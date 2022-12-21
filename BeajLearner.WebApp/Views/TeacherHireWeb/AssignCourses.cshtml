@@ -1,0 +1,32 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+<div class="container">
+    <h3>Assign Courses to Teachers</h3>
+    <select class="form-select form-select-lg mb-3" id="drpTeachers"  aria-label=".form-select-lg example">
+  <option selected>Select Teacher</option>
+ 
+</select>
+<div id="container"></div>
+@*<select class="form-select form-select-sm" id="drpCoursesCateg" aria-label=".form-select-sm example">
+  <option selected>Assign Course Category</option>
+
+
+</select>*@
+<button class="btn btn-primary" id="btnAssign" >Assign</button>
+</div>
+
+ 
+
+
+								@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <link rel="stylesheet" type="text/css" href="~/css/style.css"  />
+    <script type="text/javascript" src="~/js\hireTeacher.js" ></script>
+
+
+}

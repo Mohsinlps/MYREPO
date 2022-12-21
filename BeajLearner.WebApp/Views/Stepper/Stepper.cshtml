@@ -1,0 +1,466 @@
+﻿
+
+@{
+    ViewData["Title"] = "Stepper";
+}
+
+
+
+
+
+<br />
+
+<div class="container-fluid">
+
+
+    @*--------------Add category modal--------------*@
+
+<div class="modal   CategoryAddModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Category </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" style="">
+           
+         <div class="row addCategoryDiv">
+    <div class="col-md-12">
+        <form asp-action="AddCourseCategory" id="form">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+           
+                <label hidden id="lblCategoryAddSuccess">Saved Successfully!!</label>    
+
+               @*<label id="lblCourseCategoryName" class="fieldlabels">Course Category Name</label>*@
+               <input type="text" id="txtCourseCategory" class="form-control" placeholder="Category Name" />
+               <br />
+               <label class="control-label  audioHide">Upload Image</label>
+                            <input type="file"  id="imageUploadCat"  name="files" class="  " multiple />
+           
+            <br />
+           
+              <button  id="btnAddCategory"  class="button btn btn-primary btn-user btn-block" type="button" >
+                                        
+      <span class="btn-txt" >Add Course Category</span>
+    </button>
+
+           
+        </form>
+    </div>
+</div>
+
+ 
+      </div>
+  
+    </div>
+  </div>
+</div>
+
+
+
+@*---------------------------Course Add Modal--------------------------*@
+
+
+
+<div class="modal   courseAddModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Course </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" style="">
+           
+         <div class="row addCategoryDiv">
+    <div class="col-md-12">
+        <form asp-action="AddCourse" id="form">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+             
+           
+            </div>
+            
+        
+            <div class="form-group">
+                <label hidden id="lblCourseAddedMessage">Added Successfully !!!</label>
+               
+                <input  id="txtCourse" class="form-control" placeholder="Enter Course Name" />
+                <br />
+                <div style="display:flex !important ;justify-content:space-between !important">
+                        <input id="txtCoursePrice" class="form-control" placeholder="Enter Price"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
+                        <br />
+                         <input id="txtCourseWeeks" class="form-control"  placeholder="Enter Course Weeks" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                         />       
+                </div>
+            </div>
+        
+            <div class="form-group">
+                <input id="btnCourseAddclick" type="button" value="Add Course"  class="btn btn-primary"  />
+            </div>
+        </form>
+    </div>
+</div>
+
+ 
+      </div>
+  
+    </div>
+  </div>
+</div>
+
+@*-------------------------------------------------------------------------------------------*@
+
+
+
+
+
+
+
+
+
+
+
+	<div class="row justify-content-center">
+		<div class="col-11 col-sm-9 col-md-7 col-lg-6 col-xl-11 text-center p-0 mt-3 mb-2">
+            <div class="card px-0 pt-4 pb-0 mt-3 mb-3">
+                <h2 id="heading">Add Courses</h2>
+                @*<p>Fill all form field to go to next step</p>*@
+                
+                <form id="msform">
+                    <!-- progressbar -->
+                    <ul id="progressbar">
+                        <li class="active" id="account"><strong>Course Category</strong></li>
+                        <li id="personal"><strong>Course</strong></li>
+                        <li id="payment"><strong>Lesson</strong></li>
+
+                        <li id="confirm"><strong>Finish</strong></li>
+                    </ul>
+                    <div class="progress">
+                    	<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                	</div>
+                    <br>
+                    <!-- fieldsets -->
+
+
+                    @*-------------------------  category -----------------------*@
+
+                    <fieldset>
+                        <div class="form-card">
+                        	<div class="row">
+                        		<div class="col-7">
+                            		<h2 class="fs-title">Add Course Category:</h2>
+                            	</div>
+                           
+                            </div>
+                            
+                    <div class="row">
+                         <div class="col-10">
+                              @*  <label  class="control-label">Select Category</label>*@
+                              <select   id="CourseCategorydrp"  class="form-select form-select-lg mb-3 categoryDrp" aria-label=".form-select-lg example" >
+                               <option value="-1">Select Category</option>
+                              </select>
+
+                              </div>
+
+                               <div class="col-2" >
+                               <button type="button" class="button btn btn-primary btn-user btn-block" id="btnAddCategoryModal">Add Category</button>
+                                </div>
+                    </div>
+
+                               
+
+                               
+                           
+                        </div>
+                        <input type="button" id="btnNextCategory" name="next" class=" action-button" value="Next"/>
+                    </fieldset>
+
+
+
+                    @*-----------------------------------course--------------------------*@
+
+                    <fieldset>
+                        <div class="form-card">
+                            <div class="row">
+                        		<div class="col-7">
+                            		<h2 class="fs-title">Add Course:</h2>
+                            	</div>
+                       
+                            </div>
+
+                          <div class="row">
+                            <div class="col-10">
+                                 @* <label  class="control-label" >Select Course</label>*@
+                                  <select  id="Coursedrp"  class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" >
+                                  <option value="-1">Select Course</option>
+                                  </select>
+                            </div>
+
+                              <div class="col-2">
+                            <button type="button" class="button btn btn-primary btn-user btn-block" id="btnAddCourseModal">Add Course</button>
+                               </div>
+                          </div>
+                              
+                            
+                         
+              
+                        </div>
+                        <input type="button" name="next" id="btnNextCourse" class=" action-button" value="Next"/>
+                        <input type="button" name="previous" class="previous action-button-previous" value="Previous"/>
+                    </fieldset>
+
+
+                    @*------------------------   Activity    -------------------------*@
+                    <fieldset>
+                        <div class="form-card">
+                            <div class="row">
+                        		<div class="col-7">
+                            		<h2 class="fs-title">Lesson Upload:</h2>
+                            	</div>
+                            	
+                            </div>
+                            <label class="fieldlabels">Select Type:</label>
+                           <select  id="drpLessonType"  class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                             <option value="-1">Select Lesson type</option>
+                               <option value="week">Weekly</option>
+                             <option value="day">Topic Based</option>
+                            </select>
+                           <div class="weekNumberDiv">
+                                 <select  id="weekNumberDrp"   class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" >
+                               <option value="-1">Select Week Number</option>
+                             
+                              
+                              </select>
+                           </div>
+
+                               <div class="dayDiv">
+
+                                    <select  id="dayDrp"  class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" >
+                               <option value="-1">Select Day</option>
+                               <option value="1">1</option>
+                               <option value="2">2</option>
+                               <option value="3">3</option>
+                               <option value="4">4</option>
+                               <option value="5">5</option>
+                               <option value="6">6</option>
+                              </select>
+                               </div>
+                            
+                             <label class="fieldlabels">Select Lesson Activity:</label>
+                           <select  id="drpFormat"  class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                             <option value="-1">Select Lesson Activity</option>
+                               <option value="audio">Listen</option>
+                             <option value="video">Watch</option>
+                             <option value="text">Read</option>
+                              <option value="text">Speak</option>
+                             <option value="mcqs">MCQs</option>
+                            </select>
+                        </div>
+                        <input type="button" name="next" id="btnNextLesson1" class="btnNextLesson1 action-button" value="Submit"/>
+                        <input type="button" name="previous"@* id="btnPreStepperTeacher"*@ class="previous action-button-previous" value="Previous"/>
+                    </fieldset>
+                    
+                    
+                            @*-------------------------lesson  2------------------------*@
+
+
+
+                       <fieldset>
+                        <div class="form-card" id="lesson2form">
+                            
+                            	
+                          	<div class="col-7">
+                            		<h2 class="fs-title">Lesson Upload:</h2>
+                            	</div>
+                          @*    <label  class="control-label">Select Category</label>
+                              <select   id="CourseCategorydrp"  class="form-select form-select-lg mb-3 categoryDrp" aria-label=".form-select-lg example" >
+                               <option value="-1">Select Category</option>
+                              </select>*@
+
+                           @*
+                               <label  class="control-label" >Select Course</label>
+                              <select  id="Coursedrp"  class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" >
+                              <option value="-1">Select Course</option>
+                              </select>*@
+
+                             
+                              @*  <label class="control-label weekHide">Week</label>
+                               <input type="text"  class="form-control weekHide" />*@
+                             
+
+                                   <label class="control-label  audioHide">Upload Image</label>
+                            <input type="file"  id="imageUpload"  name="files" class="fileUpload imageHide js-file-upload" multiple />
+                             
+                            
+                            <label  class="control-label textHide">Enter Text</label>
+                            <div class="row">
+                               <div class="textDiv col-11">
+                               
+                              <textarea  class="ckeditor  textHide"  id="text" ></textarea>
+
+                              </div>
+                              <div class="col-1">
+                                <button type="button" id="btnTextSave" class="btn btn-success">Save</button>
+                              </div>
+                              </div>
+                               <br />
+
+                                 <label class="control-label videoHide">Upload Video</label>
+                                 <input type="file"  id="videoUpload"  name="files" class="fileUpload videoHide js-video-upload" multiple />       
+
+                                 <label class="control-label  audioHide">Upload Audio</label>
+                                 <input type="file"  id="audioUpload"  name="files" class="fileUpload audioHide" multiple />
+                            
+                                 
+                                 @*-----------------mcq generation--------------*@
+                                 <div id="divMcsqs" style=" border:2px solid black;border-radius:5px;">
+                                 <div class="card">
+                                 <div class="card-body">
+                                 <h3><i> Start writing mcqs </i> </h3> 
+                                 </div>
+                                  </div>
+                                  @*-----------------*@
+                                  <div id="questionDiv">
+                                      <div id="removeQuestion" class="iterateElements">
+                                      <h3 class="regenerateCount">Question No : 1</h3>
+                                      
+                                      <input type="text" id="txtMcqQuestion0" class="form-control txtMcqQuestion iterateInputElements question" style="border-radius:5px" placeholder="Write question" />
+                                     <input type="text" id="txtMcqOption10" class=" iterateInputElements option"  placeholder="provide option" />
+                                     <input type="text" id="txtMcqOption20" class=" iterateInputElements option" placeholder="provide option" />
+                                     <input type="text" id="txtMcqOption30" class=" iterateInputElements option" placeholder="provide option" />
+                                     <input type="text" id="txtMcqOption40" class=" iterateInputElements option" placeholder="provide option" />
+                                   <hr />
+                                   <input type="text" id="txtCorrectAnswer0" class=" iterateInputElements" placeholder="provide Correct answer" />
+                                     
+                                  </div>
+                                  </div>
+                                  <hr style="color:red" />
+                                  <button type="button" class="btn btn-success btnAddMcq">Add Question</button>
+                                
+                                 </div>
+                                 @*-----------------------------------------------*@
+
+                        </div>
+                        <input type="button" name="next" id="btnNextLesson2" class="btnNextLesson2 action-button" value="Save"/>
+                        <input type="button" name="previous" class="previous action-button-previous" value="Previous"/>
+                    </fieldset>
+
+
+                         @*-----------------------------Finished-------------------------- *@
+
+                           <fieldset>
+                        <div class="form-card" id="lesson2form">
+                            
+                            	
+                        <h2 class="purple-text text-center"><strong>SUCCESS !</strong></h2>
+                            <br>
+                            <div class="row justify-content-center">
+                                <div class="col-3">
+                                    <img src="https://i.imgur.com/GwStPmg.png" class="fit-image">
+                                </div>
+                                
+                            </div>
+                           
+                           
+                            
+
+                        </div>
+                      
+                        <input type="button"  name="previous" class="previous action-button-previous btnEdit" value="Edit Saved"/>
+                    </fieldset>
+                 @*   <fieldset>
+                        <div class="form-card">
+                        	<div class="row">
+                        		<div class="col-7">
+                            		<h2 class="fs-title">Finish:</h2>
+                            	</div>
+                            	<div class="col-5">
+                            		<h2 class="steps"></h2>
+                            	</div>
+                            </div>
+                            <br><br>
+                            <h2 class="purple-text text-center"><strong>SUCCESS !</strong></h2>
+                            <br>
+                            <div class="row justify-content-center">
+                                <div class="col-3">
+                                    <img src="https://i.imgur.com/GwStPmg.png" class="fit-image">
+                                </div>
+                                
+                            </div>
+                            <br><br>
+                            <div class="row justify-content-center">
+                                <div class="col-7 text-center">
+                                    <h5 class="purple-text text-center">You Have Successfully Saved Data</h5>
+                                  
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>*@
+                </form>
+            </div>
+        </div>
+
+
+           @*-----------------------------------------------*@
+        	<div  class="col-11 col-sm-9 col-md-7 col-lg-6 col-xl-11 text-center p-0 mt-3 mb-2 tableClass" >
+
+    <div class="table-responsive tbldynamic">
+        
+  </div>
+    </div>
+	</div>
+ 
+    
+</div>
+
+
+
+@*<video id="video" width="320" height="240" controls style="display: none;"></video>*@
+
+@*--------------  modal pic----------------*@
+
+<div class="modal   picModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+       
+      <div class="modal-body" style="">
+          
+ 
+      </div>
+  
+    </div>
+  </div>
+</div>
+
+
+@*--------------  modal Text----------------*@
+
+<div class="modal   textModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+     <div class="modal-header">
+        <h5 class="modal-title">Your Text </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" style="">
+          
+ 
+      </div>
+  
+    </div>
+  </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <link rel="stylesheet" type="text/css" href="~/css/Stepper.css"  />
+    <script type="text/javascript" src="~/js\stepperjs.js" ></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+  <script src="~/ckeditor/ckeditor.js"></script>
+  <link href="~/ckeditor/contents.css" rel="stylesheet" />
+ 
+
+}

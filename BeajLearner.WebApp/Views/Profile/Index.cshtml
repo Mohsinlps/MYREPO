@@ -1,0 +1,104 @@
+﻿@*
+For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Profile";
+    Layout = "~/Views/Shared/_LayoutNew.cshtml";
+}
+@section Scripts
+    {
+    <script asp-append-version="true" src="@Url.Content("/js/Profile/ProfileIndex.js")"></script>
+}
+
+
+@{ string id = Context.Session.GetString("UserId");
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card shadow card-user">
+            <div class="image">
+                <img src="https://ununsplash.imgix.net/photo-1431578500526-4d9613015464?fit=crop&fm=jpg&h=300&q=75&w=400"
+                     alt="..." style="width:100%; height:210px" />
+            </div>
+            <div class="content">
+                <div class="author text-center py-4">
+                    <h6 class="m-0 font-weight-bold text-primary name"></h6>
+                    
+                      <p class="mb-0 email">              
+                        
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Edit Profile</h6>
+            </div>
+            <div class="card-body">
+                <div class="content">
+                    <form id="formProfile">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input type="email" id="email" name="email" class="form-control" disabled placeholder="Email" value="">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>First Name</label>
+                                    <input type="text" id="firstName" name="firstName" class="form-control" placeholder="First Name" value="">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Last Name</label>
+                                    <input type="text" id="lastName" name="lastName" class="form-control" placeholder="Last Name">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-info btn-fill pull-right" id="updateProfileBtn">Update Profile</button>
+                        <div class="clearfix"></div>
+                        <input id="Id" value="@id" hidden>
+                        <input id="role" value="" hidden>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Edit Password</h6>
+            </div>
+            <div class="card-body">
+                <div class="content">
+                    <form id="formChangePassword">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>New Password</label>
+                                    <input type="password" class="form-control" id="newPassword" name="newPassword" placeholder="New Password" value="">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Confirm Password</label>
+                                    <input type="password" class="form-control" id="confirmedPassword" name="confirmedPassword" placeholder="Confirm Password" value="">
+                                </div>
+                            </div>
+                        </div>
+                        <button  class="btn btn-info btn-fill pull-right" id="changePasswordBtn">Update Password</button>
+                        <div class="clearfix"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

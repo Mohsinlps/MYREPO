@@ -1,0 +1,374 @@
+﻿@model BeajLearner.Application.DTOs.AddLessonDto
+
+@{
+    ViewData["Title"] = "AddLesson";
+}
+
+<h1>AddLesson</h1>
+
+<hr />
+<div style="">
+<p><b>Choose type of Lesson</b></p>
+
+  <div class="form-check form-check-inline">
+         <input class="form-check-input" onclick="lessonType(value)" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="Video">
+         <label class="form-check-label" for="inlineRadio1">Video</label>
+       </div>
+       <div class="form-check form-check-inline">
+         <input class="form-check-input" onclick="lessonType(value)" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="Audio">
+         <label class="form-check-label" for="inlineRadio2">Audio</label>
+       </div>
+       <div class="form-check form-check-inline">
+         <input class="form-check-input" type="radio"  onclick="lessonType(value)" name="inlineRadioOptions" id="inlineRadio3" value="MCQs" >
+         <label class="form-check-label" for="inlineRadio3">MCQs </label>
+       </div>
+
+</div>
+<br />
+@*---------------------------------Video-------------------------------------------------*@
+@*<div class="row videoDiv" >
+    <div>
+          <form asp-action="AddLesson"  enctype="multipart/form-data" method="post" id="formlesson" >
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CourseCategoryId" class="control-label">Select Category</label>
+               <select asp-for="CourseCategoryId"  id="CourseCategorydrp" >
+                   <option>Select Category</option>
+               </select>
+                <span asp-validation-for="CourseCategoryId" class="text-danger"></span>
+            </div>
+             <div class="form-group">
+                <label asp-for="CourseId" class="control-label">Select Course</label>
+               <select asp-for="CourseId"  id="Coursedrp" >
+                   <option>Select Course</option>
+               </select>
+                <span asp-validation-for="CourseId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="week" class="control-label"></label>
+                <input asp-for="week" class="form-control" />
+                <span asp-validation-for="week" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="text" class="control-label">Enter Text</label>
+                <textarea asp-for="text" class="ckeditor"  id="text" ></textarea>
+                  <span asp-validation-for="text" class="text-danger"></span>
+            </div>
+             <div class="form-group">
+                 <label class="control-label">Upload Video</label>
+               <input type="file" asp-for="Videos" id="videoUpload"  name="files" class="fileUpload" multiple />
+               
+            </div>
+          
+           
+           
+            <div class="form-group">
+                @*<input type="button" value="Add Lesson" class="btn btn-primary" onclick="submitlesson()" />
+                 <input type="submit" value="Add Lesson" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>*@
+<div class="container-fluid">
+	<div class="row justify-content-center">
+		<div class="col-11 col-sm-9 col-md-7 col-lg-6 col-xl-5 text-center p-0 mt-3 mb-2">
+            <div class="card px-0 pt-4 pb-0 mt-3 mb-3">
+                <h2 id="heading">Sign Up Your User Account</h2>
+                <p>Fill all form field to go to next step</p>
+
+                <form id="msform">
+                    <!-- progressbar -->
+                    <ul id="progressbar">
+                        <li class="active" id="account"><strong>Account</strong></li>
+                        <li id="personal"><strong>Personal</strong></li>
+                        <li id="payment"><strong>Image</strong></li>
+                        <li id="confirm"><strong>Finish</strong></li>
+                    </ul>
+                    <div class="progress">
+                    	<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                	</div>
+                    <br>
+                    <!-- fieldsets -->
+                    <fieldset>
+                        <div class="form-card">
+                        	<div class="row">
+                        		<div class="col-7">
+                            		<h2 class="fs-title">Account Information:</h2>
+                            	</div>
+                            	<div class="col-5">
+                            		<h2 class="steps">Step 1 - 4</h2>
+                            	</div>
+                            </div>
+                            <label class="fieldlabels">Email: *</label>
+                            <input type="email" name="email" placeholder="Email Id"/>
+                            <label class="fieldlabels">Username: *</label>
+                            <input type="text" name="uname" placeholder="UserName"/>
+                            <label class="fieldlabels">Password: *</label>
+                            <input type="password" name="pwd" placeholder="Password"/>
+                            <label class="fieldlabels">Confirm Password: *</label>
+                            <input type="password" name="cpwd" placeholder="Confirm Password"/>
+                        </div>
+                        <input type="button" name="next" class="next action-button" value="Next"/>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-card">
+                            <div class="row">
+                        		<div class="col-7">
+                            		<h2 class="fs-title">Personal Information:</h2>
+                            	</div>
+                            	<div class="col-5">
+                            		<h2 class="steps">Step 2 - 4</h2>
+                            	</div>
+                            </div>
+                            <label class="fieldlabels">First Name: *</label>
+                            <input type="text" name="fname" placeholder="First Name"/>
+                            <label class="fieldlabels">Last Name: *</label>
+                            <input type="text" name="lname" placeholder="Last Name"/>
+                            <label class="fieldlabels">Contact No.: *</label>
+                            <input type="text" name="phno" placeholder="Contact No."/>
+                            <label class="fieldlabels">Alternate Contact No.: *</label>
+                            <input type="text" name="phno_2" placeholder="Alternate Contact No."/>
+                        </div>
+                        <input type="button" name="next" class="next action-button" value="Next"/>
+                        <input type="button" name="previous" class="previous action-button-previous" value="Previous"/>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-card">
+                            <div class="row">
+                        		<div class="col-7">
+                            		<h2 class="fs-title">Image Upload:</h2>
+                            	</div>
+                            	<div class="col-5">
+                            		<h2 class="steps">Step 3 - 4</h2>
+                            	</div>
+                            </div>
+                            <label class="fieldlabels">Upload Your Photo:</label>
+                            <input type="file" name="pic" accept="image/*">
+                            <label class="fieldlabels">Upload Signature Photo:</label>
+                            <input type="file" name="pic" accept="image/*">
+                        </div>
+                        <input type="button" name="next" class="next action-button" value="Submit"/>
+                        <input type="button" name="previous" class="previous action-button-previous" value="Previous"/>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-card">
+                        	<div class="row">
+                        		<div class="col-7">
+                            		<h2 class="fs-title">Finish:</h2>
+                            	</div>
+                            	<div class="col-5">
+                            		<h2 class="steps">Step 4 - 4</h2>
+                            	</div>
+                            </div>
+                            <br><br>
+                            <h2 class="purple-text text-center"><strong>SUCCESS !</strong></h2>
+                            <br>
+                            <div class="row justify-content-center">
+                                <div class="col-3">
+                                    <img src="https://i.imgur.com/GwStPmg.png" class="fit-image">
+                                </div>
+                            </div>
+                            <br><br>
+                            <div class="row justify-content-center">
+                                <div class="col-7 text-center">
+                                    <h5 class="purple-text text-center">You Have Successfully Signed Up</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+	</div>
+</div>
+
+@*-----------------------------------Audios-------------------------------------*@
+
+<div class="row audioDiv" hidden >
+    <div>
+          <form asp-action="AddLesson"  enctype="multipart/form-data" method="post" id="formlesson" >
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CourseCategoryId" class="control-label">Select Category</label>
+               <select asp-for="CourseCategoryId"  id="CourseCategorydrp" >
+                   <option>Select Category</option>
+               </select>
+                <span asp-validation-for="CourseCategoryId" class="text-danger"></span>
+            </div>
+             <div class="form-group">
+                <label asp-for="CourseId" class="control-label">Select Course</label>
+               <select asp-for="CourseId"  id="Coursedrp" >
+                   <option>Select Course</option>
+               </select>
+                <span asp-validation-for="CourseId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="week" class="control-label"></label>
+                <input asp-for="week" class="form-control" />
+                <span asp-validation-for="week" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="text" class="control-label">Enter Text</label>
+                <textarea asp-for="text" class="ckeditor"  id="text" ></textarea>
+                  <span asp-validation-for="text" class="text-danger"></span>
+            </div>
+           
+            <div class="form-group">
+                 <label class="control-label">Upload Audio</label>
+               <input type="file" asp-for="Audios"  name="files" id="audioUpload" class="fileUpload" multiple />
+            </div>
+           
+           
+            <div class="form-group">
+                @*<input type="button" value="Add Lesson" class="btn btn-primary" onclick="submitlesson()" />*@
+                 <input type="submit" value="Add Lesson" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@*-----------------------------------MCQs-------------------------------------*@
+
+<div class="row mcqDiv" hidden >
+    <div>
+          <form asp-action="AddLesson"  enctype="multipart/form-data" method="post" id="formlesson" >
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CourseCategoryId" class="control-label">Select Category</label>
+               <select asp-for="CourseCategoryId"  id="CourseCategorydrp" >
+                   <option>Select Category</option>
+               </select>
+                <span asp-validation-for="CourseCategoryId" class="text-danger"></span>
+            </div>
+             <div class="form-group">
+                <label asp-for="CourseId" class="control-label">Select Course</label>
+               <select asp-for="CourseId"  id="Coursedrp" >
+                   <option>Select Course</option>
+               </select>
+                <span asp-validation-for="CourseId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="week" class="control-label"></label>
+                <input asp-for="week" class="form-control" />
+                <span asp-validation-for="week" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="text" class="control-label">Enter Text</label>
+                <textarea asp-for="text" class="ckeditor"  id="text" ></textarea>
+                  <span asp-validation-for="text" class="text-danger"></span>
+            </div>
+           
+            <div class="form-group">
+                 <label class="control-label">Upload MCQS</label>
+               <input type="file" asp-for="Audios"  name="files" id="audioUpload" class="fileUpload" multiple />
+            </div>
+           
+           
+            <div class="form-group">
+                @*<input type="button" value="Add Lesson" class="btn btn-primary" onclick="submitlesson()" />*@
+                 <input type="submit" value="Add Lesson" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@*--------------------------------------All Data-----------------------------*@
+
+@*<div class="row">
+    <div class="">
+        <form asp-action="AddLesson"  enctype="multipart/form-data" method="post" id="formlesson" >
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CourseCategoryId" class="control-label">Select Category</label>
+               <select asp-for="CourseCategoryId"  id="CourseCategorydrp" >
+                   <option>Select Category</option>
+               </select>
+                <span asp-validation-for="CourseCategoryId" class="text-danger"></span>
+            </div>
+             <div class="form-group">
+                <label asp-for="CourseId" class="control-label">Select Course</label>
+               <select asp-for="CourseId"  id="Coursedrp" >
+                   <option>Select Course</option>
+               </select>
+                <span asp-validation-for="CourseId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="week" class="control-label"></label>
+                <input asp-for="week" class="form-control" />
+                <span asp-validation-for="week" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="text" class="control-label">Enter Text</label>
+                <textarea asp-for="text" class="ckeditor"  id="text" ></textarea>
+                  <span asp-validation-for="text" class="text-danger"></span>
+            </div>
+             <div class="form-group">
+                 <label class="control-label">Upload Video</label>
+               <input type="file" asp-for="Videos" id="videoUpload"  name="files" class="fileUpload" multiple />
+               
+            </div>
+            <div class="form-group">
+                 <label class="control-label">Upload Audio</label>
+               <input type="file" asp-for="Audios"  name="files" id="audioUpload" class="fileUpload" multiple />
+            </div>
+           
+           
+            <div class="form-group">
+                <input type="button" value="Add Lesson" class="btn btn-primary" onclick="submitlesson()" />
+                 <input type="submit" value="Add Lesson" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>*@
+@*---------------------------------------------*@
+<br />
+@*<label class="">Show Courses from specific Category</label>
+
+<div>
+      <select id="drpCategory">
+
+           <option value="-1">Show All Category Courses</option>
+      </select>
+</div>
+
+      <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>LessonId</th>
+                        <th>Week</th>
+                        <th>Text</th>
+                        <th>Lesson Audio</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                  <tbody >
+                  </tbody>
+            </table>
+  </div>
+*@
+  @*--------------------------*@
+
+
+
+
+
+
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <link rel="stylesheet" type="text/css" href="~/css/lesson.css"  />
+    <script type="text/javascript" src="~/js\Lessonjs.js" ></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+  <script src="~/ckeditor/ckeditor.js"></script>
+  <link href="~/ckeditor/contents.css" rel="stylesheet" />
+ 
+
+}

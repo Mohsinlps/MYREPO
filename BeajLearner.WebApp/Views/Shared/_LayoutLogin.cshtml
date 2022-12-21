@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BeajLearner.WebApp</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/BeajLearner.WebApp.styles.css" asp-append-version="true" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+</head>
+<body class="bg-gradient-primary">
+
+    @RenderBody()
+        <script>
+
+        //         local 
+       let globalUrlForAPIs = 'https://localhost:7223/api/';
+        
+        //         live
+       //   let globalUrlForAPIs = 'https://lpsapps.com:6043/api/';
+      
+        
+        //  let globalUrlForWeb = 'https://lpsapps.com:6031/';
+        </script>
+   
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
