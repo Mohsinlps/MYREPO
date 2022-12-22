@@ -101,6 +101,7 @@ builder.Services.AddScoped<IAsyncRepository<Lesson>, EfRepository<Lesson>>();
 builder.Services.AddScoped<IAsyncRepository<mcqQuestions>, EfRepository<mcqQuestions>>();
 builder.Services.AddScoped<IAsyncRepository<Otp>, EfRepository<Otp>>();
 builder.Services.AddScoped<IAsyncRepository<TeachersAssignedCourse>, EfRepository<TeachersAssignedCourse>>();
+builder.Services.AddScoped<IAsyncRepository<purchasedCourse>, EfRepository<purchasedCourse>>();
 //builder.Services.AddScoped<IAsyncRepository<UserSignup>, EfRepository<UserSignup>>();
 builder.Services.AddCors(options =>
 {
