@@ -1,0 +1,58 @@
+﻿
+@{
+    ViewData["Title"] = "getLessons";
+}
+
+
+
+
+
+<div id="dropdownsDiv" class="row">
+      <div class="col-6">
+       <select   id="CourseCategorydrp"  class="form-select form-select-lg mb-3 categoryDrp" aria-label=".form-select-lg example" >
+          <option value="-1">Select Category</option>
+           </select>
+      </div>
+
+      <div class="col-6">
+        <select  id="Coursedrp"  class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" >
+        <option value="-1">Select Course</option>
+        </select>
+        </div>
+</div>
+
+     <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>LessonId</th>
+                        <th>Lesson Type</th>
+                        <th>Day Number</th>
+                        <th>Activity</th>
+                        <th>Week Number</th>
+                        <th>Videos</th>
+                        <th>Audios</th>
+                        <th>Image</th>
+                        <th>Text</th>
+                        <th>Show Mcqs</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                  <tbody >
+
+                  </tbody>
+            </table>
+  </div>
+
+  @section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @*<link rel="stylesheet" type="text/css" href="~/css/Stepper.css"  />*@
+    <script type="text/javascript" src="~/js\Lessonjs.js" ></script>
+      
+
+ 
+
+}
+
+

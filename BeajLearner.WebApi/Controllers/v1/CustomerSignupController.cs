@@ -138,6 +138,28 @@ namespace BeajLearner.WebApi.Controllers.v1
 
         }
 
+       
+        [HttpPost("getCustomerProfile")]
+        public async Task<getCustomerProfileDto> getCustomerProfile([FromBody] string userId)
+        {
+           
+            var origin = Request.Headers["origin"];
+            try
+            {
+
+                return (await _userRepository.getUserProfile(userId));
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+
+
+
+        }
+
+
         [HttpPost("sendSmsWithNetwork")]
         public async Task< IActionResult> SendSMS(sendOtpDto sendotpdto)
         {

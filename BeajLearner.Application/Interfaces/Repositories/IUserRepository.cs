@@ -1,4 +1,5 @@
 ﻿
+using BeajLearner.Application.DTOs;
 using BeajLearner.Application.DTOs.User;
 using BeajLearner.Application.Wrappers;
 using BeajLearner.Domain.Interfaces;
@@ -13,6 +14,7 @@ namespace BeajLearner.Application.Interfaces.Repositories
         //Task<IReadOnlyList<User>> GetAllAsync(string search, string orderBy, bool ascending);
 
         public Task<string> getUserByUserId(string userName);
+        public  Task<getCustomerProfileDto> getUserProfile(string userId);
         //---------------------------
 
         Task<Response<bool>> DeleteUserAsync(string id);

@@ -710,12 +710,19 @@ $(document).on('click', '#btnAddCategoryModal', function () {
 });
 
 $(document).on('click', '#btnAddCourseModal', function () {
-
+    alert('clicked');
       $('#lblCourseaddedmsg').prop('hidden', true);
       $('#txtCourse').show();
       $('#btnCourseAddclick').show();
     $('.courseAddModal').modal('toggle');
     $('#coursecategoryid').prop('hidden', false);
+
+    $('#txtCourse').val('');
+    $('#txtCoursePrice').val('');
+    $('#txtCourseWeeks').val('');
+
+    $('#txtCoursePrice').show();
+    $('#txtCourseWeeks').show();
 });
 
 
@@ -772,7 +779,7 @@ $(document).on('click','#btnAddCategory', function () {
 });
 
 
-//-------------Next Course Button Click-------------save course ---------------------
+//--------------------------save course ---------------------
 
 
 $(document).on('click', '#btnCourseAddclick', function () {
@@ -796,7 +803,8 @@ $(document).on('click', '#btnCourseAddclick', function () {
                             $('#lblCourseAddedMessage').prop('hidden', false);
                             $('#txtCourse').hide();
                             $('#btnCourseAddclick').hide();
-                           
+                            $('#txtCoursePrice').hide();
+                            $('#txtCourseWeeks').hide();
                             $('#coursecategoryid').prop('hidden', true);
                             loadCoursesDrp();
                         },

@@ -103,7 +103,25 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
             coursecat.CourseCategoryName = input.CourseCategoryName;
             coursecat.image = imagePath;
 
-           coursecat= _repo.Add(coursecat);
+            CourseCategory course = _repo.GetAll().Where(c => c.CourseCategoryName == input.CourseCategoryName).FirstOrDefault();
+            if (course != null)
+            {
+
+            }
+            else
+            {
+                coursecat = _repo.Add(coursecat);
+
+            }
+
+
+
+
+
+
+
+
+            //coursecat = _repo.Add(coursecat);
             input.CourseCategoryId = coursecat.CourseCategoryId;
             input.CourseCategoryName = coursecat.CourseCategoryName;
             return input;

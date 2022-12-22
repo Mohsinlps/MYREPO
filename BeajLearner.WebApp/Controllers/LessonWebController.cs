@@ -10,6 +10,10 @@ namespace BeajLearner.WebApp.Controllers
         }
 
        
+        public IActionResult getLessons()
+        {
+            return View();
+        }
     }
 }
 

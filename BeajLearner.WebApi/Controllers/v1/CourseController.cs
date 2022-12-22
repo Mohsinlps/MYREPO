@@ -37,6 +37,15 @@ namespace BeajLearner.WebApi.Controllers.v1
             return dto;
         }
 
+        [HttpPost]
+        [Route("GetAllCourseByUserId")]
+        public IEnumerable< CourseDto> getAllByUserId(string Id)
+        {
+         
+            IEnumerable<CourseDto> dto = _CourseService.GetAllCoursesForUser(Id);
+            return dto;
+        }
+
         [HttpGet]
         [Route("GetAllCourseWithCategoryModel")]
         public IQueryable<GetCourseWithCategoryNameDto> GetAllModel( )

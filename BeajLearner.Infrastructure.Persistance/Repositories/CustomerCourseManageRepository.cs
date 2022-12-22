@@ -1,4 +1,5 @@
-﻿using BeajLearner.Application.DTOs;
+﻿using AutoMapper;
+using BeajLearner.Application.DTOs;
 using BeajLearner.Application.Interfaces.Repositories;
 using BeajLearner.Domain.Entities;
 using BeajLearner.Domain.Interfaces;
@@ -13,13 +14,26 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
     public class CustomerCourseManageRepository: ICustomerCourseManageRepository
     {
         private IAsyncRepository<purchasedCourse> _repo;
-        public CustomerCourseManageRepository(IAsyncRepository<purchasedCourse> repo)
+        private IMapper _mapper;
+        public CustomerCourseManageRepository(IAsyncRepository<purchasedCourse> repo,IMapper mapper)
         {
+            _mapper=mapper;
             _repo = repo;
         }
-        public void savePurchasedCourse(purchaseCourseDto dto)
+        public purchaseCourseDto savePurchasedCourse(purchaseCourseDto dto)
         {
-        
+            purchasedCourse model=_mapper.Map<purchasedCourse>(dto);
+            try
+            {
+                model = _repo.Add(model);
+
+                return dto;
+            }
+            catch(Exception ex)
+            {
+                return dto;
+            }
+
         }
     }
 }

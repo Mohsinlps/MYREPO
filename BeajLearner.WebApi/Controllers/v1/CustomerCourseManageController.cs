@@ -20,10 +20,10 @@ namespace BeajLearner.WebApi.Controllers.v1
 
         [HttpPost]
         [Route("purchaseCourse")]
-        public IActionResult purchaseCourse(purchaseCourseDto dto)
+        public purchaseCourseDto purchaseCourse(purchaseCourseDto dto)
         {
-
-            return null;
+           dto = _repoCustomerCourse.savePurchasedCourse(dto);
+            return dto;
         }
     }
 }

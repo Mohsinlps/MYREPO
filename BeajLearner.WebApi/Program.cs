@@ -89,12 +89,13 @@ builder.Services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>(
 builder.Services.AddScoped<ICourseCategoryRepository, CourseCategoryRepository>();
 builder.Services.AddScoped<ICourseRepository, CourseRepository>();
 builder.Services.AddScoped<ILessonRepository, LessonRepository>();
-
 builder.Services.AddScoped<IGetCategoriesRepository, GetCategoriesRepository>();
 builder.Services.AddScoped<IGetLessonRepository, GetLessonRepository>();
 builder.Services.AddScoped<IGetCourseRepository, GetCourseRepository>();
 builder.Services.AddScoped<ITeachersManageRepository, TeachersManageRepository>();
 builder.Services.AddScoped<IStudentsRepository, StudentsRepository>();
+builder.Services.AddScoped<ICustomerCourseManageRepository, CustomerCourseManageRepository>();
+
 builder.Services.AddScoped<IAsyncRepository<CourseCategory>, EfRepository<CourseCategory>>();
 builder.Services.AddScoped<IAsyncRepository<Course>, EfRepository<Course>>();
 builder.Services.AddScoped<IAsyncRepository<Lesson>, EfRepository<Lesson>>();

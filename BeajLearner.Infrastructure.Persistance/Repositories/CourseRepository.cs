@@ -15,10 +15,12 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
     {
         private IMapper _mapper;
         private IAsyncRepository<Course> _repo;
-        public CourseRepository(IMapper mapper, IAsyncRepository<Course> repo)
+        private IAsyncRepository<purchasedCourse> _repoPurchasedCourse;
+        public CourseRepository(IMapper mapper, IAsyncRepository<Course> repo, IAsyncRepository<purchasedCourse> repoPurchasedCourse)
         {
             _mapper = mapper;
             _repo = repo;
+            _repoPurchasedCourse = repoPurchasedCourse;
         }
         public void AddCourse(CourseDto dto)
         {
@@ -47,8 +49,7 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
             return dto;
         }
 
-
-
+      
 
 
 
@@ -60,6 +61,30 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
             List<CourseDto> dto = _mapper.Map<List<CourseDto>>(course);
             return dto;
         }
+        //*********************************************************************************
+
+        public IEnumerable< CourseDto> GetAllCoursesForUser(string CustomerId)
+        {
+
+        IEnumerable<purchaseCourseDto> purchasedCourses =_mapper.Map<IEnumerable< purchaseCourseDto> >(_repoPurchasedCourse.GetAll());
+            //-------------------------------
+            IEnumerable<Course> allCourses = _repo.GetAll();
+
+            //----------------------------------------
+      
+
+         var test= allCourses.Where(ac => purchasedCourses.Select(pc => pc.courseId).Contains(ac.CourseId));
+            foreach(var i in test)
+            {
+                allCourses.FirstOrDefault(x=> x.CourseId==i.CourseId).CoursePrice=0;
+            }
+
+            IEnumerable<CourseDto> coursedto = _mapper.Map<IEnumerable< CourseDto>>(allCourses);
+          
+            return coursedto;
+        }
+
+
         public CourseDto GetCourseById(int id)
         {
             CourseDto dto = new CourseDto();

@@ -51,11 +51,11 @@ app.MapControllerRoute(
 // pattern: "{controller=CourseWeb}/{action=GetAllCourses}/{id?}");
 //pattern: "{controller=CourseWeb}/{action=AddCourse}/{id?}");
 //pattern: "{controller=LessonWeb}/{action=AddLesson}/{id?}");
-pattern: "{controller=Login}/{action=Index}/{id?}");
+//pattern: "{controller=Login}/{action=Index}/{id?}");
 //pattern: "{controller=CourseCategoryWeb}/{action=AddCourseCategory}/{id?}");
 //    pattern: "{controller=Dashboard}/{action=Index}/{id?}");
 //pattern: "{controller=Stepper}/{action=Stepper}/{id?}");
 //pattern: "{controller=Stepper}/{action=StepperTeacher}/{id?}");
 //pattern: "{controller=TeacherHireWeb}/{action=AssignCourses}/{id?}");
-
+pattern: "{controller=LessonWeb}/{action=getLessons}/{id?}");
 app.Run();

@@ -290,6 +290,8 @@ namespace BeajLearner.Infrastructure.Identity.Services
             var upd = await _userManager.UpdateAsync(user);
             return new Response<string>(user.UserName, Message: $"Profile Generated Successfully");
         }
+       
+
         private async Task<JwtSecurityToken> GenerateJWTokenUser(ApplicationUser user)
         {
             var userClaims = await _userManager.GetClaimsAsync(user);

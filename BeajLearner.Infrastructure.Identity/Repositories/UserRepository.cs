@@ -15,6 +15,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using BeajLearner.Application.Enums;
+using BeajLearner.Application.DTOs;
+using AutoMapper;
 
 namespace BeajLearner.Infrastructure.Identity.Repositories
 {
@@ -24,13 +26,15 @@ namespace BeajLearner.Infrastructure.Identity.Repositories
         private readonly IAuthenticatedUserService _authenticatedUser;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private IMapper _mapper;
         //private readonly IDocumentRepository _documentRepository;
-        public UserRepository(/*IDocumentRepository documentRepository,*/ UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IdentityContext dbContext, IAuthenticatedUserService authenticatedUser) : base(dbContext)
+        public UserRepository( IMapper mapper , UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IdentityContext dbContext, IAuthenticatedUserService authenticatedUser) : base(dbContext)
         {
             _dbContext = dbContext;
             _authenticatedUser = authenticatedUser;
             _userManager = userManager;
             _roleManager = roleManager;
+            _mapper = mapper;
             //_documentRepository = documentRepository;
         }
         public async Task<Response<IEnumerable<Role>>> GetAllRoles()
@@ -114,6 +118,29 @@ namespace BeajLearner.Infrastructure.Identity.Repositories
             }
            
         }
+        //-------------------------Get User profile----------------
+        public async Task<getCustomerProfileDto> getUserProfile(string userId)
+        {
+            ApplicationUser user = await _dbContext.Users.Where(x => x.Id == userId).FirstOrDefaultAsync();
+
+            getCustomerProfileDto dto = new getCustomerProfileDto();
+            dto.CellNumber = user.CellNumber;
+            dto.DOB = user.DOB;
+            dto.FirstName = user.FirstName;
+            dto.Gender=user.Gender;
+            dto.Occupation = user.Occupation;
+            
+            if (user == null)
+            {
+                return null;
+            }
+            else
+            {
+
+                return dto;
+            }
+        }
+
         //----------------------------------------------------------
         public async Task<Response<bool>> DeleteUserAsync(string id)
         {

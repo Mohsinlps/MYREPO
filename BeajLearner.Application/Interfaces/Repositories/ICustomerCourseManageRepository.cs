@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BeajLearner.Application.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,6 @@ namespace BeajLearner.Application.Interfaces.Repositories
 {
     public interface ICustomerCourseManageRepository
     {
+        public purchaseCourseDto savePurchasedCourse(purchaseCourseDto dto);
     }
 }

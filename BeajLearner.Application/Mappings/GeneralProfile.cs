@@ -31,6 +31,8 @@ namespace BeajLearner.Application.Mappings
             CreateMap<RegisterRequest, CustomerSignupDto>().ReverseMap();
             CreateMap<mcqQuestions,mcqsDto>().ReverseMap();
             CreateMap<Otp, otpDto>().ReverseMap();
+            CreateMap<purchasedCourse,purchaseCourseDto>().ReverseMap();
+           
         }
     }
 }
