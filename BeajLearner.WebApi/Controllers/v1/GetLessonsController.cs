@@ -53,13 +53,16 @@ namespace BeajLearner.WebApi.Controllers.v1
 
 
         [HttpPost("getLessonByCourseIdAndActivity")]
-        public IEnumerable<GetLessonsDto> getLessonByCourseIdAndActivity([FromBody] getMcqsDto Getdto)
+        public IEnumerable<GetLessonsDto> getLessonByCourseIdAndActivity( getLessonByCourseIdAndActivityDto Getdto)
         {
+            getMcqsDto getmcqdto = new getMcqsDto();
+            getmcqdto.courseId = Getdto.courseId;
+            getmcqdto.activity = Getdto.activity;
             List<GetLessonsDto> dto = new List<GetLessonsDto>();
 
             try
             {
-                IEnumerable<Lesson> model = _lessonRepo.GetLessonByCourseIdAndActivity(Getdto);
+                IEnumerable<Lesson> model = _lessonRepo.GetLessonByCourseIdAndActivity(getmcqdto);
                 if (model != null)
                 {
                     dto = _mapper.Map<List<GetLessonsDto>>(model);
@@ -77,6 +80,64 @@ namespace BeajLearner.WebApi.Controllers.v1
 
             return dto;
         }
+
+
+
+
+        //----------------------------------------------
+
+
+        //[HttpPost("getLessonByCourseIdAndActivity")]
+        //public IEnumerable<GetLessonsDto> getLessonForDataTables(getLessonByCourseIdAndActivityDto Getdto)
+        //{
+        //    getMcqsDto getmcqdto = new getMcqsDto();
+        //    getmcqdto.courseId = Getdto.courseId;
+        //    getmcqdto.activity = Getdto.activity;
+        //    List<GetLessonsDto> dto = new List<GetLessonsDto>();
+
+        //    try
+        //    {
+        //        IEnumerable<Lesson> model = _lessonRepo.GetLessonByCourseIdAndActivity(getmcqdto);
+        //        if (model != null)
+        //        {
+        //            dto = _mapper.Map<List<GetLessonsDto>>(model);
+        //            return dto;
+        //        }
+        //        else
+        //        {
+        //            return dto;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //    }
+
+        //    return dto;
+        //}
+
+
+
+
+
+
+
+
+
+
+
+
+        //---------------------------------------------
+
+
+
+
+
+
+
+
+
+
 
         [HttpPost("getLessonByCourseId")]
         public IEnumerable<GetLessonsDto> getLessonByCourseId(int id)

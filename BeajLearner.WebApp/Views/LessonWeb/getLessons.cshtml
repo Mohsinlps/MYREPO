@@ -4,7 +4,25 @@
 }
 
 
+@*------------------------------------- Show text Modal --------------------------------------------*@
 
+   <div class="modal   textModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+     <div class="modal-header">
+        <h5 class="modal-title">Your Text </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body textModalBody" style="">
+          
+ 
+      </div>
+  
+    </div>
+  </div>
+</div>
+
+@*----------------------------------------------------------------------------------------------------*@
 
 
 <div id="dropdownsDiv" class="row">
@@ -21,22 +39,84 @@
         </div>
 </div>
 
-     <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active  paneVideo" id="home-tab"  data-bs-toggle="tab" data-bs-target="#video" type="button" role="tab" aria-controls="home" aria-selected="true">Video</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link  paneAudio" id="profile-tab" data-bs-toggle="tab" data-bs-target="#audio" type="button" role="tab" aria-controls="profile" aria-selected="false">Audio</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link paneText" id="contact-tab" data-bs-toggle="tab" data-bs-target="#text" type="button" role="tab" aria-controls="contact" aria-selected="false">Text</button>
+  </li>
+    <li class="nav-item" role="presentation">
+    <button class="nav-link paneText" id="contact-tab" data-bs-toggle="tab" data-bs-target="#mcqs" type="button" role="tab" aria-controls="contact" aria-selected="false">MCQs</button>
+  </li>
+</ul>
+
+
+
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="video" role="tabpanel" aria-labelledby="home-tab">
+           <div class="table-responsive">
+            <table class="table table-bordered" id="videoDataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
-                        <th>LessonId</th>
-                        <th>Lesson Type</th>
-                        <th>Day Number</th>
-                        <th>Activity</th>
-                        <th>Week Number</th>
-                        <th>Videos</th>
+                         
+
+                     
+                         <th>lessonType</th>
+                          <th>weekNumber</th>
+                        <th>dayNumber</th>
+                        <th>videos</th>
+                       
+                      
+                       
+                    </tr>
+                </thead>
+                  <tbody  id="tblVideo">
+
+                  </tbody>
+            </table>
+  </div>
+
+ 
+
+
+  </div>
+  <div class="tab-pane fade" id="audio" role="tabpanel" aria-labelledby="profile-tab">
+         <div class="table-responsive">
+            <table class="table table-bordered" id="audioDataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        
+                         <th>lessonType</th>
+                          <th>weekNumber</th>
+                        <th>dayNumber</th>
+                        <th>Audios</th>
+                        <th>Image</th>
+                     
+                    </tr>
+                </thead>
+                  <tbody  >
+
+                  </tbody>
+            </table>
+  </div>
+  </div>
+  <div class="tab-pane fade" id="text" role="tabpanel" aria-labelledby="contact-tab">
+
+    <div class="table-responsive">
+            <table class="table table-bordered" id="textDataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                         <th>lessonType</th>
+                          <th>weekNumber</th>
+                        <th>dayNumber</th>
                         <th>Audios</th>
                         <th>Image</th>
                         <th>Text</th>
-                        <th>Show Mcqs</th>
-                        <th></th>
-                        <th></th>
+                      
                     </tr>
                 </thead>
                   <tbody >
@@ -45,14 +125,42 @@
             </table>
   </div>
 
+  </div>
+    @*-----------------------------   mcqs ------------------------------------------------*@
+
+    <div class="tab-pane fade" id="mcqs" role="tabpanel" aria-labelledby="contact-tab">
+
+    <div class="table-responsive">
+            <table class="table table-bordered" id="mcqsDataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                         <th>lessonType</th>
+                          <th>weekNumber</th>
+                        <th>dayNumber</th>
+                        <th>MCQs</th>
+                      
+                    </tr>
+                </thead>
+                  <tbody >
+
+                  </tbody>
+            </table>
+  </div>
+
+  </div>
+</div>
+
+
+
   @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+       <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
     @*<link rel="stylesheet" type="text/css" href="~/css/Stepper.css"  />*@
     <script type="text/javascript" src="~/js\Lessonjs.js" ></script>
       
-
- 
-
 }
+
+
 
 
