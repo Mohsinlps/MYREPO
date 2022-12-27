@@ -22,6 +22,7 @@ using NpgsqlTypes;
 using Serilog;
 using Serilog.Sinks.PostgreSQL;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Microsoft.AspNetCore.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 var _config = builder.Configuration;

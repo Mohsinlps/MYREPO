@@ -1,5 +1,9 @@
 ﻿//const { forEach } = require("../vendor/fontawesome-free/js/v4-shims");
 
+/*const { Doc } = require("../ckeditor/samples/toolbarconfigurator/lib/codemirror/codemirror");*/
+
+/*const { Tab } = require("../lib/bootstrap/dist/js/bootstrap.bundle");*/
+
 
 
 //-------------------Add Lesson------------------------
@@ -116,7 +120,14 @@ function loadVideoLesson()
             data: jsondata,
             success: (res) =>
             {
-                console.log(res);
+                var table = $('#videoDataTable').DataTable();
+
+                //clear datatable
+                table.clear().draw();
+
+                //destroy datatable
+                table.destroy();
+
                 $('#videoDataTable').dataTable({
                     data: res,
                     columns: [
@@ -133,7 +144,7 @@ function loadVideoLesson()
                                 var videoArray = "";
                                 var length = data.videos.length;
                                 for (var i = 0; i < length; i++) {
-                                    videoArray = videoArray + '<video width="50" height="50" controls><source src="' + data.videos[i] + '"></video>';
+                                    videoArray = videoArray + '<video width="150" height="150" controls><source src="' + data.videos[i] + '"></video>';
                                     videoArray = videoArray + ' ';
                                 }
 
@@ -174,7 +185,16 @@ function loadAudioLesson() {
             contentType: "application/json; charset=utf-8",
             data: jsondata,
             success: (res) => {
-                console.log(res);
+               
+
+                var table = $('#audioDataTable').DataTable();
+
+                //clear datatable
+                table.clear().draw();
+
+                //destroy datatable
+                table.destroy();
+
                 $('#audioDataTable').dataTable({
                     data: res,
                     columns: [
@@ -239,7 +259,17 @@ function loadTextLesson() {
             contentType: "application/json; charset=utf-8",
             data: jsondata,
             success: (res) => {
-               
+
+                var table = $('#textDataTable').DataTable();
+
+                //clear datatable
+                table.clear().draw();
+
+                //destroy datatable
+                table.destroy();
+
+
+
                 $('#textDataTable').dataTable({
                     data: res,
                     columns: [
@@ -267,7 +297,7 @@ function loadTextLesson() {
                         },
                         {
                             "data": null, "render": function (data) {
-                                return `<img src="` + data.image + `"  width="50" height="50">`;
+                                return `<img id="imgText" src="` + data.image + `"  width="50" height="50">`;
                             }
                         },
                         {
@@ -304,6 +334,18 @@ $(document).on('click', '.btnShowLessonText', function () {
 
 
 
+$(document).on('click', '#imgText', function () {
+
+    var src = $(this).attr('src');
+   
+    $('.textImgModalBody').html(
+        `<img id="imgText" src="` + src + `"  width="465" height="auto">`
+    );
+
+    $('.textImgModal').modal('toggle');
+});
+
+//aaaaaaaaaaaaaaaaaaaaaa
 
 //-------------------  load mcqs ----------------------------------
 
@@ -320,7 +362,16 @@ function loadMcqsLesson() {
             contentType: "application/json; charset=utf-8",
             data: jsondata,
             success: (res) => {
-                console.log(res);
+
+                var table = $('#mcqsDataTable').DataTable();
+
+                //clear datatable
+                table.clear().draw();
+
+                //destroy datatable
+                table.destroy();
+
+
                 $('#mcqsDataTable').dataTable({
                     data: res, 
                     columns: [  
@@ -340,10 +391,8 @@ function loadMcqsLesson() {
                                     mcqsArray[i]=data.mcqquestion[i];
                                  
                                 }
-                                console.log("--------array--------");
-
-                                console.log(mcqsArray);
-                                return '<button type="button" id="btnShowMcq" lessonId="' + data.lessonId + '"  class="btn btn-danger ">Show Mcqs</button>'
+                              
+                                return '<button type="button"  lessonId="' + data.lessonId + '"  class="btn btn-danger btnShowMcq ">Show Mcqs</button>'
                               
                             }
                                  
@@ -362,10 +411,38 @@ function loadMcqsLesson() {
 };
 
 
-$(document).on('click', '#btnShowMcqs', function () {
+$(document).on('click', '.btnShowMcq', function () {
     console.log("-----btn click-----------");
     console.log(mcqsArray);
-    alert('clicked');
+
+    console.log('-----question  =' + mcqsArray[0].question);
+    $('.mcqsModalBody').html(``);
+    for (var i = 0; i < mcqsArray.length; i++)
+    {
+
+       
+
+      
+        $('.mcqsModalBody').append(`
+       <div class="question">
+              <h2>Question : `+ mcqsArray[i].question + `</h2>
+              <p>Option 1 :`+ mcqsArray[i].option1 + `</p>
+              <p>Option 2 :`+ mcqsArray[i].option2 +`</p>
+              <p>Option 3 :`+ mcqsArray[i].option3+`</p>
+              <p>Option 4 :`+ mcqsArray[i].option4+`</p>
+              <h3>Correct Answer :`+ mcqsArray[i].correctAnswer+`</h3>
+              
+          </div>
+
+`);
+      
+
+
+    }
+
+    $('.mcqsModal').modal('toggle');
+
+   
     
 });
 

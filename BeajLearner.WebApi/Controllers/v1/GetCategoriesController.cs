@@ -20,32 +20,32 @@ namespace BeajLearner.WebApi.Controllers.v1
         }
 
       
-        [HttpGet("GetAllCategories")]
-        public IEnumerable<CourseCategoryDto> getCategories()
-        {
-            List<CourseCategoryDto> dto=new List<CourseCategoryDto>();
-            try
-            {
-                IEnumerable<CourseCategory> obj = _categoryRepo.GetAllCategories();
-                if(obj!=null)
-                {
-                   dto = _mapper.Map<List<CourseCategoryDto>>(obj);
-                    return dto;
-                }
-                else
-                {
-                    return dto;
-                }
+        //[HttpGet("GetAllCategories")]
+        //public IEnumerable<CourseCategoryDto> getCategories()
+        //{
+        //    List<CourseCategoryDto> dto=new List<CourseCategoryDto>();
+        //    try
+        //    {
+        //        IEnumerable<CourseCategory> obj = _categoryRepo.GetAllCategories();
+        //        if(obj!=null)
+        //        {
+        //           dto = _mapper.Map<List<CourseCategoryDto>>(obj);
+        //            return dto;
+        //        }
+        //        else
+        //        {
+        //            return dto;
+        //        }
                
-            }
-            catch(Exception ex)
-            {
+        //    }
+        //    catch(Exception ex)
+        //    {
 
-            }
+        //    }
            
-            return dto;
+        //    return dto;
 
-        }
+        //}
 
     }
 }

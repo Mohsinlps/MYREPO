@@ -34,15 +34,15 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
             _mcqRepo = mcqRepo;
         }
 
-
-        public async Task<LessonDto> AddLesson( LessonDto input)
+        public async Task<LessonDto> AddLesson(LessonDto input)
         {
             Lesson lesson = new Lesson();
             lesson = _mapper.Map<Lesson>(input);
-          
+
 
             #region
-            var fileDirectory = _configuration["FileSetting:DirectoryPath"];
+            // var fileDirectory = _configuration["FileSetting:DirectoryPath"];
+            var fileDirectory = "wwwroot/uploads";
             var thumbnailDirectory = _configuration["FileSetting:Thumbnail:DirectoryPath"];
             var thumbnailWidth = Convert.ToInt32(_configuration["FileSetting:Thumbnail:Width"]);
             var thumbnailHeight = Convert.ToInt32(_configuration["FileSetting:Thumbnail:Height"]);
@@ -72,7 +72,7 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
                 String GenericfilePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
                 foreach (IFormFile requestvideo in input.videos)
                 {
-                    if (requestvideo!=null)
+                    if (requestvideo != null)
                     {
 
 
@@ -89,11 +89,11 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
                             await file.CopyToAsync(fileStream);
                         }
 
-                       
+
                         #region save file name in lstDocument
 
-                        //   lstVideos.Add(newFileName);
-                        lstVideos.Add(filePath);
+                        string dbPath =input.savingPort+"uploads/"+ newFileName;
+                        lstVideos.Add(dbPath);
 
                         #endregion
                     }
@@ -135,8 +135,8 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
 
                         #region save file name in lstDocument
 
-                        //   lstVideos.Add(newFileName);
-                        lstaudios.Add(filePath);
+                        string dbPath = input.savingPort + "uploads/" + newFileName;
+                        lstaudios.Add(dbPath);
 
                         #endregion
                     }
@@ -164,9 +164,9 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
                 {
                     if (requestimage != null)
                     {
-                     var imgtype= input.image[i].ContentType;
+                        var imgtype = input.image[i].ContentType;
                         i++;
-                         imgtype = imgtype.Substring(imgtype.LastIndexOf('/') + 1);
+                        imgtype = imgtype.Substring(imgtype.LastIndexOf('/') + 1);
                         // create new guid and set file name with newly created guid.
                         var newFileName = string.Format(@"{0}", Guid.NewGuid()) + "." + imgtype;
 
@@ -182,8 +182,8 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
 
                         #region save file name in lstDocument
 
-                        //   lstVideos.Add(newFileName);
-                        lstimages.Add(filePath);
+                        string dbPath = input.savingPort + "uploads/" + newFileName;
+                        lstimages.Add(dbPath);
 
                         #endregion
                     }
@@ -200,15 +200,188 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
                 #endregion
             }
 
-            lesson =  _repo.Add(lesson);
+            lesson = _repo.Add(lesson);
             LessonDto dto = new LessonDto();
             dto.LessonId = lesson.LessonId;
-            return dto; 
+            return dto;
 
         }
 
+
+        //public async Task<LessonDto> AddLesson( LessonDto input)
+        //{
+        //    Lesson lesson = new Lesson();
+        //    lesson = _mapper.Map<Lesson>(input);
+
+
+        //    #region
+        //    var fileDirectory = _configuration["FileSetting:DirectoryPath"];
+        //    var thumbnailDirectory = _configuration["FileSetting:Thumbnail:DirectoryPath"];
+        //    var thumbnailWidth = Convert.ToInt32(_configuration["FileSetting:Thumbnail:Width"]);
+        //    var thumbnailHeight = Convert.ToInt32(_configuration["FileSetting:Thumbnail:Height"]);
+
+
+        //    //#region create folders
+        //    if (!Directory.Exists(fileDirectory))
+        //    {
+        //        Directory.CreateDirectory(fileDirectory);
+        //    }
+        //    if (!Directory.Exists(thumbnailDirectory))
+        //    {
+        //        Directory.CreateDirectory(thumbnailDirectory);
+        //    }
+        //    //#endregion
+
+
+        //    //#region save base64 to folder
+
+        //    List<string> lstVideos = new List<string>();
+        //    List<string> lstaudios = new List<string>();
+        //    List<string> lstimages = new List<string>();
+
+        //    if (input != null && input.videos != null)
+        //    {
+        //        String filePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
+        //        String GenericfilePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
+        //        foreach (IFormFile requestvideo in input.videos)
+        //        {
+        //            if (requestvideo!=null)
+        //            {
+
+
+        //                // create new guid and set file name with newly created guid.
+        //                var newFileName = string.Format(@"{0}", Guid.NewGuid()) + "." + "mp4";
+
+
+        //                filePath = Path.Combine(GenericfilePath, newFileName);
+
+
+        //                IFormFile file = requestvideo;
+        //                using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+        //                {
+        //                    await file.CopyToAsync(fileStream);
+        //                }
+
+
+        //                #region save file name in lstDocument
+
+        //                //   lstVideos.Add(newFileName);
+        //                lstVideos.Add(filePath);
+
+        //                #endregion
+        //            }
+        //        }
+
+        //        #region update files in product table in database
+
+        //        if (lstVideos != null && lstVideos.Count > 0)
+        //        {
+
+        //            lesson.videos = lstVideos.ToArray();
+
+        //        }
+        //        #endregion
+        //    }
+        //    #endregion
+        //    if (input != null && input.Audios != null)
+        //    {
+        //        String filePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
+        //        String GenericfilePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
+        //        foreach (IFormFile requestaudio in input.Audios)
+        //        {
+        //            if (requestaudio != null)
+        //            {
+
+
+        //                // create new guid and set file name with newly created guid.
+        //                var newFileName = string.Format(@"{0}", Guid.NewGuid()) + "." + "mp3";
+
+
+        //                filePath = Path.Combine(GenericfilePath, newFileName);
+
+
+        //                IFormFile file = requestaudio;
+        //                using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+        //                {
+        //                    await file.CopyToAsync(fileStream);
+        //                }
+
+        //                #region save file name in lstDocument
+
+        //                //   lstVideos.Add(newFileName);
+        //                lstaudios.Add(filePath);
+
+        //                #endregion
+        //            }
+        //        }
+
+        //        #region update files in product table in database
+
+        //        if (lstaudios != null && lstaudios.Count > 0)
+        //        {
+
+        //            lesson.Audios = lstaudios.ToArray();
+
+        //        }
+        //        #endregion
+        //    }
+
+
+        //    if (input != null && input.image != null)
+        //    {
+        //        String filePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
+        //        String GenericfilePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
+
+        //        int i = 0;
+        //        foreach (IFormFile requestimage in input.image)
+        //        {
+        //            if (requestimage != null)
+        //            {
+        //             var imgtype= input.image[i].ContentType;
+        //                i++;
+        //                 imgtype = imgtype.Substring(imgtype.LastIndexOf('/') + 1);
+        //                // create new guid and set file name with newly created guid.
+        //                var newFileName = string.Format(@"{0}", Guid.NewGuid()) + "." + imgtype;
+
+
+        //                filePath = Path.Combine(GenericfilePath, newFileName);
+
+
+        //                IFormFile file = requestimage;
+        //                using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+        //                {
+        //                    await file.CopyToAsync(fileStream);
+        //                }
+
+        //                #region save file name in lstDocument
+
+        //                //   lstVideos.Add(newFileName);
+        //                lstimages.Add(filePath);
+
+        //                #endregion
+        //            }
+        //        }
+
+        //        #region update files in product table in database
+
+        //        if (lstimages != null && lstimages.Count > 0)
+        //        {
+
+        //            lesson.image = lstimages.ToArray();
+
+        //        }
+        //        #endregion
+        //    }
+
+        //    lesson =  _repo.Add(lesson);
+        //    LessonDto dto = new LessonDto();
+        //    dto.LessonId = lesson.LessonId;
+        //    return dto; 
+
+        //}
+
         //-------------------------------   MCQS ------------------------------
-     
+
 
         public void AddMcqs(List< mcqsDto> dto)
         {

@@ -138,16 +138,16 @@ namespace BeajLearner.WebApi.Controllers.v1
 
         }
 
-       
+        [Authorize]
         [HttpPost("getCustomerProfile")]
-        public async Task<getCustomerProfileDto> getCustomerProfile([FromBody] string userId)
+        public async Task<getCustomerProfileDto> getCustomerProfile([FromBody] getProfileDto dto)
         {
            
             var origin = Request.Headers["origin"];
             try
             {
-
-                return (await _userRepository.getUserProfile(userId));
+                string userid = dto.id;
+                return (await _userRepository.getUserProfile(userid));
             }
             catch (Exception ex)
             {

@@ -5,6 +5,7 @@ using BeajLearner.Domain.DomainDtos;
 using BeajLearner.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Hosting;
 
 namespace BeajLearner.WebApi.Controllers.v1
 {
@@ -12,12 +13,13 @@ namespace BeajLearner.WebApi.Controllers.v1
     [ApiController]
     public class LessonController : ControllerBase
     {
-
+        private IWebHostEnvironment Environment;
         private ILessonRepository _lessonRepository;
-
-        public LessonController(ILessonRepository lessonRepository)
+       
+        public LessonController(ILessonRepository lessonRepository, IWebHostEnvironment env)
         {
             _lessonRepository = lessonRepository;
+            Environment = env;
         }
 
         //********************************************************
@@ -37,6 +39,14 @@ namespace BeajLearner.WebApi.Controllers.v1
         [Route("AddLesson")]
         public async Task<IActionResult> Post([FromForm] LessonDto dto)
         {
+           
+            string host = HttpContext.Request.Host.Value;
+            host = "https://" + host+"//";
+
+            dto.savingPort = host;
+
+            //------------------------
+
             if (dto.dayNumber == -1)
             {
                 dto.dayNumber = null;

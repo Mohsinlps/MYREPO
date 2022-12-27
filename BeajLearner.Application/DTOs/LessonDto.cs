@@ -22,6 +22,7 @@ namespace BeajLearner.Application.DTOs
         public string text { get; set; }
        public string mcqs { get; set; }
         public int courseId { get; set; }
+        public string savingPort { get; set; }
 
 
       
