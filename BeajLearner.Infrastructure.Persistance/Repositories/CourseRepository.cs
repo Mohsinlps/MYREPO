@@ -66,7 +66,7 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
         public IEnumerable< CourseDto> GetAllCoursesForUser(string CustomerId)
         {
 
-        IEnumerable<purchaseCourseDto> purchasedCourses =_mapper.Map<IEnumerable< purchaseCourseDto> >(_repoPurchasedCourse.GetAll());
+        IEnumerable<purchaseCourseDto> purchasedCourses =_mapper.Map<IEnumerable< purchaseCourseDto> >(_repoPurchasedCourse.GetAll().Where(x=>x.customerId==CustomerId));
             //-------------------------------
             IEnumerable<Course> allCourses = _repo.GetAll();
 
@@ -76,7 +76,8 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
          var test= allCourses.Where(ac => purchasedCourses.Select(pc => pc.courseId).Contains(ac.CourseId));
             foreach(var i in test)
             {
-                allCourses.FirstOrDefault(x=> x.CourseId==i.CourseId).CoursePrice=0;
+
+                allCourses.FirstOrDefault(x => x.subscribed = true);
             }
 
             IEnumerable<CourseDto> coursedto = _mapper.Map<IEnumerable< CourseDto>>(allCourses);

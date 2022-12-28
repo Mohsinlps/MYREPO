@@ -49,7 +49,7 @@ $('#CourseCategorydrp').change(function () {
 
     $.ajax(
         {
-            type: 'POST',
+            type: 'GET',
             url: globalUrlForAPIs +'Course/GetAllCourseByCategoryId?categoryId=' + id,
             contentType: "application/json; charset=utf-8",
             dataType: "json",

@@ -20,30 +20,30 @@ namespace BeajLearner.WebApi.Controllers.v1
             _mapper = mapper;
         }
 
-        [HttpGet("GetCourseByCategoryId")]
-        public IEnumerable<CourseDto> GetCoursesbyCategoryId(int id)
-        {
-            List<CourseDto> dto = new List<CourseDto>();
-            try
-            {
-                IEnumerable<Course> model = _courseRepo.GetCourseByCategoryId(id);
-                if(model!= null)
-                {
-                    dto = _mapper.Map<List<CourseDto>>(model);
-                    return dto;
-                }
-                else
-                {
-                    return dto;
-                }
-            }
-            catch(Exception ex)
-            {
+        //[HttpGet("GetCourseByCategoryId")]
+        //public IEnumerable<CourseDto> GetCoursesbyCategoryId(int id)
+        //{
+        //    List<CourseDto> dto = new List<CourseDto>();
+        //    try
+        //    {
+        //        IEnumerable<Course> model = _courseRepo.GetCourseByCategoryId(id);
+        //        if(model!= null)
+        //        {
+        //            dto = _mapper.Map<List<CourseDto>>(model);
+        //            return dto;
+        //        }
+        //        else
+        //        {
+        //            return dto;
+        //        }
+        //    }
+        //    catch(Exception ex)
+        //    {
                
-            }
+        //    }
            
-            return dto;
+        //    return dto;
 
-        }
+        //}
     }
 }

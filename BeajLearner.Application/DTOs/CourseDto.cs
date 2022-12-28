@@ -13,5 +13,7 @@ namespace BeajLearner.Application.DTOs
         public int? CoursePrice { get; set; }
         public int? CourseWeeks { get; set; }
         public int CourseCategoryId { get; set; }
+        public bool subscribed { get; set; }
+        public string status { get; set; }
     }
 }

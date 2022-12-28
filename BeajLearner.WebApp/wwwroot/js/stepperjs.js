@@ -710,13 +710,15 @@ $(document).on('click', '#btnAddCategoryModal', function () {
 });
 
 $(document).on('click', '#btnAddCourseModal', function () {
-    alert('clicked');
-      $('#lblCourseaddedmsg').prop('hidden', true);
+   
+      $('#lblCourseAddedMessage').prop('hidden', true);
       $('#txtCourse').show();
       $('#btnCourseAddclick').show();
     $('.courseAddModal').modal('toggle');
     $('#coursecategoryid').prop('hidden', false);
-
+    $('#courseStatusDrp').prop('hidden', false);
+    $("#courseStatusDrp").val($("#courseStatusDrp option:first").val());
+    $('#txtCoursePrice').prop('disabled', true);
     $('#txtCourse').val('');
     $('#txtCoursePrice').val('');
     $('#txtCourseWeeks').val('');
@@ -785,6 +787,7 @@ $(document).on('click','#btnAddCategory', function () {
 $(document).on('click', '#btnCourseAddclick', function () {
 
     var check = isNullOrUndefined($('#txtCourse').val());
+   
     if (check != false)
     {
        
@@ -792,7 +795,7 @@ $(document).on('click', '#btnCourseAddclick', function () {
                     {
                         
                         url: globalUrlForAPIs + 'Course/AddCourse',
-                        data: { "CourseCategoryId": $('#CourseCategorydrp').find(":selected").val(), "CourseName": $('#txtCourse').val(), "CoursePrice": $('#txtCoursePrice').val(), "CourseWeeks": $('#txtCourseWeeks').val() },
+                        data: { "CourseCategoryId": $('#CourseCategorydrp').find(":selected").val(), "CourseName": $('#txtCourse').val(), "CoursePrice": $('#txtCoursePrice').val(), "CourseWeeks": $('#txtCourseWeeks').val(), "status": $('#courseStatusDrp').find(':selected').val() },
 
                         dataType: 'JSON',
                   
@@ -806,6 +809,7 @@ $(document).on('click', '#btnCourseAddclick', function () {
                             $('#txtCoursePrice').hide();
                             $('#txtCourseWeeks').hide();
                             $('#coursecategoryid').prop('hidden', true);
+                            $('#courseStatusDrp').prop('hidden', true);
                             loadCoursesDrp();
                         },
                         error: (res) => { alert('something went wrong') }
@@ -817,6 +821,23 @@ $(document).on('click', '#btnCourseAddclick', function () {
     //redurl = 'StepperTeacher';
     //window.location.href = redurl;
 });
+
+
+$(document).on('change', '#courseStatusDrp', function () {
+
+    var value = $('#courseStatusDrp').find(':selected').val();
+    if (value == 'free') {
+        $('#txtCoursePrice').val('0');
+        $('#txtCoursePrice').attr('disabled', true);
+    }
+    else
+    {
+        $('#txtCoursePrice').val('');
+        $('#txtCoursePrice').attr('disabled', false);
+    }
+});
+
+
 
 
 
@@ -887,7 +908,7 @@ function loadCoursesDrp () {
     $('#txtCategory').val(text);
     $.ajax(
         {
-            type: 'POST',
+            type: 'GET',
             url: globalUrlForAPIs + 'Course/GetAllCourseByCategoryId?categoryId=' + id,
             contentType: "application/json; charset=utf-8",
             dataType: "json",

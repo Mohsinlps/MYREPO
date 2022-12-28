@@ -85,13 +85,21 @@
                 <label hidden id="lblCourseAddedMessage">Added Successfully !!!</label>
                
                 <input  id="txtCourse" class="form-control" placeholder="Enter Course Name" />
+                 <br />
+                 <select class="form-select form-select-lg mb-3 " id="courseStatusDrp">
+                             <option value="-1">Status</option>
+                             <option value="paid">Paid</option>
+                             <option value="free">Free</option>
+                         </select>
                 <br />
                 <div style="display:flex !important ;justify-content:space-between !important">
-                        <input id="txtCoursePrice" class="form-control" placeholder="Enter Price"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
+                        <input id="txtCoursePrice" class="form-control" placeholder="Enter Price" disabled  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
                         <br />
                          <input id="txtCourseWeeks" class="form-control"  placeholder="Enter Course Weeks" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
-                         />       
+                         />     
+                        
                 </div>
+               
             </div>
         
             <div class="form-group">
