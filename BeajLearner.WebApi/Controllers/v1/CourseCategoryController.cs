@@ -23,7 +23,11 @@ namespace BeajLearner.WebApi.Controllers.v1
         [Route("AddCourseCategory")]
         public async Task<IActionResult> Post([FromForm] CourseCategoryDto categorydto)
         {
-         categorydto=   _CourseCategoryService.AddCourseCategory(categorydto);
+            string host = HttpContext.Request.Host.Value;
+            host = "https://" + host + "//";
+
+            categorydto.savingPort = host;
+            categorydto =   _CourseCategoryService.AddCourseCategory(categorydto);
             return Ok(new Response<CourseCategoryDto>(categorydto, "Created Sucessfully"));
         }
 

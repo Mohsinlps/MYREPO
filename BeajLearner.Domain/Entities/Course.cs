@@ -18,7 +18,7 @@ namespace BeajLearner.Domain.Entities
         public bool subscribed { get; set; }
         public string status { get; set; }
         public CourseCategory CourseCategory { get; set; }
-      
+     
         public ICollection<Lesson> lessons { get; set; }
     }
 }

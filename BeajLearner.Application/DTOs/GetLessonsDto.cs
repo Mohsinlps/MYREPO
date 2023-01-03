@@ -18,6 +18,7 @@ namespace BeajLearner.Application.DTOs
         public string lessonType { get; set; }
         public int? dayNumber { get; set; }
         public string activity { get; set; }
+        public string activityAlias { get; set; }
         public ICollection<mcqQuestions> mcqquestion { get; set; }
         public int courseId { get; set; }
 

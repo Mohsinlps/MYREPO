@@ -34,6 +34,14 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
         //    return obj;
         //}
 
+        public IEnumerable<GetLessonWithCourseAndCategoryDto> GetAllLessonWithCatAndCourseById(int id)
+        {
+
+            IQueryable<GetLessonWithCourseAndCategoryDto> dto = _lessonRepo.GetLessonWithCourseAndCategoryById(id);
+            return dto;
+        }
+
+
 
         public IEnumerable<Lesson> GetLessonByCourseIdAndActivity(getMcqsDto dto)
         {
@@ -60,6 +68,29 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
           
                 IEnumerable<Lesson> obj = _lessonRepo.GetLessonByCourseIdwithMcqs( id);
           if(obj != null)
+            {
+                return obj;
+            }
+            else { return null; }
+        }
+
+        public IEnumerable<Lesson> GetLessonById(int id)
+        {
+
+
+
+            IEnumerable<Lesson> obj = _lessonRepo.GetLessonByIdwithMcqs(id);
+            if (obj != null)
+            {
+                return obj;
+            }
+            else { return null; }
+        }
+
+        public IEnumerable<Lesson> GetLessonByCourseIdAndWeekNumber(int id,int weekNumber)
+        {
+            IEnumerable<Lesson> obj = _lessonRepo.GetLessonByCourseIdwithMcqs(id).Where(x=>x.weekNumber==weekNumber);
+            if (obj != null)
             {
                 return obj;
             }

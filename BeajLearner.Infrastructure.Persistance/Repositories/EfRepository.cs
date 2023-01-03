@@ -86,16 +86,54 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
                              LessonId= L.LessonId,
                            //  week=L.week,
                              text=L.text,
-                             Videos=L.videos,
+                             videos=L.videos,
                              Audios=L.Audios,
-                             CourseId=c.CourseId,
+                             image=L.image,
+                             lessonType=L.lessonType,
+                             dayNumber=L.dayNumber,
+                             activity=L.activity,
+                             activityAlias=L.activityAlias,
+                             mcqquestion=L.mcqquestion,
+                             courseId=c.CourseId,
                              CourseName=c.CourseName,
+                             weekNumber=L.weekNumber,
+
                              CourseCategoryId=cc.CourseCategoryId,
                              CourseCategoryName=cc.CourseCategoryName
                          };
             return result;
         }
 
+        public IQueryable<GetLessonWithCourseAndCategoryDto> GetLessonWithCourseAndCategoryById(int id)
+        {
+            var result = from L in _dbContext.Lesson
+                         join c in _dbContext.Courses
+                         on L.courseId equals c.CourseId
+                         join cc in _dbContext.CourseCategories
+                         on c.CourseCategoryId equals cc.CourseCategoryId
+                         where L.LessonId==id
+                         select new GetLessonWithCourseAndCategoryDto
+                         {
+                             LessonId = L.LessonId,
+                             //  week=L.week,
+                             text = L.text,
+                             videos = L.videos,
+                             Audios = L.Audios,
+                             image = L.image,
+                             lessonType = L.lessonType,
+                             dayNumber = L.dayNumber,
+                             activity = L.activity,
+                             activityAlias = L.activityAlias,
+                             mcqquestion = L.mcqquestion,
+                             courseId = c.CourseId,
+                             CourseName = c.CourseName,
+                             weekNumber = L.weekNumber,
+
+                             CourseCategoryId = cc.CourseCategoryId,
+                             CourseCategoryName = cc.CourseCategoryName
+                         };
+            return result;
+        }
 
 
         // get specific activity data by course Id
@@ -115,6 +153,14 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
         public IEnumerable<Lesson> GetLessonByCourseIdwithMcqs(int id)
         {
             IEnumerable<Lesson> model = _dbContext.Lesson.Where(x => x.courseId ==id).Include(y => y.mcqquestion);
+            return model;
+        }
+
+
+
+        public IEnumerable<Lesson> GetLessonByIdwithMcqs(int id)
+        {
+            IEnumerable<Lesson> model = _dbContext.Lesson.Where(x => x.LessonId == id).Include(y => y.mcqquestion);
             return model;
         }
 

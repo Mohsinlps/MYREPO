@@ -34,9 +34,10 @@
                @*<label id="lblCourseCategoryName" class="fieldlabels">Course Category Name</label>*@
                <input type="text" id="txtCourseCategory" class="form-control" placeholder="Category Name" />
                <br />
-               <label class="control-label  audioHide">Upload Image</label>
-                            <input type="file"  id="imageUploadCat"  name="files" class="  " multiple />
-           
+               <div id="categoryImg">
+               <label class="control-label  ">Upload Image</label>
+                            <input type="file"  id="imageUploadCat" class="form-control"  name="files" class="  " multiple />
+           </div>
             <br />
            
               <button  id="btnAddCategory"  class="button btn btn-primary btn-user btn-block" type="button" >
@@ -239,6 +240,25 @@
                              
                               
                               </select>
+                             <div class="row">
+                                 <div class="col-4">
+                                     <label class="fieldlabels">Week Image</label>
+                                  <input type="file" id="weekImgUpload" class="form-control"/></div>
+
+                                   <div  class="col-4">
+                                     <label class="fieldlabels">Week Image</label>
+                                     <div id="imgDiv">
+
+                                     </div>
+                               
+                              </div>
+
+                                 <div class="col-4">
+                                     <label class="fieldlabels">Week Description</label>
+                                  <input class="form-control" id="weekDescription"  placeholder="Add Week Description" />
+                              </div>
+                                 
+                              </div>
                            </div>
 
                                <div class="dayDiv">
@@ -259,10 +279,29 @@
                              <option value="-1">Select Lesson Activity</option>
                                <option value="audio">Listen</option>
                              <option value="video">Watch</option>
-                             <option value="text">Read</option>
-                              <option value="text">Speak</option>
+                             <option value="read">Read</option>
+                              <option value="speak">Speak</option>
                              <option value="mcqs">MCQs</option>
                             </select>
+                            
+                            <label class="fieldlabels">Select activity alias</label>
+                              <select  id="drpAlias"  class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                             <option value="-1">Select Alias</option>
+                               <option value="Listen">Listen</option>
+                             <option value="Watch">Watch</option>
+                             <option value="Speak">Speak</option>
+                              <option value="Grammar">Grammar</option>
+                             <option value="Practice">Practice</option>
+                              <option value="Speak">Speak</option>
+                               <option value="Vocabulary">Vocabulary</option>
+                                <option value="Conversation">Conversation</option>
+                                 <option value="Read">Read</option>
+                                  <option value="Review Phrases">Review Phrases</option>
+                                  <option value="Review words">Review words</option>
+
+                            </select>
+                          
+                            
                         </div>
                         <input type="button" name="next" id="btnNextLesson1" class="btnNextLesson1 action-button" value="Submit"/>
                         <input type="button" name="previous"@* id="btnPreStepperTeacher"*@ class="previous action-button-previous" value="Previous"/>

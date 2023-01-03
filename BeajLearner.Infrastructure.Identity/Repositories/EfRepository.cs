@@ -82,9 +82,17 @@ namespace BeajLearner.Infrastructure.Identity.Repositories
         {
             return null;
         }
+        public IQueryable<GetLessonWithCourseAndCategoryDto> GetLessonWithCourseAndCategoryById(int id) 
+        {
+
+            return null;
+
+        }
         public int deleteBulk(List<T> entity) { return 0; }
         public IEnumerable<Lesson> getLessonWithMcqs(getMcqsDto getDto) { return null; }
         public IEnumerable<Lesson> GetLessonByCourseIdwithMcqs(int id) { return null; }
+
+        public IEnumerable<Lesson> GetLessonByIdwithMcqs(int id) { return null; }
 
        // ********************************************************
         public virtual async Task<T> GetByIdAsync(Guid id)

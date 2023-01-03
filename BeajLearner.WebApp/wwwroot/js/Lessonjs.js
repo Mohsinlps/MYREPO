@@ -25,7 +25,7 @@ $(document).ready
 
 
                         $.each(res, function (i, item) {
-                            $('#CourseCategorydrp').append(`<option value="${item.courseCategoryId}">
+                            $('#CourseCategorydrpLesson').append(`<option value="${item.courseCategoryId}">
                                        ${item.courseCategoryName}
                                   </option>`)
                         });
@@ -41,8 +41,8 @@ $(document).ready
 
     )
 
-$('#CourseCategorydrp').change(function () {
-    var id = $('#CourseCategorydrp').find(":selected").val();
+$('#CourseCategorydrpLesson').change(function () {
+    var id = $('#CourseCategorydrpLesson').find(":selected").val();
 
     var jsondata = JSON.stringify({ "categoryId": id });
 
@@ -55,10 +55,15 @@ $('#CourseCategorydrp').change(function () {
             dataType: "json",
             success: (res) => {
 
+                $('#CoursedrpLesson').empty();
+                $('#CoursedrpLesson').append(`<option value="-1">
+                                       Select Course
+                                  </option>`);
+
                 $.each(res, function (i, item) {
-                    $('#Coursedrp').append(`<option value="${item.courseId}">
+                    $('#CoursedrpLesson').append(`<option value="${item.courseId}">
                                        ${item.courseName}
-                                  </option>`)
+                                  </option>`);
                 });
             }
         }
@@ -90,9 +95,9 @@ $('#CourseCategorydrp').change(function () {
 //    )
 //}
 
-$('#Coursedrp').change(function () {
+$('#CoursedrpLesson').change(function () {
 
-    if ($('#Cousedrp').find(":selected").val()!=-1)
+    if ($('#CousedrpLesson').find(":selected").val()!=-1)
     {
         loadVideoLesson();
         loadAudioLesson();
@@ -107,8 +112,8 @@ $('#Coursedrp').change(function () {
 
 function loadVideoLesson()
 {
-    var categoryId = $('#CourseCategorydrp').find(":selected").val();
-    var CourseId = $('#Coursedrp').find(":selected").val();
+    var categoryId = $('#CourseCategorydrpLesson').find(":selected").val();
+    var CourseId = $('#CoursedrpLesson').find(":selected").val();
    
     var jsondata = JSON.stringify({ activity: "video", courseId: CourseId });
     $.ajax(
@@ -149,13 +154,22 @@ function loadVideoLesson()
                                 }
 
                                 return videoArray;
-                                //data.each((item, index) => {
-                                //    return '<video width="50" height="50" controls><source src="' + data.videos + '"></video>';
-                                //});
-
+                             
                                 
                                
                                 
+                            }
+                        },
+                        {
+                            "data": null, "render": function (data)
+                            {
+                                return `<button class="btn btn-primary btnEditLesson" lessonId=` + data.lessonId + `>Edit</button>`
+                            }
+                        },
+                        {
+                            "data": null, "render": function (data)
+                            {
+                                return `<button class="btn btn-danger btnDeleteLesson" lessonId=` + data.lessonId + `>Delete</button>`
                             }
                         },
                      
@@ -173,8 +187,8 @@ function loadVideoLesson()
 
 
 function loadAudioLesson() {
-    var categoryId = $('#CourseCategorydrp').find(":selected").val();
-    var CourseId = $('#Coursedrp').find(":selected").val();
+    var categoryId = $('#CourseCategorydrpLesson').find(":selected").val();
+    var CourseId = $('#CoursedrpLesson').find(":selected").val();
 
     var jsondata = JSON.stringify({ activity: "audio", courseId: CourseId });
     $.ajax(
@@ -224,10 +238,21 @@ function loadAudioLesson() {
 
                             }
                         },
+                        
                         {
                             "data": null, "render": function(data)
                             {
-                                return `<img src="` + data.image + `"  width="50" height="50">`;
+                                return `<img id="imgAudio" src="` + data.image + `"  width="50" height="50">`;
+                            }
+                        },
+                        {
+                            "data": null, "render": function (data) {
+                                return `<button class="btn btn-primary btnEditLesson" lessonId=` + data.lessonId + `>Edit</button>`
+                            }
+                        },
+                        {
+                            "data": null, "render": function (data) {
+                                return `<button class="btn btn-danger btnDeleteLesson" lessonId=` + data.lessonId + `>Delete</button>`
                             }
                         },
                        
@@ -245,10 +270,24 @@ function loadAudioLesson() {
 };
 
 
+$(document).on('click', '#imgAudio', function () {
+
+    var src = $(this).attr('src');
+
+    $('.audioImgModalBody').html(
+        `<img  src="` + src + `"  width="465" height="auto">`
+    );
+
+    $('.audioImgModal').modal('toggle');
+});
+
+
+
+
 
 function loadTextLesson() {
-    var categoryId = $('#CourseCategorydrp').find(":selected").val();
-    var CourseId = $('#Coursedrp').find(":selected").val();
+    var categoryId = $('#CourseCategorydrpLesson').find(":selected").val();
+    var CourseId = $('#CoursedrpLesson').find(":selected").val();
 
     var jsondata = JSON.stringify({ activity: "text", courseId: CourseId });
     $.ajax(
@@ -304,11 +343,21 @@ function loadTextLesson() {
                            
                             "data": null, "render": function (data) {
                                // globalLessonText = data.text;
-                                return '<button type="button" lessonId="' + data.lessonId + '" text="' + data.text + '"  class="btn btn-danger btnShowLessonText">Show text</button>'
+                                return '<button type="button" lessonId="' + data.lessonId + '" text="' + data.text + '"  class="btn btn-success btnShowLessonText">Show text</button>'
 
                             }
 
-                        }
+                        },
+                        {
+                            "data": null, "render": function (data) {
+                                return `<button class="btn btn-primary btnEditLesson" lessonId=` + data.lessonId + `>Edit</button>`
+                            }
+                        },
+                        {
+                            "data": null, "render": function (data) {
+                                return `<button class="btn btn-danger btnDeleteLesson" lessonId=` + data.lessonId + `>Delete</button>`
+                            }
+                        },
 
                     ]
 
@@ -350,8 +399,8 @@ $(document).on('click', '#imgText', function () {
 //-------------------  load mcqs ----------------------------------
 
 function loadMcqsLesson() {
-    var categoryId = $('#CourseCategorydrp').find(":selected").val();
-    var CourseId = $('#Coursedrp').find(":selected").val();
+    var categoryId = $('#CourseCategorydrpLesson').find(":selected").val();
+    var CourseId = $('#CoursedrpLesson').find(":selected").val();
 
     var jsondata = JSON.stringify({ activity: "mcqs", courseId: CourseId });
     $.ajax(
@@ -392,12 +441,22 @@ function loadMcqsLesson() {
                                  
                                 }
                               
-                                return '<button type="button"  lessonId="' + data.lessonId + '"  class="btn btn-danger btnShowMcq ">Show Mcqs</button>'
+                                return '<button type="button"  lessonId="' + data.lessonId + '"  class="btn btn-success btnShowMcq ">Show Mcqs</button>'
                               
                             }
                                  
 
-                        }
+                        },
+                        {
+                            "data": null, "render": function (data) {
+                                return `<button class="btn btn-primary btnEditLesson" lessonId=` + data.lessonId + `>Edit</button>`
+                            }
+                        },
+                        {
+                            "data": null, "render": function (data) {
+                                return `<button class="btn btn-danger btnDeleteLesson" lessonId=` + data.lessonId + `>Delete</button>`
+                            }
+                        },
 
                     ]
 
@@ -431,8 +490,9 @@ $(document).on('click', '.btnShowMcq', function () {
               <p>Option 3 :`+ mcqsArray[i].option3+`</p>
               <p>Option 4 :`+ mcqsArray[i].option4+`</p>
               <h3>Correct Answer :`+ mcqsArray[i].correctAnswer+`</h3>
-              
+             
           </div>
+<br>
 
 `);
       
@@ -448,67 +508,205 @@ $(document).on('click', '.btnShowMcq', function () {
 
 
 
+$(document).on('click', '.btnDeleteLesson', function () {
 
-//$('#formlesson').submit(function (event) {
+    var lessonId = $(this).attr('lessonId');
+   
+    $.ajax({
 
-//    // var courseiddrp = $('#Coursedrp').find(":selected").val();
-//    // var week = $('#week').val();
-//    //var textval = CKEDITOR.instances['text'].getData();
-
-
-
-    
-//    event.preventDefault();
-//    var isValid = $(this).validate().form();
-//    console.log(isValid);
-//    if (!isValid) return false;
-//    else {
-
-//        var courseiddrp = $('#Coursedrp').find(":selected").val();
-//        var week = $('#week').val();
-//        var textval = CKEDITOR.instances['text'].getData();
-
-//        var formData = new FormData();
-//        formData.append("CourseId", $('#Coursedrp').find(":selected").val());
-//        formData.append("week", $('#week').val());
-//        formData.append("text", CKEDITOR.instances['text'].getData());
+        type: 'GET',
+        url: globalUrlForAPIs + 'Lesson/DeleteLesson?id=' + lessonId,
+        success: (res) =>
+        {
+            loadVideoLesson();
+            loadAudioLesson();
+            loadTextLesson();
+            loadMcqsLesson();
+        }
+    });
+});
 
 
-//        $($("#videoUpload")[0].files).each((i, element) => {
 
-//            formData.append("Videos", $("#videoUpload")[0].files[i]);
-//        })
 
-//        $($("#audioUpload")[0].files).each((i, element) => {
 
-//            formData.append("Audios", $("#audioUpload")[0].files[i]);
-//        })
 
-//        $($('#videoUpload')[0].files).each((i, element) => {
-//            console.log(i);
-//            console.log(element);
-//        });
+
+//        ---------------          edit -----------------------------
+
+$(document).on('click', '.btnEditLesson', function () {
+
+    var lessonId = $(this).attr('lessonId');
+
+   
+   
+
+    $.ajax({
+        type: 'GET',
+        url: globalUrlForAPIs + 'GetLessons/GetLessonWithCourseAndCategoryById?id=' + lessonId,
+      
+        success: (resLesson) =>
+        {
+            console.log(resLesson);
+
+            //load category
+            $.ajax(
+                {
+                    type: 'GET',
+                    url: globalUrlForAPIs + 'CourseCategory/GetAllCourseCategories',
+
+                    success: (res) => {
+
+                        alert('cat' + resLesson[0].courseCategoryId);
+                        $('#CourseCategorydrpEdit').empty();
+
+                        //$('#CourseCategorydrpEdit').append(`<option value="` + resLesson[0].courseCategoryId + `">
+                        //               `+ resLesson[0].courseCategoryName + ` </option>`);
+                        $.each(res, function (i, item) {
+                            $('#CourseCategorydrpEdit').append(`<option value="${item.courseCategoryId}">
+                                       ${item.courseCategoryName}
+                                  </option>`)
+                        });
+
+
+                        $("#CourseCategorydrpEdit select").val(resLesson[0].courseCategoryId).change();
+                        console.log(res[0].courseCategoryId);
+                      
+                    
+
+
+                    }
+                }
+            )
+
+            //   load course drp
+
+            //$.ajax({
+            //    type: 'GET',
+            //    url: globalUrlForAPIs + 'Course/GetAllCourseByCategoryId?categoryId=' + res[0].courseCategoryId,
+            //    success: (res) =>
+            //    {
+            //        $('#Coursedrp').empty();
+            //        $('#Coursedrp').append(`<option value="-1">
+            //                           Select Course
+            //                      </option>`);
+
+            //        $.each(res, function (i, item) {
+            //            $('#Coursedrp').append(`<option value="${item.courseId}">
+            //                           ${item.courseName}
+            //                      </option>`);
+            //        });
+
+            //        $('#Coursedrp').val(res[0].courseId).change();
+
+
+            //    }
+            //});
+
+            //$('#drpLessonType').val(res[0].lessonType).change();
+            //if (res[0].lessonType != 'week') {
+            //    $('.weekNumberDiv').prop('hidden', true);
+            //    $('.dayDiv').prop('hidden', true);
+                
+            //}
+            //else
+            //{
+            //    $('.weekNumberDiv').prop('hidden', false);
+            //    $('.dayDiv').prop('hidden', false);
+
+            //    $('#weekNumberDrp').val(res[0].weekNumber).change();
+
+
+            //    //  load week
+            //    $.ajax({
+            //        type: 'GET',
+            //        url: globalUrlForAPIs + 'Lesson/GetWeekByCourseIdAndWeekNumber?id=' + res[0].courseId + '&weekNumber=' + res[0].weekNumber + '',
+            //        success: (resWeek) =>
+            //        {
+            //            console.log('--resweek--' + resWeek);
+            //            $('#imgDiv').html(`  <img id='imgWeekModal' alt="Image" style=" width:50px ; height:50px" src=' ` + resWeek.image + `' />`);
+            //        }
+            //    });
+               
+
+            //}
+
+
+
+
+
+            $('.lessonEditModal').modal('toggle');
+
+
+
+
+        }
         
-//        console.log(formData);
-//        $.ajax(
-//            {
-//                url: globalUrlForAPIs +'Lesson/AddLesson',
-//                data: formData,
-//                dataType: 'JSON',
-//                processData: false,
-//                contentType: false,
-//                enctype: "multipart/form-data",
-//                type: 'POST',
-//                success: (res) => {
-//                    alert("saved successfully");
-//                }
-//            });
-//    }
-//});
+    });
+
+});
+
+
+//--------------------------  MCqs Designing ------------------------------------------
+
+//-----------------------------  btn append mcq question click -------------------------
+let mcqQuestionCount = 2;
+let idCount = 1;
+
+$(document).on('click', '.btnAddMcq', function () {
 
 
 
-//------------------Select Lesson type------------------------
+
+    $('#questionDiv').append(`<div id="removeQuestion` + idCount + `" class="iterateElements">
+
+                                    <h3 class="regenerateCount"><p>Question No : `+ mcqQuestionCount + `</p></h3>
+                                    <button type="button" class="btn btn-danger " id="`+ idCount + `" onclick="removeQuestionFunc(this.id)">Remove</button>
+                                     <input type="text" id="txtMcqQuestion`+ idCount + `" class="form-control txtMcqQuestion iterateInputElements question" style="border-radius:5px" placeholder="Write question" />
+                                     <input type="text" id="txtMcqOption1`+ idCount + `"  class=" iterateInputElements option"  placeholder="provide option" />
+                                     <input type="text" id="txtMcqOption2`+ idCount + `"  class=" iterateInputElements option" placeholder="provide option" />
+                                     <input type="text" id="txtMcqOption3`+ idCount + `"  class=" iterateInputElements option" placeholder="provide option" />
+                                     <input type="text" id="txtMcqOption4`+ idCount + `"  class=" iterateInputElements option" placeholder="provide option" />
+                                    <hr style="color:red" />
+                                   <input type="text" id="txtCorrectAnswer`+ idCount + `" class=" iterateInputElements" placeholder="provide Correct answer" />
+                                   
+                                    </div>
+                                     `);
+
+    mcqQuestionCount++;
+    idCount++;
+    regenerateQuestionAfterAdd();
+
+});
+
+function removeQuestionFunc(value) {
+
+    $('#removeQuestion' + value + '').remove();
+    regenerateQuestionAfterAdd();
+    //var j = 1;
+
+    //$('.regenerateCount').each((i, element) => {
+
+    //    $(element).children("p").text('Question No : '+j);
+
+    //    j++;
+
+    //});
+}
+
+function regenerateQuestionAfterAdd() {
+    var j = 1;
+    $('.regenerateCount').each((i, element) => {
+
+        $(element).children("p").text('Question No : ' + j);
+
+        j++;
+        //$('.regenerateCount').text(j);
+        //j++
+    });
+}
+
+//----------------------------------------------------------------------------------------
 
 
 

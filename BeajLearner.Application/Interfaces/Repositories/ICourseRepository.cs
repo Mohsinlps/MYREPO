@@ -22,7 +22,7 @@ namespace BeajLearner.Application.Interfaces.Repositories
         public void Delete(int id);
         public IQueryable<GetCourseWithCategoryNameDto> GetCourseWithCategory();
         public IQueryable<GetCourseWithCategoryNameDto> GetCourseWithCategoryById(int id);
-        public IEnumerable<CourseDto> GetAllCoursesForUser(string CustomerId);
+        public IEnumerable<CourseDto> GetAllCoursesForUser(string CustomerId,int categoryId);
 
     }
 }

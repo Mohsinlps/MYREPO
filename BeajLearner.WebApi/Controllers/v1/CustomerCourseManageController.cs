@@ -1,5 +1,6 @@
 ﻿using BeajLearner.Application.DTOs;
 using BeajLearner.Application.Interfaces.Repositories;
+using BeajLearner.Application.Wrappers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,10 +21,12 @@ namespace BeajLearner.WebApi.Controllers.v1
 
         [HttpPost]
         [Route("purchaseCourse")]
-        public purchaseCourseDto purchaseCourse(purchaseCourseDto dto)
+        public IActionResult purchaseCourse(purchaseCourseDto dto)
         {
            dto = _repoCustomerCourse.savePurchasedCourse(dto);
-            return dto;
+            bool success = true;
+
+            return Ok(new ResponseOtp(success, "course purchased successfully"));
         }
     }
 }

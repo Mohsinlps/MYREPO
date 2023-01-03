@@ -19,6 +19,7 @@ namespace BeajLearner.Infrastructure.Persistance.Contexts
         public DbSet<mcqQuestions> mcqQuestions { get; set; }
         public DbSet<Otp> Otps { get; set; } 
         public DbSet<purchasedCourse> purchasedCourses { get; set; }
+        public DbSet<CourseWeek> courseWeek { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
             

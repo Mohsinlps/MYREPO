@@ -14,5 +14,10 @@ namespace BeajLearner.Application.Interfaces.Repositories
         //public IEnumerable<Lesson> GetLessonByCourseId(int id);
         public IEnumerable<Lesson> GetLessonByCourseIdAndActivity(getMcqsDto dto);
         public IEnumerable<Lesson> GetLessonByCourseId(int id);
+        
+            public IEnumerable<Lesson> GetLessonByCourseIdAndWeekNumber(int id,int weekNumber);
+        public IEnumerable<GetLessonWithCourseAndCategoryDto> GetAllLessonWithCatAndCourseById(int id);
+        public IEnumerable<Lesson> GetLessonById(int id);
+
     }
 }

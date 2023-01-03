@@ -19,6 +19,7 @@ namespace BeajLearner.Domain.Entities
         public string lessonType { get; set; }
         public int? dayNumber { get; set; }
         public string activity { get; set; }
+        public string activityAlias { get; set; }
         public int? weekNumber { get; set; }
         public string[] videos { get; set; }
         public string[] Audios { get; set; }

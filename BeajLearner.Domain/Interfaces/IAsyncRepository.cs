@@ -17,8 +17,10 @@ namespace BeajLearner.Domain.Interfaces
         public IQueryable<GetCourseWithCategoryNameDto> GetCourseWithCategory();
         public IQueryable<GetCourseWithCategoryNameDto> GetCourseWithCategoryById(int id);
         public IQueryable<GetLessonWithCourseAndCategoryDto> GetLessonWithCourseAndCategory();
+        public IQueryable<GetLessonWithCourseAndCategoryDto> GetLessonWithCourseAndCategoryById(int id);
 
         public IEnumerable<Lesson> GetLessonByCourseIdwithMcqs(int id);
+        public IEnumerable<Lesson> GetLessonByIdwithMcqs(int id);
         public IEnumerable<Lesson> getLessonWithMcqs(getMcqsDto getDto);
         public int deleteBulk(List<T> entity);
 

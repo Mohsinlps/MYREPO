@@ -15,6 +15,7 @@ namespace BeajLearner.WebApi.Controllers.v1
     {
         private IWebHostEnvironment Environment;
         private ILessonRepository _lessonRepository;
+
        
         public LessonController(ILessonRepository lessonRepository, IWebHostEnvironment env)
         {
@@ -32,6 +33,8 @@ namespace BeajLearner.WebApi.Controllers.v1
             return dto;
         }
 
+
+       
 
         //*******************************************************
 
@@ -59,6 +62,49 @@ namespace BeajLearner.WebApi.Controllers.v1
 
         }
 
+        //------------------------------
+        [HttpPost]
+        [Route("AddCourseWeekInfo")]
+        public async Task<IActionResult> saveCourseWeekInfo([FromForm] courseWeekInfoDto dto)
+        {
+            string host = HttpContext.Request.Host.Value;
+            host = "https://" + host + "//";
+
+            dto.savingPort = host;
+
+            LessonDto getdto = new LessonDto();
+
+            
+             _lessonRepository.addCourseWeekInfo(dto);
+
+            return Ok(new Response<LessonDto>(getdto, "Created Sucessfully"));
+
+
+        }
+
+        [HttpGet]
+        [Route("GetWeeksByCourseId")]
+        public async Task<IEnumerable< CourseWeek>> GetWeeksByCourseId(int id)
+        {
+           
+        IEnumerable<CourseWeek> weeks=   _lessonRepository.GetWeeksByCourseId(id);
+
+            return weeks;
+
+        }
+
+        [HttpGet]
+        [Route("GetWeekByCourseIdAndWeekNumber")]
+        public async Task<CourseWeek> GetWeekByCourseIdAndWeekNumber(int id,int weekNumber)
+        {
+
+            CourseWeek weeks = _lessonRepository.GetWeeksByCourseIdAndWeekNumber(id,weekNumber);
+
+            return weeks;
+
+        }
+
+
         [HttpPost]
         [Route("AddMcqs")]
         public async Task<IActionResult> Post(List<mcqsDto> dto) 
@@ -81,9 +127,9 @@ namespace BeajLearner.WebApi.Controllers.v1
 
         [HttpGet]
         [Route("GetLessonById")]
-        public LessonDto GetById(int id)
+        public GetLessonsDto GetById(int id)
         {
-            LessonDto dto = _lessonRepository.GetLessonById(id);
+            GetLessonsDto dto = _lessonRepository.GetLessonById(id);
             return dto;
         }
 
@@ -112,9 +158,9 @@ namespace BeajLearner.WebApi.Controllers.v1
 
 
 
-        [HttpDelete]
+        [HttpGet]
         [Route("DeleteLesson")]
-        public async Task<IActionResult> Delete(int id)
+        public IActionResult Delete(int id)
         {
             _lessonRepository.Delete(id);
             return Ok(new Response<int>(id, "Deleted Successfully"));

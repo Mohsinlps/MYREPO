@@ -21,35 +21,35 @@ namespace BeajLearner.WebApi.Controllers.v1
             _mapper = mapper;
         }
 
-        //[HttpGet("GetlessonByCourseId")]
-        //public IEnumerable<GetLessonsDto> GetlessonbycourseId(int id)
-        //{
-        //    List<GetLessonsDto> dto = new List<GetLessonsDto>();
+        [HttpGet("GetlessonByCourseId")]
+        public IEnumerable<GetLessonsDto> GetlessonbycourseId(int id)
+        {
+            List<GetLessonsDto> dto = new List<GetLessonsDto>();
 
-        //    try
-        //    {
-        //        IEnumerable<Lesson> model = _lessonRepo.GetLessonByCourseId(id);
-        //        if(model != null)
-        //        {
-        //            dto = _mapper.Map<List<GetLessonsDto>>(model);
-        //            return dto;
-        //        }
-        //        else
-        //        {
-        //            return dto;
-        //        }
-        //    }
-        //    catch(Exception ex)
-        //    {
+            try
+            {
+                IEnumerable<Lesson> model = _lessonRepo.GetLessonByCourseId(id);
+                if (model != null)
+                {
+                    dto = _mapper.Map<List<GetLessonsDto>>(model);
+                    return dto;
+                }
+                else
+                {
+                    return dto;
+                }
+            }
+            catch (Exception ex)
+            {
 
-        //    }
-            
-            
-          
-        
-           
-        //    return dto;
-        //}
+            }
+
+
+
+
+
+            return dto;
+        }
 
 
         [HttpPost("getLessonByCourseIdAndActivity")]
@@ -164,6 +164,69 @@ namespace BeajLearner.WebApi.Controllers.v1
 
             return dto;
         }
+
+        [HttpGet("getLessonById")]
+        public IEnumerable<GetLessonsDto> getLessonById(int id)
+        {
+            List<GetLessonsDto> dto = new List<GetLessonsDto>();
+
+            try
+            {
+                IEnumerable<Lesson> model = _lessonRepo.GetLessonById(id);
+                if (model != null)
+                {
+                    dto = _mapper.Map<List<GetLessonsDto>>(model);
+                    return dto;
+                }
+                else
+                {
+                    return dto;
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return dto;
+        }
+
+
+        [HttpGet("getLessonByCourseIdAndWeekNumber")]
+        public IEnumerable<GetLessonsDto> getLessonByCourseIdAndWeekNumber(int id,int weekNumber)
+        {
+            List<GetLessonsDto> dto = new List<GetLessonsDto>();
+
+            try
+            {
+                IEnumerable<Lesson> model = _lessonRepo.GetLessonByCourseIdAndWeekNumber(id,weekNumber);
+                if (model != null)
+                {
+                    dto = _mapper.Map<List<GetLessonsDto>>(model);
+                    return dto;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return dto;
+        }
+
+
+        [HttpGet]
+        [Route("GetLessonWithCourseAndCategoryById")]
+        public IEnumerable<GetLessonWithCourseAndCategoryDto> GetLessonWithCourseAndCategoryById(int id)
+        {
+            IEnumerable<GetLessonWithCourseAndCategoryDto> dto = _lessonRepo.GetAllLessonWithCatAndCourseById(id);
+            return dto;
+        }
+
 
 
     }

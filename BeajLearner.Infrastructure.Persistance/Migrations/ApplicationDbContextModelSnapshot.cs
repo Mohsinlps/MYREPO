@@ -74,6 +74,31 @@ namespace BeajLearner.Infrastructure.Persistance.Migrations
                     b.ToTable("CourseCategories");
                 });
 
+            modelBuilder.Entity("BeajLearner.Domain.Entities.CourseWeek", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+
+                    b.Property<int>("courseId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("image")
+                        .HasColumnType("text");
+
+                    b.Property<int>("weekNumber")
+                        .HasColumnType("integer");
+
+                    b.HasKey("id");
+
+                    b.ToTable("courseWeek");
+                });
+
             modelBuilder.Entity("BeajLearner.Domain.Entities.Lesson", b =>
                 {
                     b.Property<int>("LessonId")
@@ -86,6 +111,9 @@ namespace BeajLearner.Infrastructure.Persistance.Migrations
                         .HasColumnType("text[]");
 
                     b.Property<string>("activity")
+                        .HasColumnType("text");
+
+                    b.Property<string>("activityAlias")
                         .HasColumnType("text");
 
                     b.Property<int>("courseId")

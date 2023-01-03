@@ -13,18 +13,19 @@ namespace BeajLearner.Application.Interfaces.Repositories
     {
         public  Task testMethod(int id);
         public  Task<LessonDto> AddLesson( LessonDto input);
+        public void addCourseWeekInfo(courseWeekInfoDto dto);
+        public IEnumerable<CourseWeek> GetWeeksByCourseId(int id);
+        public CourseWeek GetWeeksByCourseIdAndWeekNumber(int id, int weekNumber);
         public void AddMcqs(List< mcqsDto> dto);
         public void updateMcqs(List<mcqsDto> dto);
         public void deleteMcqs(int id);
         public IEnumerable<GetLessonWithCourseAndCategoryDto> GetAllLessonWithCatAndCourse();
 
-
-
         public IEnumerable<CourseCategory> GetAllLesson(int courseCategoryId);
 
 
-        public LessonDto GetLessonById(int id);
-
+        public GetLessonsDto GetLessonById(int id);
+      
 
 
         public  Task<LessonDto> UpdateLesson(LessonDto input);

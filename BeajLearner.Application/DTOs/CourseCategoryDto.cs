@@ -11,6 +11,7 @@ namespace BeajLearner.Application.DTOs
     {
         public int CourseCategoryId { get; set; }
         public string CourseCategoryName { get; set; }
+        public string savingPort { get; set; }
         public IFormFile[] image { get; set; }
     }
 }

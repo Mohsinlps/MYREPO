@@ -28,6 +28,9 @@ namespace BeajLearner.WebApi.Controllers.v1
             return Ok(new Response<int>(dto.CourseId, "Created Sucessfully"));
         }
 
+
+
+
         [HttpGet]
         [Route("GetAllCourse")]
         public List<CourseDto> GetAll()
@@ -39,10 +42,10 @@ namespace BeajLearner.WebApi.Controllers.v1
 
         [HttpGet]
         [Route("GetAllCourseByUserId")]
-        public IEnumerable< CourseDto> getAllByUserId(string Id)
+        public IEnumerable< CourseDto> getAllByUserId(string Id,int categoryId)
         {
          
-            IEnumerable<CourseDto> dto = _CourseService.GetAllCoursesForUser(Id);
+            IEnumerable<CourseDto> dto = _CourseService.GetAllCoursesForUser(Id, categoryId);
             return dto;
         }
 

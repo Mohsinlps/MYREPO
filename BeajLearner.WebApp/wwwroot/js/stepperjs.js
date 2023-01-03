@@ -299,11 +299,14 @@ $(document).ready(function () {
                 console.log(weekNumber);
                 var textval = CKEDITOR.instances['text'].getData();
                 var activity = $('#drpFormat').find(":selected").val();
+                var activityAlias = $('#drpAlias').find(":selected").val();
 
                 formData.append("courseId", $('#Coursedrp').find(":selected").val());
                 formData.append("lessonType", lessonType);
                 formData.append("dayNumber", day);
                 formData.append("activity", activity);
+                formData.append("activityAlias", activityAlias);
+                                
                 formData.append("weekNumber", weekNumber);
                
                 $($("#videoUpload")[0].files).each((i, element) => {
@@ -337,6 +340,8 @@ $(document).ready(function () {
                         type: 'POST',
                         success: (res) => {
                             console.log(res);
+
+                            saveWeekInfo();
                             // alert("saved successfully");
                            
                             insertedLessonId = res.data.lessonId;
@@ -700,13 +705,16 @@ function loadCategoryDropdown() {
 $(document).on('click', '#btnAddCategoryModal', function () {
 
     $('.CategoryAddModal').modal('toggle');
-    $('#txtmodalCourseCategory').show();
-    $('#lblCourseCategoryName').show();
-    $('#lblCategoryAddSuccess').attr('hidden', true);
-    $('#btnAddCategory').show();
-    $('#lblCategoryAddSuccess').attr('hidden', true);
+    $('#txtCourseCategory').prop('hidden',false);
     $('#txtCourseCategory').val('');
-    $('#txtCourseCategory').show();
+    //$('#lblCourseCategoryName').show();
+    $('#lblCategoryAddSuccess').attr('hidden', true);
+    $('#categoryImg').prop('hidden', false);
+    $('#imageUploadCat').val('');
+    $('#btnAddCategory').prop('hidden', false);
+    //$('#lblCategoryAddSuccess').attr('hidden', true);
+    
+   
 });
 
 $(document).on('click', '#btnAddCourseModal', function () {
@@ -761,11 +769,13 @@ $(document).on('click','#btnAddCategory', function () {
             success: (res) => {
 
                 //$('#txtmodalCourseCategory').hide();
-                //$('#lblCourseCategoryName').hide();
+                $('#lblCategoryAddSuccess').prop('hidden',false);
                 //$('#lblMessage').removeAttr('hidden');
-                //$('#btnAddCategory').hide();
-                //$('#lblCategoryAddSuccess').removeAttr('hidden');
-                //$('#txtCourseCategory').hide();
+                $('#txtCourseCategory').prop('hidden', true);
+                $('#btnAddCategory').prop('hidden', true);
+                $('#categoryImg').prop('hidden', true);
+               
+                
                 loadCategoryDropdown();
             },
             error: () => {
@@ -1053,6 +1063,7 @@ $('#dayDrp').change(function () {
 
 });
 
+
 //--------------------  week drp change --------------
 
 
@@ -1060,12 +1071,97 @@ $('#dayDrp').change(function () {
 
 $('#weekNumberDrp').change(function () {
 
+    var courseId = $('#Coursedrp option:selected').val();
+   
     var weekNum = $("#weekNumberDrp option:selected").text();
     weekNum = $.trim(weekNum);
+    //assigning value to table below stepper
     $('#txtWeekNum').val(weekNum);
+    $('#weekImgUpload').val('');
+    // week image load procedure
+
+    $.ajax({
+
+        type: 'GET',
+        url: globalUrlForAPIs + 'Lesson/GetWeekByCourseIdAndWeekNumber?id=' + courseId + '&weekNumber=' + weekNum + '',
+        success: (res) =>
+        {
+            if (res != null) {
+                $('#imgDiv').html(`  <img id='imgWeekModal' alt="Image" style=" width:50px ; height:50px" src=' ` + res.image + `' />`);
+                $('#weekDescription').val(res.description);
+            }
+            else
+            {
+                $('#imgDiv').html(``);
+            }
+        }
+    });
 
 
 });
+
+
+// -------------------------------------  Save Week Information ----------------------------
+
+function saveWeekInfo()
+{
+    var formData = new FormData();
+    var courseId = $('#Coursedrp option:selected').val();
+    var weekNum = $("#weekNumberDrp option:selected").val();
+    var description = $('#weekDescription').val();
+
+    formData.append('weekNumber', weekNum);
+    formData.append('courseId', courseId);
+    formData.append('description', description);
+    formData.append('savingPort', "");
+    $($("#weekImgUpload")[0].files).each((i, element) => {
+
+        formData.append("image", $("#weekImgUpload")[0].files[i]);
+    });
+    
+    
+   
+    $.ajax({
+        type: 'POST',
+        dataType: 'JSON',
+        url: globalUrlForAPIs + 'Lesson/AddCourseWeekInfo',
+        data: formData,
+        processData: false,
+        contentType: false,
+        enctype: "multipart/form-data",
+        success: (res) =>
+        {
+
+        }
+    });
+}
+
+
+//---------------------  show week Info  -------------------------
+
+
+
+$("#weekImgUpload").on("change", function (e) {
+    var fileModalpic = "";
+    const [file] = e.target.files;
+
+    $('#imgDiv').html(` <img id='imgWeekModal' alt="Image" style=" width:50px ; height:50px" src='#' />`);
+
+    if (file) {
+        imgWeekModal.src = URL.createObjectURL(file);
+
+        fileModalpic = URL.createObjectURL(file);
+        console.log(fileModalpic);
+    }
+});
+
+
+
+
+
+
+
+
 
 
 
@@ -1111,7 +1207,7 @@ $('#drpFormat').change(function () {
     {
         $('.videoHide').prop('hidden', false);
         $('.audioHide').prop('hidden', true);
-        $('.textDiv').prop('hidden', true);
+        $('.textDiv').prop('hidden', false);
         $('.imageHide').prop('hidden', true);
         $('#btnTextSave').prop('hidden', true);
         $('#divMcsqs').prop('hidden', true);
@@ -1153,7 +1249,7 @@ $('#drpFormat').change(function () {
          $('.audioHide').prop('hidden', false);
          $('.imageHide').prop('hidden', false);
         $('.videoHide').prop('hidden', true);
-         $('.textDiv').prop('hidden', true);
+         $('.textDiv').prop('hidden', false);
          $('#btnTextSave').prop('hidden', true);
          $('#divMcsqs').prop('hidden', true);
 
@@ -1192,10 +1288,10 @@ $('#drpFormat').change(function () {
                   </tbody>
             </table> `);
     }
-    if (format == 'text') {
+    if (format == 'read') {
         $('#btnTextSave').prop('hidden', false);
         $('.imageHide').prop('hidden', false);
-         $('.textDiv').prop('hidden', false);
+        $('.textDiv').prop('hidden', false);
          $('.audioHide').prop('hidden', false);
         $('.videoHide').prop('hidden', true);
         $('#divMcsqs').prop('hidden', true);
@@ -1249,7 +1345,7 @@ $('#drpFormat').change(function () {
         $('#divMcsqs').prop('hidden', false);
         $('#btnTextSave').prop('hidden', true);
         $('.imageHide').prop('hidden', true);
-        $('.textDiv').prop('hidden', true);
+        $('.textDiv').prop('hidden', false);
         $('.audioHide').prop('hidden', true);
         $('.videoHide').prop('hidden', true);
        

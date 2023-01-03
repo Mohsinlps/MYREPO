@@ -41,7 +41,8 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
         public CourseCategoryDto AddCourseCategory(CourseCategoryDto input)
         {
             string imagePath = "";
-            var fileDirectory = _configuration["FileSetting:DirectoryPath"];
+            //var fileDirectory = _configuration["FileSetting:DirectoryPath"];
+            var fileDirectory = "wwwroot/uploads";
             var thumbnailDirectory = _configuration["FileSetting:Thumbnail:DirectoryPath"];
             var thumbnailWidth = Convert.ToInt32(_configuration["FileSetting:Thumbnail:Width"]);
             var thumbnailHeight = Convert.ToInt32(_configuration["FileSetting:Thumbnail:Height"]);
@@ -84,9 +85,10 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
 
                         #region save file name in lstDocument
 
-                        
-                     //   lstimages.Add(filePath);
-                     imagePath = filePath;
+
+                        //   lstimages.Add(filePath);
+                      
+                        imagePath = input.savingPort + "uploads/" + newFileName;
                         #endregion
                     }
                 }

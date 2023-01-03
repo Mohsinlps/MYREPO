@@ -30,7 +30,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
      <div class="modal-header">
-        <h5 class="modal-title">Your Text </h5>
+        <h5 class="modal-title">Mcqs</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body mcqsModalBody" style="">
@@ -42,9 +42,9 @@
   </div>
 </div>
 
-@*----------------------------------------------------------------------------------------------------*@
 
-@*------------------------------------- Show text img Modal --------------------------------------------*@
+
+@*------------------------------------- Show text img Modal   / audio image too --------------------------------------------*@
 
    <div class="modal  textImgModal"  tabindex="-1">
   <div class="modal-dialog">
@@ -62,18 +62,208 @@
   </div>
 </div>
 
-@*----------------------------------------------------------------------------------------------------*@
+
+@*------------------------------------- Show audio img Modal   / audio image too --------------------------------------------*@
+
+   <div class="modal  audioImgModal"  tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+     <div class="modal-header">
+        <h5 class="modal-title">Your Image </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body audioImgModalBody" style="">
+        
+ 
+      </div>
+  
+    </div>
+  </div>
+</div>
 
 
-<div id="dropdownsDiv" class="row">
+
+@*------------------------------------- Show edit Modal   / audio image too --------------------------------------------*@
+
+   <div class="modal  lessonEditModal "   tabindex="-1">
+  <div class="modal-dialog" style="max-width: 60%;">
+    <div class="modal-content">
+     <div class="modal-header">
+        <h5 class="modal-title">Edit Lesson </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body EditModalBody" style="">
+        
+
+          @*-------------------------  Edit ------------------------------*@
+
+          <div  class="row">
       <div class="col-6">
-       <select   id="CourseCategorydrp"  class="form-select form-select-lg mb-3 categoryDrp" aria-label=".form-select-lg example" >
+       <select   id="CourseCategorydrpEdit"  class="form-select form-select-lg mb-3 " aria-label=".form-select-lg example" >
           <option value="-1">Select Category</option>
            </select>
       </div>
 
       <div class="col-6">
-        <select  id="Coursedrp"  class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" >
+        <select  id="CoursedrpEdit"  class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" >
+        <option value="-1">Select Course</option>
+        </select>
+        </div>
+          </div>
+          <div>
+           <div class="row">
+                        		
+                            	
+                            </div>
+                            <label class="fieldlabels">Select Type:</label>
+                           <select  id="drpLessonType"  class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                             <option value="-1">Select Lesson type</option>
+                               <option value="week">Weekly</option>
+                             <option value="day">Topic Based</option>
+                            </select>
+                           <div class="weekNumberDiv">
+                                 <select  id="weekNumberDrp"   class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" >
+                               <option value="-1">Select Week Number</option>
+                             
+                              
+                              </select>
+                             <div class="row">
+                                 <div class="col-4">
+                                     <label class="fieldlabels">Week Image</label>
+                                  <input type="file" id="weekImgUpload" class="form-control"/>
+                              </div>
+
+                                   <div  class="col-4">
+                                     <label class="fieldlabels">Week Image</label>
+                                     <div id="imgDiv">
+
+                                     </div>
+                               
+                              </div>
+
+                                 <div class="col-4">
+                                     <label class="fieldlabels">Week Description</label>
+                                  <input class="form-control" id="weekDescription"  placeholder="Add Week Description" />
+                              </div>
+                                 
+                              </div>
+                           </div>
+                           <br />
+                               <div class="dayDiv">
+
+                                    <select  id="dayDrp"  class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" >
+                               <option value="-1">Select Day</option>
+                               <option value="1">1</option>
+                               <option value="2">2</option>
+                               <option value="3">3</option>
+                               <option value="4">4</option>
+                               <option value="5">5</option>
+                               <option value="6">6</option>
+                              </select>
+                               </div>
+                            
+                             <label class="fieldlabels">Select Lesson Activity:</label>
+                           <select  id="drpFormat"  class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                             <option value="-1">Select Lesson Activity</option>
+                               <option value="audio">Listen</option>
+                             <option value="video">Watch</option>
+                             <option value="read">Read</option>
+                              <option value="speak">Speak</option>
+                             <option value="mcqs">MCQs</option>
+                            </select>
+                            
+                            <label class="fieldlabels">Select activity alias</label>
+                              <select  id="drpAlias"  class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                             <option value="-1">Select Alias</option>
+                               <option value="Listen">Listen</option>
+                             <option value="Watch">Watch</option>
+                             <option value="Speak">Speak</option>
+                              <option value="Grammar">Grammar</option>
+                             <option value="Practice">Practice</option>
+                              <option value="Speak">Speak</option>
+                               <option value="Vocabulary">Vocabulary</option>
+                                <option value="Conversation">Conversation</option>
+                                 <option value="Read">Read</option>
+                                  <option value="Review Phrases">Review Phrases</option>
+                                  <option value="Review words">Review words</option>
+
+                            </select>
+                          
+          </div>
+                        
+                            
+                            
+                          
+                           
+                               <div class="textDiv col-11">
+                                 <label  class="control-label textHide">Enter Text</label>
+                              <textarea  class="ckeditor  textHide"  id="text" ></textarea>
+
+                              </div>
+
+                             
+                            
+                               <br />
+                                 <div>
+                                <label class="control-label  audioHide">Upload Image</label>
+                                  <input type="file"  id="imageUpload"  name="files" class="fileUpload imageHide js-file-upload form-control" multiple />
+                                 </div>
+                                 <label class="control-label videoHide">Upload Video</label>
+                                 <input type="file"  id="videoUpload"  name="files" class="fileUpload videoHide js-video-upload form-control" multiple />       
+
+                                 <label class="control-label  audioHide">Upload Audio</label>
+                                 <input type="file"  id="audioUpload"  name="files" class="fileUpload audioHide form-control" multiple />
+                            
+                                 <br />
+                                 @*-----------------mcq generation--------------*@
+                                 <div id="divMcsqs" style=" border:2px solid black;border-radius:5px;">
+                                 <div class="card">
+                                 <div class="card-body">
+                                 <h3><i> Start writing mcqs </i> </h3> 
+                                 </div>
+                                  </div>
+                                  @*-----------------*@
+                                  <div id="questionDiv">
+                                      <div id="removeQuestion" class="iterateElements">
+                                      <h3 class="regenerateCount">Question No : 1</h3>
+                                      
+                                      <input type="text" id="txtMcqQuestion0" class="form-control txtMcqQuestion iterateInputElements question" style="border-radius:5px" placeholder="Write question" />
+                                     <input type="text" id="txtMcqOption10" class=" iterateInputElements option"  placeholder="provide option" />
+                                     <input type="text" id="txtMcqOption20" class=" iterateInputElements option" placeholder="provide option" />
+                                     <input type="text" id="txtMcqOption30" class=" iterateInputElements option" placeholder="provide option" />
+                                     <input type="text" id="txtMcqOption40" class=" iterateInputElements option" placeholder="provide option" />
+                                   <hr />
+                                   <input type="text" id="txtCorrectAnswer0" class=" iterateInputElements" placeholder="provide Correct answer" />
+                                     
+                                  </div>
+                                  </div>
+                                  <hr style="color:red" />
+                                  <button type="button" class="btn btn-success btnAddMcq">Add Question</button>
+                                
+                                 </div>
+
+ 
+          @*--------------------------------------------------------------------*@
+      </div>
+  
+    </div>
+  </div>
+</div>
+
+
+
+@*----------------------------------------------------------------------------------------------------*@
+
+
+<div id="dropdownsDiv" class="row">
+      <div class="col-6">
+       <select   id="CourseCategorydrpLesson"  class="form-select form-select-lg mb-3 categoryDrp" aria-label=".form-select-lg example" >
+          <option value="-1">Select Category</option>
+           </select>
+      </div>
+
+      <div class="col-6">
+        <select  id="CoursedrpLesson"  class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" >
         <option value="-1">Select Course</option>
         </select>
         </div>
@@ -109,8 +299,8 @@
                           <th>weekNumber</th>
                         <th>dayNumber</th>
                         <th>videos</th>
-                       
-                      
+                       <th></th>
+                      <th></th>
                        
                     </tr>
                 </thead>
@@ -135,7 +325,8 @@
                         <th>dayNumber</th>
                         <th>Audios</th>
                         <th>Image</th>
-                     
+                       <th></th>
+                      <th></th>
                     </tr>
                 </thead>
                   <tbody  >
@@ -156,7 +347,8 @@
                         <th>Audios</th>
                         <th>Image</th>
                         <th>Text</th>
-                      
+                        <th></th>
+                      <th></th>
                     </tr>
                 </thead>
                   <tbody >
@@ -178,7 +370,8 @@
                           <th>weekNumber</th>
                         <th>dayNumber</th>
                         <th>MCQs</th>
-                      
+                        <th></th>
+                      <th></th>
                     </tr>
                 </thead>
                   <tbody >
@@ -198,6 +391,8 @@
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
     @*<link rel="stylesheet" type="text/css" href="~/css/Stepper.css"  />*@
     <script type="text/javascript" src="~/js\Lessonjs.js" ></script>
+      <script src="~/ckeditor/ckeditor.js"></script>
+  <link href="~/ckeditor/contents.css" rel="stylesheet" />
       
 }
 

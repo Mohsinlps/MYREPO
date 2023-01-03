@@ -15,6 +15,7 @@ namespace BeajLearner.Application.DTOs
         public string lessonType { get; set; }
         public int? dayNumber { get; set; }
         public string activity { get; set; }
+        public string activityAlias { get; set; }
         public int? weekNumber { get; set; }
         public IFormFile[] videos { get; set; }
         public IFormFile[] Audios { get; set; }

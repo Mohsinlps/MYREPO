@@ -24,7 +24,8 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
         private IAsyncRepository<mcqQuestions> _mcqRepo;
         private IAsyncRepository<CourseCategory> _repoCategory;
         private IAsyncRepository<Course> _repoCourse;
-        public LessonRepository(IMapper mapper,IAsyncRepository<mcqQuestions> mcqRepo, IAsyncRepository<Lesson> repo, IAsyncRepository<Course> repoCourse, IAsyncRepository<CourseCategory> repoCourseCategory,IConfiguration configuration)
+        private IAsyncRepository<CourseWeek> _repoCourseWeek;
+        public LessonRepository(IAsyncRepository<CourseWeek> courseweek, IMapper mapper,IAsyncRepository<mcqQuestions> mcqRepo, IAsyncRepository<Lesson> repo, IAsyncRepository<Course> repoCourse, IAsyncRepository<CourseCategory> repoCourseCategory,IConfiguration configuration)
         {
             _mapper = mapper;
             _repo = repo;
@@ -32,6 +33,7 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
             _configuration = configuration;
             _repoCourse = repoCourse;
             _mcqRepo = mcqRepo;
+            _repoCourseWeek = courseweek;
         }
 
         public async Task<LessonDto> AddLesson(LessonDto input)
@@ -65,6 +67,10 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
             List<string> lstVideos = new List<string>();
             List<string> lstaudios = new List<string>();
             List<string> lstimages = new List<string>();
+
+
+
+
 
             if (input != null && input.videos != null)
             {
@@ -205,6 +211,105 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
             dto.LessonId = lesson.LessonId;
             return dto;
 
+        }
+
+        public void addCourseWeekInfo(courseWeekInfoDto input)
+        {
+            var fileDirectory = "wwwroot/uploads";
+            if (input != null && input.image != null)
+            {
+                String filePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
+                String GenericfilePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
+               
+                  
+
+                        // create new guid and set file name with newly created guid.
+                        var newFileName = string.Format(@"{0}", Guid.NewGuid()) + "." + "mp4";
+
+
+                        filePath = Path.Combine(GenericfilePath, newFileName);
+
+
+                        IFormFile file = input.image;
+                        using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                             file.CopyTo(fileStream);
+                        }
+
+
+                        #region save file name in lstDocument
+
+                        string dbPath = input.savingPort + "uploads/" + newFileName;
+                CourseWeek courseWeek = new CourseWeek();
+                courseWeek.image = dbPath;
+                courseWeek.weekNumber = input.weekNumber;
+                courseWeek.courseId = input.courseId;
+                courseWeek.description = input.description;
+
+
+                try
+                {
+
+    CourseWeek weekDuplicacy= _repoCourseWeek.GetAll().Where(x => x.weekNumber == input.weekNumber).FirstOrDefault();
+
+                 
+                    if (weekDuplicacy==null)
+                    {
+                       
+                        _repoCourseWeek.Add(courseWeek);
+                    }
+                    else 
+                    {
+                        weekDuplicacy.courseId = input.courseId;
+                        weekDuplicacy.weekNumber = input.weekNumber;
+                        weekDuplicacy.description = input.description;
+                        weekDuplicacy.image = dbPath;
+                        _repoCourseWeek.Update(weekDuplicacy);
+                    }
+
+                  
+                  
+                  
+
+                }
+                catch (Exception ex) 
+                {
+                
+                
+                }
+              
+                        #endregion
+                    
+                
+
+                #region update files in product table in database
+
+              
+                #endregion
+            }
+
+        }
+
+
+
+        public IEnumerable<CourseWeek> GetWeeksByCourseId(int id)
+        {
+     IEnumerable< CourseWeek> weeks=      _repoCourseWeek.GetAll().Where(x => x.courseId == id).ToList();
+           if(weeks!=null)
+            {
+                return weeks;
+            }
+            else { return null; }
+        }
+
+        public CourseWeek GetWeeksByCourseIdAndWeekNumber(int id,int weekNumber)
+        {
+           CourseWeek weeks = _repoCourseWeek.GetAll().Where(x => x.courseId == id && x.weekNumber==weekNumber).FirstOrDefault();
+            if (weeks != null)
+            {
+                return weeks;
+            }
+            else { return null; }
         }
 
 
@@ -468,14 +573,15 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
             
             return coursecategory;
         }
-        public LessonDto GetLessonById(int id)
+        public GetLessonsDto GetLessonById(int id)
         {
-            LessonDto dto = new LessonDto();
+            GetLessonsDto dto = new GetLessonsDto();
             Lesson Lesson = _repo.GetById(id);
-            dto = _mapper.Map<LessonDto>(Lesson);
+            dto = _mapper.Map<GetLessonsDto>(Lesson);
             return dto;
         }
 
+        
 
         //--------------  update -----------------
         public async Task<LessonDto> UpdateLesson(LessonDto input)
