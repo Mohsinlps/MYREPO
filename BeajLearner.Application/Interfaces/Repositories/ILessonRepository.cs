@@ -32,6 +32,9 @@ namespace BeajLearner.Application.Interfaces.Repositories
 
 
         public void Delete(int id);
-       
+        public void addActivityAlias(string alias);
+        public IEnumerable<ActivityAlias> getActivityAlias();
+        public void deleteActivityAlias(int id);
+
     }
 }

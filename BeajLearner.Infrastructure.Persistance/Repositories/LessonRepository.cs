@@ -25,7 +25,8 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
         private IAsyncRepository<CourseCategory> _repoCategory;
         private IAsyncRepository<Course> _repoCourse;
         private IAsyncRepository<CourseWeek> _repoCourseWeek;
-        public LessonRepository(IAsyncRepository<CourseWeek> courseweek, IMapper mapper,IAsyncRepository<mcqQuestions> mcqRepo, IAsyncRepository<Lesson> repo, IAsyncRepository<Course> repoCourse, IAsyncRepository<CourseCategory> repoCourseCategory,IConfiguration configuration)
+        private IAsyncRepository<ActivityAlias> _repoActivityAlias;
+        public LessonRepository(IAsyncRepository<ActivityAlias> activityalias, IAsyncRepository<CourseWeek> courseweek, IMapper mapper,IAsyncRepository<mcqQuestions> mcqRepo, IAsyncRepository<Lesson> repo, IAsyncRepository<Course> repoCourse, IAsyncRepository<CourseCategory> repoCourseCategory,IConfiguration configuration)
         {
             _mapper = mapper;
             _repo = repo;
@@ -34,6 +35,7 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
             _repoCourse = repoCourse;
             _mcqRepo = mcqRepo;
             _repoCourseWeek = courseweek;
+            _repoActivityAlias = activityalias;
         }
 
         public async Task<LessonDto> AddLesson(LessonDto input)
@@ -591,7 +593,7 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
 
 
             #region
-            var fileDirectory = _configuration["FileSetting:DirectoryPath"];
+            var fileDirectory ="wwwroot/uploads"; 
             var thumbnailDirectory = _configuration["FileSetting:Thumbnail:DirectoryPath"];
             var thumbnailWidth = Convert.ToInt32(_configuration["FileSetting:Thumbnail:Width"]);
             var thumbnailHeight = Convert.ToInt32(_configuration["FileSetting:Thumbnail:Height"]);
@@ -640,9 +642,8 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
 
 
                         #region save file name in lstDocument
-
-                        //   lstVideos.Add(newFileName);
-                        lstVideos.Add(filePath);
+                        string dbPath = input.savingPort + "uploads/" + newFileName;
+                        lstVideos.Add(dbPath);
 
                         #endregion
                     }
@@ -684,8 +685,8 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
 
                         #region save file name in lstDocument
 
-                        //   lstVideos.Add(newFileName);
-                        lstaudios.Add(filePath);
+                        string dbPath = input.savingPort + "uploads/" + newFileName;
+                        lstaudios.Add(dbPath);
 
                         #endregion
                     }
@@ -731,8 +732,8 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
 
                         #region save file name in lstDocument
 
-                        //   lstVideos.Add(newFileName);
-                        lstimages.Add(filePath);
+                        string dbPath = input.savingPort + "uploads/" + newFileName;
+                        lstimages.Add(dbPath);
 
                         #endregion
                     }
@@ -795,6 +796,33 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
 
         }
 
+
+
+        public void addActivityAlias(string alias)
+        {
+            if (alias != null) 
+            {
+                ActivityAlias aliasModel=new ActivityAlias();
+                aliasModel.Alias = alias;
+              _repoActivityAlias.Add(aliasModel);
+              
+
+            }
+
+        }
+        public IEnumerable< ActivityAlias> getActivityAlias()
+            {
+                IEnumerable<ActivityAlias> aliasModel = _repoActivityAlias.GetAll();
+
+                return aliasModel;
+            }
+
+        public void deleteActivityAlias(int id)
+        {
+            _repoActivityAlias.Delete(id);
+
+           
+        }
 
 
         // ---------------------------------------------------------

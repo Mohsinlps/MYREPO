@@ -280,25 +280,16 @@
                                <option value="audio">Listen</option>
                              <option value="video">Watch</option>
                              <option value="read">Read</option>
-                              <option value="speak">Speak</option>
+                              <option value="listenAndSpeak">Listen and Speak</option>
+                             <option value="watchAndSpeak">Watch and Speak</option>
                              <option value="mcqs">MCQs</option>
                             </select>
                             
+
                             <label class="fieldlabels">Select activity alias</label>
                               <select  id="drpAlias"  class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
                              <option value="-1">Select Alias</option>
-                               <option value="Listen">Listen</option>
-                             <option value="Watch">Watch</option>
-                             <option value="Speak">Speak</option>
-                              <option value="Grammar">Grammar</option>
-                             <option value="Practice">Practice</option>
-                              <option value="Speak">Speak</option>
-                               <option value="Vocabulary">Vocabulary</option>
-                                <option value="Conversation">Conversation</option>
-                                 <option value="Read">Read</option>
-                                  <option value="Review Phrases">Review Phrases</option>
-                                  <option value="Review words">Review words</option>
-
+                          
                             </select>
                           
                             
@@ -358,7 +349,19 @@
                                  <label class="control-label  audioHide">Upload Audio</label>
                                  <input type="file"  id="audioUpload"  name="files" class="fileUpload audioHide" multiple />
                             
+
+                                 @*------------------- Listen and Speak -----------------*@
+
+
+                                 <div class="listenAndSpeak">
+                                     <div class="listenAndSpeakQuestionDiv">
+                                         <input class="form-control listenAndSpeakQuestion" placeholder="Write Question" />
+                                         <input class="form-control listenAndSpeakAnswer" placeholder="Provide answer" />
+                                     </div>
+                                     <button class="btn btn-success" id="btnAddAnswer">Add Answer</button>
+                                 </div>
                                  
+
                                  @*-----------------mcq generation--------------*@
                                  <div id="divMcsqs" style=" border:2px solid black;border-radius:5px;">
                                  <div class="card">

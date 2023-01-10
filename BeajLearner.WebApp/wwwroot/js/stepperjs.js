@@ -164,7 +164,7 @@ $(document).ready(function () {
 
 
 
-    //////////////////////////////////////    save Lesson 1 //////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////
 
     $(".btnNextLesson1").click(function () {
         var type = $('#drpLessonType').find(":selected").val();
@@ -241,7 +241,10 @@ $(document).ready(function () {
 
 
 
-    //------------------------------   -----SAVE LESSON   2  -----     ---------------
+    //------------------------------   -----SAVING LESSON  HERE   -----     ---------------
+
+
+
     //********************************************************************************
 
     $(document).on('click', '.btnNextLesson2', function () {
@@ -977,7 +980,38 @@ $('#Coursedrp').change(function () {
                 }
             }
         )
-    }
+}
+
+
+//---------------------------    Load Alias  -----------------------
+$(document).ready(function ()
+{
+    $.ajax(
+        {
+            type: 'GET',
+            url: globalUrlForAPIs + 'Lesson/getActivityAlias',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: (res) => {
+                console.log(res);
+                $('#drpAlias').empty();
+                $('#drpAlias').append(`<option value="-1">Select Alias </option>`);
+                for (var i = 0; i <= res.length; i++) {
+
+                    $('#drpAlias').append(`<option value="${i}">
+                                       ${res[i].alias}
+                                  </option>`)
+                }
+            }
+        }
+    )
+
+});
+   
+  
+
+
+
 
 
 
@@ -1338,6 +1372,18 @@ $('#drpFormat').change(function () {
                       
                   </tbody>
             </table> `);
+    }
+
+    if (format == 'listenAndSpeak')
+    {
+       
+        $('.audioHide').prop('hidden', false);
+        $('.videoHide').prop('hidden', true);
+        $('#divMcsqs').prop('hidden', true);
+        $('#btnTextSave').prop('hidden', true);
+        $('.imageHide').prop('hidden', true);
+        $('.textDiv').prop('hidden', true);
+
     }
 
 

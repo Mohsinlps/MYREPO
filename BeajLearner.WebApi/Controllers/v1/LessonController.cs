@@ -137,8 +137,12 @@ namespace BeajLearner.WebApi.Controllers.v1
         [Route("updateLesson")]
         public async Task<LessonDto> updatelesson([FromForm] LessonDto dto)
         {
-           
-          await   _lessonRepository.UpdateLesson(dto);
+
+            string host = HttpContext.Request.Host.Value;
+            host = "https://" + host + "//";
+
+            dto.savingPort = host;
+            await  _lessonRepository.UpdateLesson(dto);
             return dto;
         }
         [HttpPost]
@@ -156,6 +160,49 @@ namespace BeajLearner.WebApi.Controllers.v1
             return Ok(new Response<mcqsDto>("deleted Sucessfully"));
         }
 
+
+        [HttpGet]
+        [Route("addActivityAlias")]
+        public IActionResult addAlias(string alias)
+        {
+            _lessonRepository.addActivityAlias(alias);
+            return Ok(new Response<int>(1,"added Successfully"));
+        }
+
+
+
+
+        [HttpGet]
+        [Route("getActivityAlias")]
+        public IEnumerable<ActivityAlias> getAlias()
+        {
+            IEnumerable<ActivityAlias> activityalias = _lessonRepository.getActivityAlias();
+            if (activityalias != null)
+            {
+                return activityalias;
+            }
+            else
+            {
+                return activityalias;
+            }
+        }
+        [HttpGet]
+        [Route("deleteActivityAlias")]
+        public int deleteAlias(int id)
+        {
+            try
+            {
+                _lessonRepository.deleteActivityAlias(id);
+                return id;
+            }
+            catch(Exception ex)
+
+            {
+                return 0;
+            }
+             
+           
+        }
 
 
         [HttpGet]

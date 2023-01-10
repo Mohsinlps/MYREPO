@@ -137,6 +137,23 @@
                 </div>
             </li>
                <li class="nav-item">
+                <a class="nav-link collapsed" href="@Url.Action("manageActivityAlias", "Stepper")"  data-target="#collapseUtilities"
+                    aria-expanded="true" aria-controls="collapseUtilities">
+                    <i class="fas fa-fw fa-wrench"></i>
+                    <span>Manage Activity Alias</span>
+                </a>
+                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Custom Utilities:</h6>
+                        <a class="collapse-item" href="utilities-color.html">Colors</a>
+                        <a class="collapse-item" href="utilities-border.html">Borders</a>
+                        <a class="collapse-item" href="utilities-animation.html">Animations</a>
+                        <a class="collapse-item" href="utilities-other.html">Other</a>
+                    </div>
+                </div>
+            </li>
+               <li class="nav-item">
                 <a class="nav-link collapsed" href="@Url.Action("hireTeacher", "TeacherHireWeb")"  data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
                     <i class="fas fa-fw fa-wrench"></i>
@@ -177,7 +194,7 @@
 
 
 
-        @*   <li class="nav-item">
+           <li class="nav-item">
                
                 <div class="dropdown " style="text-align: -webkit-center;">
   <button class="btn btn-secondary dropdown-toggle  border:none"  style="background:transparent" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -194,14 +211,14 @@
                     <i class="fas fa-fw fa-wrench"></i>
                     <span style="color:black" >Course</span>
                 </a></li>
-    <li> <a class="nav-link collapsed"  href="@Url.Action("AddLesson", "LessonWeb")" data-target="#collapseUtilities"
+ @*   <li> <a class="nav-link collapsed"  href="@Url.Action("AddLesson", "LessonWeb")" data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
                     <i class="fas fa-fw fa-wrench"></i>
                     <span style="color:black">Lesson</span>
-                </a></li>
+                </a></li>*@
   </ul>
 </div>
-            </li>*@
+            </li>
 
 
             
@@ -936,11 +953,11 @@
        <script>
 
            //  local
-        let globalUrlForAPIs = 'https://localhost:7223/api/';
+       let globalUrlForAPIs = 'https://localhost:7223/api/';
       
         
          //   Live
-        // let globalUrlForAPIs = 'https://lpsapps.com:6043/api/';
+      //   let globalUrlForAPIs = 'https://lpsapps.com:6043/api/';
       
          
          

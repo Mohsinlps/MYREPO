@@ -77,6 +77,8 @@ function loginclick() {
 
                     var jwt = res.data.jwToken;
                     sessionStorage.setItem("jwt", jwt);
+
+                   
                    
                     if (res.data.role == 'Teachers') {
                         redurl = 'Dashboard/teacherDash';

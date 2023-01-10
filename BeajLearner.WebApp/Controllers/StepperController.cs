@@ -18,5 +18,12 @@ namespace BeajLearner.WebApp.Controllers
         {
             return View();
         }
+
+        
+        public IActionResult manageActivityAlias()
+        {
+            return View();
+        }
+
     }
 }

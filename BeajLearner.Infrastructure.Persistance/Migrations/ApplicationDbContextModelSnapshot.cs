@@ -22,6 +22,22 @@ namespace BeajLearner.Infrastructure.Persistance.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("BeajLearner.Domain.Entities.ActivityAlias", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+
+                    b.Property<string>("Alias")
+                        .HasColumnType("text");
+
+                    b.HasKey("id");
+
+                    b.ToTable("activityAlias");
+                });
+
             modelBuilder.Entity("BeajLearner.Domain.Entities.Course", b =>
                 {
                     b.Property<int>("CourseId")
@@ -221,37 +237,44 @@ namespace BeajLearner.Infrastructure.Persistance.Migrations
                     b.ToTable("purchasedCourses");
                 });
 
-            modelBuilder.Entity("BeajLearner.Domain.Entities.Teacher", b =>
+            modelBuilder.Entity("BeajLearner.Domain.Entities.SpeakAnswer", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
 
-                    b.Property<string>("Name")
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+
+                    b.Property<string>("answer")
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.Property<int?>("speakQuestionid")
+                        .HasColumnType("integer");
 
-                    b.ToTable("Teachers");
+                    b.HasKey("id");
+
+                    b.HasIndex("speakQuestionid");
+
+                    b.ToTable("speakAnswer");
                 });
 
-            modelBuilder.Entity("BeajLearner.Domain.Entities.TeachersAssignedCourse", b =>
+            modelBuilder.Entity("BeajLearner.Domain.Entities.SpeakQuestion", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
-                    b.Property<int>("courseId")
+                    b.Property<int>("lessonId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("teacherId")
+                    b.Property<string>("question")
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.HasKey("id");
 
-                    b.ToTable("TeachersAssignedCourses");
+                    b.ToTable("speakQuestion");
                 });
 
             modelBuilder.Entity("BeajLearner.Domain.Entities.Course", b =>
@@ -285,6 +308,15 @@ namespace BeajLearner.Infrastructure.Persistance.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("BeajLearner.Domain.Entities.SpeakAnswer", b =>
+                {
+                    b.HasOne("BeajLearner.Domain.Entities.SpeakQuestion", "speakQuestion")
+                        .WithMany("speakAnswer")
+                        .HasForeignKey("speakQuestionid");
+
+                    b.Navigation("speakQuestion");
+                });
+
             modelBuilder.Entity("BeajLearner.Domain.Entities.Course", b =>
                 {
                     b.Navigation("lessons");
@@ -298,6 +330,11 @@ namespace BeajLearner.Infrastructure.Persistance.Migrations
             modelBuilder.Entity("BeajLearner.Domain.Entities.Lesson", b =>
                 {
                     b.Navigation("mcqquestion");
+                });
+
+            modelBuilder.Entity("BeajLearner.Domain.Entities.SpeakQuestion", b =>
+                {
+                    b.Navigation("speakAnswer");
                 });
 #pragma warning restore 612, 618
         }

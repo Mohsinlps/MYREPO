@@ -1,0 +1,68 @@
+﻿
+@{
+    ViewData["Title"] = "manageActivityAlias";
+}
+
+
+
+@*-------------------Update Modal------------------------------------*@
+@*<div class="modal   courseCategoryEditModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Update Course </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" style="display:flex">
+           
+          <input type="hidden" id="txtmodalCourseCategoryId" class="form-control 	" />
+         
+          <label id="lblCourseCategoryName">Course Category Name</label>
+          <input type="text" id="txtmodalCourseCategory" class="form-control" />
+
+      <label hidden id="lblMessage">Updated Successfully !!!</label>
+ 
+      </div>
+      <div class="modal-footer">
+       
+        <button type="button" class="btn btn-primary btnSaveCourse">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>*@
+
+@*---------------------------------------------- ---------------------*@
+<div class="row" style="height:100px">
+    <div class="col-10">    <input id="txtAlias" class="form-control" placeholder="Add Activity Alias" /></div>
+    <div class="col-2"><button id="btnAddAlias" class="btn btn-success">Add Alias</button></div>
+
+</div>
+
+<div>
+<table id="tblAlias">
+    <thead>
+        <tr>
+            <th>Alias</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+</table>
+
+</div>
+
+
+  @section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+       <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+    @*<link rel="stylesheet" type="text/css" href="~/css/Stepper.css"  />*@
+    <script type="text/javascript" src="~/js\activityAlias.js" ></script>
+    
+
+      
+}
