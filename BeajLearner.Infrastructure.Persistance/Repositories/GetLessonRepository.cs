@@ -53,9 +53,18 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
                     return obj; 
                 }
             }
+            if (dto.activity == "listenAndSpeak")
+            {
+                IEnumerable<Lesson> obj = _lessonRepo.getLessonWithMcqs(dto);
+                if (obj != null)
+                {
+                    return obj;
+                }
+            }
+
             else
             {
-                IEnumerable<Lesson> obj = _lessonRepo.GetAll().Where(x => x.courseId == dto.courseId && x.activity == dto.activity).ToList();
+                IEnumerable<Lesson> obj = _lessonRepo.GetLessonByCourseIdAndActivity(dto.courseId,dto.activity).Where(x => x.courseId == dto.courseId && x.activity == dto.activity).ToList();
                 return obj;
             }
             return null;
@@ -63,9 +72,7 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
 
         public IEnumerable<Lesson> GetLessonByCourseId(int id)
         {
-           
-             
-          
+            // this method also gets speak activity data , 
                 IEnumerable<Lesson> obj = _lessonRepo.GetLessonByCourseIdwithMcqs( id);
           if(obj != null)
             {

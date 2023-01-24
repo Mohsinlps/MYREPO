@@ -86,9 +86,9 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
                              LessonId= L.LessonId,
                            //  week=L.week,
                              text=L.text,
-                             videos=L.videos,
-                             Audios=L.Audios,
-                             image=L.image,
+                             //videos=L.videos,
+                             //Audios=L.Audios,
+                           //  image=L.image,
                              lessonType=L.lessonType,
                              dayNumber=L.dayNumber,
                              activity=L.activity,
@@ -117,14 +117,16 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
                              LessonId = L.LessonId,
                              //  week=L.week,
                              text = L.text,
-                             videos = L.videos,
-                             Audios = L.Audios,
-                             image = L.image,
+                             //videos = L.videos,
+                             //Audios = L.Audios,
+                           //  image = L.image,
                              lessonType = L.lessonType,
                              dayNumber = L.dayNumber,
                              activity = L.activity,
                              activityAlias = L.activityAlias,
                              mcqquestion = L.mcqquestion,
+                             speakactivity=L.speakactivity,
+                             documentFiles=L.documentfiles,
                              courseId = c.CourseId,
                              CourseName = c.CourseName,
                              weekNumber = L.weekNumber,
@@ -139,39 +141,43 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
         // get specific activity data by course Id
         public IEnumerable<Lesson> getLessonWithMcqs(getMcqsDto getDto)
         {
-            IEnumerable<Lesson> model = _dbContext.Lesson.Where(x => x.courseId == getDto.courseId && x.activity == getDto.activity).Include(y=>y.mcqquestion);
+            IEnumerable<Lesson> model = _dbContext.Lesson.Where(x => x.courseId == getDto.courseId && x.activity == getDto.activity).Include(y=>y.mcqquestion).Include(z=>z.speakactivity).Include(j => j.documentfiles);
             return model;
         }
       
         public IEnumerable<Lesson> GetLessonByCourseIdAndWeekId(getMcqsDto getDto)
         {
-            IEnumerable<Lesson> model = _dbContext.Lesson.Where(x => x.courseId == getDto.courseId && x.activity == getDto.activity).Include(y => y.mcqquestion);
+            IEnumerable<Lesson> model = _dbContext.Lesson.Where(x => x.courseId == getDto.courseId && x.activity == getDto.activity).Include(y => y.mcqquestion).Include(z=>z.speakactivity).Include(j => j.documentfiles);
             return model;
         }
 
-        //   get data with mcqs by  course Id    
+        //   get data with mcqs by  course Id
+        //   also gets speak data
         public IEnumerable<Lesson> GetLessonByCourseIdwithMcqs(int id)
         {
-            IEnumerable<Lesson> model = _dbContext.Lesson.Where(x => x.courseId ==id).Include(y => y.mcqquestion);
+            IEnumerable<Lesson> model = _dbContext.Lesson.Where(x => x.courseId ==id).Include(y => y.mcqquestion).Include(z => z.speakactivity).Include(j=>j.documentfiles);
             return model;
         }
-
+        public IEnumerable<Lesson> GetLessonByCourseIdAndActivity(int id,string activity)
+        {
+            IEnumerable<Lesson> model = _dbContext.Lesson.Where(x => x.courseId == id && x.activity==activity).Include(y => y.mcqquestion).Include(z => z.speakactivity).Include(j => j.documentfiles);
+            return model;
+        }
 
 
         public IEnumerable<Lesson> GetLessonByIdwithMcqs(int id)
         {
-            IEnumerable<Lesson> model = _dbContext.Lesson.Where(x => x.LessonId == id).Include(y => y.mcqquestion);
+            IEnumerable<Lesson> model = _dbContext.Lesson.Where(x => x.LessonId == id).Include(y => y.mcqquestion).Include(z=>z.speakactivity).Include(j => j.documentfiles);
             return model;
         }
+        //public IEnumerable<DocumentFiles> GetDocumentFilesInfo(int id)
+        //{
+        //    IEnumerable<Lesson> model = _dbContext.documentFiles.Where(x=>x.).Include(y => y.mcqquestion).Include(z => z.speakactivity).Include(j => j.documentfiles);
+        //    return model;
+        //}
+
 
         //----------------------------------------------------------------
-
-
-
-
-
-
-
 
 
         public T Add(T entity)
@@ -215,6 +221,7 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
 
         public T Update(T entity)
         {
+            
             table.Attach(entity);
             _dbContext.Entry(entity).State = EntityState.Modified;
             _dbContext.SaveChanges();

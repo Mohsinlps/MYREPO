@@ -40,7 +40,7 @@ namespace BeajLearner.WebApi.Controllers.v1
 
         [HttpPost]
         [Route("AddLesson")]
-        public async Task<IActionResult> Post([FromForm] LessonDto dto)
+        public async Task<IActionResult> Post([FromForm]  LessonDto dto)
         {
            
             string host = HttpContext.Request.Host.Value;
@@ -104,6 +104,69 @@ namespace BeajLearner.WebApi.Controllers.v1
 
         }
 
+
+
+        [HttpPost]
+        [Route("AddSpeakActivityQuestions")]
+        public async Task<IActionResult> addSpeakActivityQuestions([FromForm] speakActivityQuestionDto dto)
+        {
+            string host = HttpContext.Request.Host.Value;
+            host = "https://" + host + "//";
+
+            dto.savingPort = host;
+            _lessonRepository.AddSpeakActivityQuestions(dto);
+            return Ok(new Response<mcqsDto>("Created Sucessfully"));
+        }
+
+
+
+
+
+        //-------------------  Add Document Files------------- 
+
+        //[HttpPost]
+        //[Route("AddDocumentFilesForLesson")]
+        //public async Task<IActionResult> documentFiles([FromForm] List<documentFilesDto> dto)
+        //{
+        //    string host = HttpContext.Request.Host.Value;
+        //    host = "https://" + host + "//";
+
+        //    //   dto.Select(x=>x.savingPort=host);
+        //    //  dto.savingPort = host;
+
+        //    // _lessonRepository.AddMcqs(dto);
+        //    return Ok(new Response<mcqsDto>("Created Sucessfully"));
+        //}
+
+        [HttpPost]
+        [Route("AddDocumentFilesForLesson")]
+        public void documentFiles([FromForm] documentFilesDto dto)
+        {
+            string host = HttpContext.Request.Host.Value;
+            host = "https://" + host + "//";
+
+            dto.savingPort = host;
+            _lessonRepository.AddDocumentFiles(dto);
+
+        }
+
+
+        [HttpPost]
+        [Route("UpdateDocumentFilesForLesson")]
+        public void documentFilesUpdate([FromForm] documentFilesDto dto)
+        {
+            string host = HttpContext.Request.Host.Value;
+            host = "https://" + host + "//";
+
+            dto.savingPort = host;
+            _lessonRepository.UpdateDocumentFiles(dto);
+
+        }
+
+
+
+
+        // -----------------   Add Mcqs -----------------------
 
         [HttpPost]
         [Route("AddMcqs")]

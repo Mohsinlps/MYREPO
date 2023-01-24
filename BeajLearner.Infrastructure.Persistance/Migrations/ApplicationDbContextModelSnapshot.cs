@@ -115,6 +115,39 @@ namespace BeajLearner.Infrastructure.Persistance.Migrations
                     b.ToTable("courseWeek");
                 });
 
+            modelBuilder.Entity("BeajLearner.Domain.Entities.DocumentFiles", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+
+                    b.Property<string>("audio")
+                        .HasColumnType("text");
+
+                    b.Property<string>("image")
+                        .HasColumnType("text");
+
+                    b.Property<string>("language")
+                        .HasColumnType("text");
+
+                    b.Property<int>("lessonId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("mediaType")
+                        .HasColumnType("text");
+
+                    b.Property<string>("video")
+                        .HasColumnType("text");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("lessonId");
+
+                    b.ToTable("DocumentFiles");
+                });
+
             modelBuilder.Entity("BeajLearner.Domain.Entities.Lesson", b =>
                 {
                     b.Property<int>("LessonId")
@@ -122,9 +155,6 @@ namespace BeajLearner.Infrastructure.Persistance.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("LessonId"));
-
-                    b.Property<string[]>("Audios")
-                        .HasColumnType("text[]");
 
                     b.Property<string>("activity")
                         .HasColumnType("text");
@@ -138,17 +168,11 @@ namespace BeajLearner.Infrastructure.Persistance.Migrations
                     b.Property<int?>("dayNumber")
                         .HasColumnType("integer");
 
-                    b.Property<string[]>("image")
-                        .HasColumnType("text[]");
-
                     b.Property<string>("lessonType")
                         .HasColumnType("text");
 
                     b.Property<string>("text")
                         .HasColumnType("text");
-
-                    b.Property<string[]>("videos")
-                        .HasColumnType("text[]");
 
                     b.Property<int?>("weekNumber")
                         .HasColumnType("integer");
@@ -237,7 +261,7 @@ namespace BeajLearner.Infrastructure.Persistance.Migrations
                     b.ToTable("purchasedCourses");
                 });
 
-            modelBuilder.Entity("BeajLearner.Domain.Entities.SpeakAnswer", b =>
+            modelBuilder.Entity("BeajLearner.Domain.Entities.SpeakActivityQuestions", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
@@ -245,36 +269,23 @@ namespace BeajLearner.Infrastructure.Persistance.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
-                    b.Property<string>("answer")
-                        .HasColumnType("text");
-
-                    b.Property<int?>("speakQuestionid")
-                        .HasColumnType("integer");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("speakQuestionid");
-
-                    b.ToTable("speakAnswer");
-                });
-
-            modelBuilder.Entity("BeajLearner.Domain.Entities.SpeakQuestion", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+                    b.Property<string[]>("answer")
+                        .HasColumnType("text[]");
 
                     b.Property<int>("lessonId")
                         .HasColumnType("integer");
+
+                    b.Property<string>("mediaFile")
+                        .HasColumnType("text");
 
                     b.Property<string>("question")
                         .HasColumnType("text");
 
                     b.HasKey("id");
 
-                    b.ToTable("speakQuestion");
+                    b.HasIndex("lessonId");
+
+                    b.ToTable("speakActivityQuestions");
                 });
 
             modelBuilder.Entity("BeajLearner.Domain.Entities.Course", b =>
@@ -286,6 +297,15 @@ namespace BeajLearner.Infrastructure.Persistance.Migrations
                         .IsRequired();
 
                     b.Navigation("CourseCategory");
+                });
+
+            modelBuilder.Entity("BeajLearner.Domain.Entities.DocumentFiles", b =>
+                {
+                    b.HasOne("BeajLearner.Domain.Entities.Lesson", null)
+                        .WithMany("documentfiles")
+                        .HasForeignKey("lessonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("BeajLearner.Domain.Entities.Lesson", b =>
@@ -308,13 +328,15 @@ namespace BeajLearner.Infrastructure.Persistance.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("BeajLearner.Domain.Entities.SpeakAnswer", b =>
+            modelBuilder.Entity("BeajLearner.Domain.Entities.SpeakActivityQuestions", b =>
                 {
-                    b.HasOne("BeajLearner.Domain.Entities.SpeakQuestion", "speakQuestion")
-                        .WithMany("speakAnswer")
-                        .HasForeignKey("speakQuestionid");
+                    b.HasOne("BeajLearner.Domain.Entities.Lesson", "lesson")
+                        .WithMany("speakactivity")
+                        .HasForeignKey("lessonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("speakQuestion");
+                    b.Navigation("lesson");
                 });
 
             modelBuilder.Entity("BeajLearner.Domain.Entities.Course", b =>
@@ -329,12 +351,11 @@ namespace BeajLearner.Infrastructure.Persistance.Migrations
 
             modelBuilder.Entity("BeajLearner.Domain.Entities.Lesson", b =>
                 {
-                    b.Navigation("mcqquestion");
-                });
+                    b.Navigation("documentfiles");
 
-            modelBuilder.Entity("BeajLearner.Domain.Entities.SpeakQuestion", b =>
-                {
-                    b.Navigation("speakAnswer");
+                    b.Navigation("mcqquestion");
+
+                    b.Navigation("speakactivity");
                 });
 #pragma warning restore 612, 618
         }

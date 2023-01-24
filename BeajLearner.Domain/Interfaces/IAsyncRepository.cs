@@ -23,7 +23,7 @@ namespace BeajLearner.Domain.Interfaces
         public IEnumerable<Lesson> GetLessonByIdwithMcqs(int id);
         public IEnumerable<Lesson> getLessonWithMcqs(getMcqsDto getDto);
         public int deleteBulk(List<T> entity);
-
+        public IEnumerable<Lesson> GetLessonByCourseIdAndActivity(int id, string activity);
 
         public T Add(T entity);
 

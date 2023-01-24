@@ -22,11 +22,14 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
         private IMapper _mapper;
         private IAsyncRepository<Lesson> _repo;
         private IAsyncRepository<mcqQuestions> _mcqRepo;
+        private IAsyncRepository<SpeakActivityQuestions> _speakActivityRepo;
         private IAsyncRepository<CourseCategory> _repoCategory;
         private IAsyncRepository<Course> _repoCourse;
         private IAsyncRepository<CourseWeek> _repoCourseWeek;
         private IAsyncRepository<ActivityAlias> _repoActivityAlias;
-        public LessonRepository(IAsyncRepository<ActivityAlias> activityalias, IAsyncRepository<CourseWeek> courseweek, IMapper mapper,IAsyncRepository<mcqQuestions> mcqRepo, IAsyncRepository<Lesson> repo, IAsyncRepository<Course> repoCourse, IAsyncRepository<CourseCategory> repoCourseCategory,IConfiguration configuration)
+        private IAsyncRepository<DocumentFiles> _repoDocumentFiles;
+        private IAsyncRepository<SpeakActivityQuestions> _repoSpeakActivity;
+        public LessonRepository(IAsyncRepository<SpeakActivityQuestions> repoSpeakActivity,IAsyncRepository<DocumentFiles> repoDocumentFiles, IAsyncRepository<SpeakActivityQuestions> speakrepo, IAsyncRepository<ActivityAlias> activityalias, IAsyncRepository<CourseWeek> courseweek, IMapper mapper,IAsyncRepository<mcqQuestions> mcqRepo, IAsyncRepository<Lesson> repo, IAsyncRepository<Course> repoCourse, IAsyncRepository<CourseCategory> repoCourseCategory,IConfiguration configuration)
         {
             _mapper = mapper;
             _repo = repo;
@@ -36,6 +39,9 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
             _mcqRepo = mcqRepo;
             _repoCourseWeek = courseweek;
             _repoActivityAlias = activityalias;
+            _speakActivityRepo = speakrepo;
+            _repoDocumentFiles = repoDocumentFiles;
+            _repoSpeakActivity = repoSpeakActivity;
         }
 
         public async Task<LessonDto> AddLesson(LessonDto input)
@@ -44,7 +50,7 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
             lesson = _mapper.Map<Lesson>(input);
 
 
-            #region
+            
             // var fileDirectory = _configuration["FileSetting:DirectoryPath"];
             var fileDirectory = "wwwroot/uploads";
             var thumbnailDirectory = _configuration["FileSetting:Thumbnail:DirectoryPath"];
@@ -71,142 +77,51 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
             List<string> lstimages = new List<string>();
 
 
+            //if (input != null && input.image != null)
+            //{
+            //    String filePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
+            //    String GenericfilePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
+
+            //    int i = 0;
+            //    foreach (IFormFile requestimage in input.image)
+            //    {
+            //        if (requestimage != null)
+            //        {
+            //            var imgtype = input.image[i].ContentType;
+            //            i++;
+            //            imgtype = imgtype.Substring(imgtype.LastIndexOf('/') + 1);
+            //            // create new guid and set file name with newly created guid.
+            //            var newFileName = string.Format(@"{0}", Guid.NewGuid()) + "." + imgtype;
 
 
-
-            if (input != null && input.videos != null)
-            {
-                String filePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
-                String GenericfilePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
-                foreach (IFormFile requestvideo in input.videos)
-                {
-                    if (requestvideo != null)
-                    {
+            //            filePath = Path.Combine(GenericfilePath, newFileName);
 
 
-                        // create new guid and set file name with newly created guid.
-                        var newFileName = string.Format(@"{0}", Guid.NewGuid()) + "." + "mp4";
+            //            IFormFile file = requestimage;
+            //            using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+            //            {
+            //                await file.CopyToAsync(fileStream);
+            //            }
 
+            //            #region save file name in lstDocument
 
-                        filePath = Path.Combine(GenericfilePath, newFileName);
+            //            string dbPath = input.savingPort + "uploads/" + newFileName;
+            //            lstimages.Add(dbPath);
 
+            //            #endregion
+            //        }
+            //    }
 
-                        IFormFile file = requestvideo;
-                        using (Stream fileStream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await file.CopyToAsync(fileStream);
-                        }
+            //    #region update files in product table in database
 
+            //    if (lstimages != null && lstimages.Count > 0)
+            //    {
 
-                        #region save file name in lstDocument
+            //       // lesson.image = lstimages.ToArray();
 
-                        string dbPath =input.savingPort+"uploads/"+ newFileName;
-                        lstVideos.Add(dbPath);
-
-                        #endregion
-                    }
-                }
-
-                #region update files in product table in database
-
-                if (lstVideos != null && lstVideos.Count > 0)
-                {
-
-                    lesson.videos = lstVideos.ToArray();
-
-                }
-                #endregion
-            }
-            #endregion
-            if (input != null && input.Audios != null)
-            {
-                String filePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
-                String GenericfilePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
-                foreach (IFormFile requestaudio in input.Audios)
-                {
-                    if (requestaudio != null)
-                    {
-
-
-                        // create new guid and set file name with newly created guid.
-                        var newFileName = string.Format(@"{0}", Guid.NewGuid()) + "." + "mp3";
-
-
-                        filePath = Path.Combine(GenericfilePath, newFileName);
-
-
-                        IFormFile file = requestaudio;
-                        using (Stream fileStream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await file.CopyToAsync(fileStream);
-                        }
-
-                        #region save file name in lstDocument
-
-                        string dbPath = input.savingPort + "uploads/" + newFileName;
-                        lstaudios.Add(dbPath);
-
-                        #endregion
-                    }
-                }
-
-                #region update files in product table in database
-
-                if (lstaudios != null && lstaudios.Count > 0)
-                {
-
-                    lesson.Audios = lstaudios.ToArray();
-
-                }
-                #endregion
-            }
-
-
-            if (input != null && input.image != null)
-            {
-                String filePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
-                String GenericfilePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
-
-                int i = 0;
-                foreach (IFormFile requestimage in input.image)
-                {
-                    if (requestimage != null)
-                    {
-                        var imgtype = input.image[i].ContentType;
-                        i++;
-                        imgtype = imgtype.Substring(imgtype.LastIndexOf('/') + 1);
-                        // create new guid and set file name with newly created guid.
-                        var newFileName = string.Format(@"{0}", Guid.NewGuid()) + "." + imgtype;
-
-
-                        filePath = Path.Combine(GenericfilePath, newFileName);
-
-
-                        IFormFile file = requestimage;
-                        using (Stream fileStream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await file.CopyToAsync(fileStream);
-                        }
-
-                        #region save file name in lstDocument
-
-                        string dbPath = input.savingPort + "uploads/" + newFileName;
-                        lstimages.Add(dbPath);
-
-                        #endregion
-                    }
-                }
-
-                #region update files in product table in database
-
-                if (lstimages != null && lstimages.Count > 0)
-                {
-
-                    lesson.image = lstimages.ToArray();
-
-                }
-                #endregion
-            }
+            //    }
+            //    #endregion
+            //}
 
             lesson = _repo.Add(lesson);
             LessonDto dto = new LessonDto();
@@ -220,24 +135,58 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
             var fileDirectory = "wwwroot/uploads";
             if (input != null && input.image != null)
             {
+
+             
+                var thumbnailDirectory = _configuration["FileSetting:Thumbnail:DirectoryPath"];
+                var thumbnailWidth = Convert.ToInt32(_configuration["FileSetting:Thumbnail:Width"]);
+                var thumbnailHeight = Convert.ToInt32(_configuration["FileSetting:Thumbnail:Height"]);
+                //#region create folders
+                if (!Directory.Exists(fileDirectory))
+                {
+                    Directory.CreateDirectory(fileDirectory);
+                }
+                if (!Directory.Exists(thumbnailDirectory))
+                {
+                    Directory.CreateDirectory(thumbnailDirectory);
+                }
+                //#endregion
+
+
+                //#region save base64 to folder
+
+
+
                 String filePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
                 String GenericfilePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
-               
-                  
-
-                        // create new guid and set file name with newly created guid.
-                        var newFileName = string.Format(@"{0}", Guid.NewGuid()) + "." + "mp4";
 
 
-                        filePath = Path.Combine(GenericfilePath, newFileName);
+
+                //saving video
+                var newFileName = "";
+                if (input.image != null)
+                {
 
 
-                        IFormFile file = input.image;
-                        using (Stream fileStream = new FileStream(filePath, FileMode.Create))
-                        {
-                             file.CopyTo(fileStream);
-                        }
+                    var imgtype = input.image.ContentType;
 
+                    imgtype = imgtype.Substring(imgtype.LastIndexOf('/') + 1);
+                    // create new guid and set file name with newly created guid.
+                     newFileName = string.Format(@"{0}", Guid.NewGuid()) + "." + imgtype;
+
+
+                    filePath = Path.Combine(GenericfilePath, newFileName);
+
+
+                    IFormFile file = input.image;
+                    using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+
+
+
+
+                }
 
                         #region save file name in lstDocument
 
@@ -489,6 +438,511 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
 
         //-------------------------------   MCQS ------------------------------
 
+        public void AddDocumentFiles( documentFilesDto input)
+        {
+            // ---------------------      saving video --------------------
+
+            if (input != null && input.video != null)
+            {
+
+                // var fileDirectory = _configuration["FileSetting:DirectoryPath"];
+                var fileDirectory = "wwwroot/uploads";
+                var thumbnailDirectory = _configuration["FileSetting:Thumbnail:DirectoryPath"];
+                var thumbnailWidth = Convert.ToInt32(_configuration["FileSetting:Thumbnail:Width"]);
+                var thumbnailHeight = Convert.ToInt32(_configuration["FileSetting:Thumbnail:Height"]);
+               //#region create folders
+                if (!Directory.Exists(fileDirectory))
+                {
+                    Directory.CreateDirectory(fileDirectory);
+                }
+                if (!Directory.Exists(thumbnailDirectory))
+                {
+                    Directory.CreateDirectory(thumbnailDirectory);
+                }
+                //#endregion
+
+
+                //#region save base64 to folder
+
+              
+
+                String filePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
+                String GenericfilePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
+                
+                DocumentFiles model = new DocumentFiles();
+               
+
+
+
+                //saving video
+
+                    if (input.video != null)
+                    {
+
+
+                        // create new guid and set file name with newly created guid.
+                        var newFileName = string.Format(@"{0}", Guid.NewGuid()) + "." + "mp4";
+
+
+                        filePath = Path.Combine(GenericfilePath, newFileName);
+
+
+                        IFormFile file = input.video;
+                        using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            file.CopyTo(fileStream);
+                        }
+
+
+                      
+
+                        string dbPath = input.savingPort + "uploads/" + newFileName;
+                    model.lessonId = input.lessonId;
+                    model.video = dbPath;
+                    model.language = input.language;
+                    model.mediaType = input.mediaType;
+                  
+                   
+                   
+                    _repoDocumentFiles.Add(model);
+
+
+
+                    
+                    }
+                
+
+              
+            }
+
+            // -------------------------   saving image --------------------------
+
+            if (input != null && input.image != null)
+            {
+
+                // var fileDirectory = _configuration["FileSetting:DirectoryPath"];
+                var fileDirectory = "wwwroot/uploads";
+                var thumbnailDirectory = _configuration["FileSetting:Thumbnail:DirectoryPath"];
+                var thumbnailWidth = Convert.ToInt32(_configuration["FileSetting:Thumbnail:Width"]);
+                var thumbnailHeight = Convert.ToInt32(_configuration["FileSetting:Thumbnail:Height"]);
+                //#region create folders
+                if (!Directory.Exists(fileDirectory))
+                {
+                    Directory.CreateDirectory(fileDirectory);
+                }
+                if (!Directory.Exists(thumbnailDirectory))
+                {
+                    Directory.CreateDirectory(thumbnailDirectory);
+                }
+                //#endregion
+
+
+                //#region save base64 to folder
+
+
+
+                String filePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
+                String GenericfilePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
+
+                DocumentFiles model = new DocumentFiles();
+
+
+
+
+                //saving video
+
+                if (input.image != null)
+                {
+
+
+                    var imgtype = input.image.ContentType;
+                    
+                    imgtype = imgtype.Substring(imgtype.LastIndexOf('/') + 1);
+                    // create new guid and set file name with newly created guid.
+                    var newFileName = string.Format(@"{0}", Guid.NewGuid()) + "." + imgtype;
+
+
+                    filePath = Path.Combine(GenericfilePath, newFileName);
+
+
+                    IFormFile file = input.image;
+                    using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+
+                 
+
+                    string dbPath = input.savingPort + "uploads/" + newFileName;
+                    model.lessonId = input.lessonId;
+                    model.image = dbPath;
+                    model.language = input.language;
+                    model.mediaType = input.mediaType;
+
+
+
+                    _repoDocumentFiles.Add(model);
+
+
+
+
+                }
+
+               
+
+
+            }
+
+            // --------------------  saving audios ---------------------------------
+
+           
+            if (input.audio != null)
+            {
+
+                // var fileDirectory = _configuration["FileSetting:DirectoryPath"];
+                var fileDirectory = "wwwroot/uploads";
+                var thumbnailDirectory = _configuration["FileSetting:Thumbnail:DirectoryPath"];
+                var thumbnailWidth = Convert.ToInt32(_configuration["FileSetting:Thumbnail:Width"]);
+                var thumbnailHeight = Convert.ToInt32(_configuration["FileSetting:Thumbnail:Height"]);
+                //#region create folders
+                if (!Directory.Exists(fileDirectory))
+                {
+                    Directory.CreateDirectory(fileDirectory);
+                }
+                if (!Directory.Exists(thumbnailDirectory))
+                {
+                    Directory.CreateDirectory(thumbnailDirectory);
+                }
+                //#endregion
+
+
+                //#region save base64 to folder
+
+
+
+                String filePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
+                String GenericfilePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
+
+                DocumentFiles model = new DocumentFiles();
+
+                var newFileName = string.Format(@"{0}", Guid.NewGuid()) + "." + "mp3";
+
+
+                filePath = Path.Combine(GenericfilePath, newFileName);
+
+
+                IFormFile file = input.audio;
+                using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    file.CopyTo(fileStream);
+                }
+
+
+
+
+                string dbPath = input.savingPort + "uploads/" + newFileName;
+                model.lessonId = input.lessonId;
+                model.audio = dbPath;
+                model.language = input.language;
+                model.mediaType = input.mediaType;
+
+
+
+                _repoDocumentFiles.Add(model);
+
+
+
+
+            }
+
+        }
+
+        public void UpdateDocumentFiles(documentFilesDto input)
+        {
+            // ---------------------      saving video --------------------
+
+            if (input != null && input.video != null)
+            {
+
+                // var fileDirectory = _configuration["FileSetting:DirectoryPath"];
+                var fileDirectory = "wwwroot/uploads";
+                var thumbnailDirectory = _configuration["FileSetting:Thumbnail:DirectoryPath"];
+                var thumbnailWidth = Convert.ToInt32(_configuration["FileSetting:Thumbnail:Width"]);
+                var thumbnailHeight = Convert.ToInt32(_configuration["FileSetting:Thumbnail:Height"]);
+                //#region create folders
+                if (!Directory.Exists(fileDirectory))
+                {
+                    Directory.CreateDirectory(fileDirectory);
+                }
+                if (!Directory.Exists(thumbnailDirectory))
+                {
+                    Directory.CreateDirectory(thumbnailDirectory);
+                }
+                //#endregion
+
+
+                //#region save base64 to folder
+
+
+
+                String filePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
+                String GenericfilePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
+
+              
+
+
+
+
+                //saving video
+
+                if (input.video != null)
+                {
+
+
+                    // create new guid and set file name with newly created guid.
+                    var newFileName = string.Format(@"{0}", Guid.NewGuid()) + "." + "mp4";
+
+
+                    filePath = Path.Combine(GenericfilePath, newFileName);
+
+
+                    IFormFile file = input.video;
+                    using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+
+      DocumentFiles documentfiles=_repoDocumentFiles.GetAll().Where(x=>x.lessonId==input.lessonId).FirstOrDefault();
+                  
+                    string dbPath = input.savingPort + "uploads/" + newFileName;
+                   
+                    documentfiles.video = dbPath;
+
+                       _repoDocumentFiles.Update(documentfiles);
+
+
+
+
+                }
+
+
+
+            }
+
+            // -------------------------   Updating image --------------------------
+
+            if (input != null && input.image != null)
+            {
+
+                // var fileDirectory = _configuration["FileSetting:DirectoryPath"];
+                var fileDirectory = "wwwroot/uploads";
+                var thumbnailDirectory = _configuration["FileSetting:Thumbnail:DirectoryPath"];
+                var thumbnailWidth = Convert.ToInt32(_configuration["FileSetting:Thumbnail:Width"]);
+                var thumbnailHeight = Convert.ToInt32(_configuration["FileSetting:Thumbnail:Height"]);
+                //#region create folders
+                if (!Directory.Exists(fileDirectory))
+                {
+                    Directory.CreateDirectory(fileDirectory);
+                }
+                if (!Directory.Exists(thumbnailDirectory))
+                {
+                    Directory.CreateDirectory(thumbnailDirectory);
+                }
+                //#endregion
+
+
+                //#region save base64 to folder
+
+
+
+                String filePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
+                String GenericfilePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
+
+                DocumentFiles model = new DocumentFiles();
+
+
+
+                    var imgtype = input.image.ContentType;
+
+                    imgtype = imgtype.Substring(imgtype.LastIndexOf('/') + 1);
+                    // create new guid and set file name with newly created guid.
+                    var newFileName = string.Format(@"{0}", Guid.NewGuid()) + "." + imgtype;
+
+
+                    filePath = Path.Combine(GenericfilePath, newFileName);
+
+
+                    IFormFile file = input.image;
+                    using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+
+                DocumentFiles documentfiles = new DocumentFiles();
+
+                documentfiles = _repoDocumentFiles.GetAll().Where(x => x.lessonId == input.lessonId && x.mediaType == "image").FirstOrDefault();
+
+                if (documentfiles != null)
+                {
+                    string dbPath = input.savingPort + "uploads/" + newFileName;
+
+                    documentfiles.image = dbPath;
+
+                    _repoDocumentFiles.Update(documentfiles);
+                }
+
+
+
+
+
+
+
+            }
+
+            // --------------------  Updating audios ---------------------------------
+
+
+            if (input.audio != null)
+            {
+
+                // var fileDirectory = _configuration["FileSetting:DirectoryPath"];
+                var fileDirectory = "wwwroot/uploads";
+                var thumbnailDirectory = _configuration["FileSetting:Thumbnail:DirectoryPath"];
+                var thumbnailWidth = Convert.ToInt32(_configuration["FileSetting:Thumbnail:Width"]);
+                var thumbnailHeight = Convert.ToInt32(_configuration["FileSetting:Thumbnail:Height"]);
+                //#region create folders
+                if (!Directory.Exists(fileDirectory))
+                {
+                    Directory.CreateDirectory(fileDirectory);
+                }
+                if (!Directory.Exists(thumbnailDirectory))
+                {
+                    Directory.CreateDirectory(thumbnailDirectory);
+                }
+                //#endregion
+
+
+                //#region save base64 to folder
+
+
+
+                String filePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
+                String GenericfilePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
+
+              
+
+                var newFileName = string.Format(@"{0}", Guid.NewGuid()) + "." + "mp3";
+
+
+                filePath = Path.Combine(GenericfilePath, newFileName);
+
+
+                IFormFile file = input.audio;
+                using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    file.CopyTo(fileStream);
+                }
+
+
+                DocumentFiles documentfiles =new DocumentFiles();
+
+             
+                documentfiles = _repoDocumentFiles.GetAll().Where(x => x.lessonId == input.lessonId && x.mediaType == "audio").FirstOrDefault();
+                if (documentfiles != null)
+                {
+                    string dbPath = input.savingPort + "uploads/" + newFileName;
+
+                    documentfiles.audio = dbPath;
+
+                    _repoDocumentFiles.Update(documentfiles);
+                }
+
+
+
+
+
+
+
+
+            }
+        }
+
+
+        public void AddSpeakActivityQuestions(speakActivityQuestionDto dto)
+        {
+           SpeakActivityQuestions speakModel = new SpeakActivityQuestions();
+           
+         
+            try
+            {
+                if (dto.audio != null)
+                {
+
+                    // var fileDirectory = _configuration["FileSetting:DirectoryPath"];
+                    var fileDirectory = "wwwroot/uploads";
+                    var thumbnailDirectory = _configuration["FileSetting:Thumbnail:DirectoryPath"];
+                    var thumbnailWidth = Convert.ToInt32(_configuration["FileSetting:Thumbnail:Width"]);
+                    var thumbnailHeight = Convert.ToInt32(_configuration["FileSetting:Thumbnail:Height"]);
+                    //#region create folders
+                    if (!Directory.Exists(fileDirectory))
+                    {
+                        Directory.CreateDirectory(fileDirectory);
+                    }
+                    if (!Directory.Exists(thumbnailDirectory))
+                    {
+                        Directory.CreateDirectory(thumbnailDirectory);
+                    }
+                    //#endregion
+
+
+                    //#region save base64 to folder
+
+
+
+                    String filePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
+                    String GenericfilePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
+
+                  
+
+                    var newFileName = string.Format(@"{0}", Guid.NewGuid()) + "." + "mp3";
+
+
+                    filePath = Path.Combine(GenericfilePath, newFileName);
+
+
+                    IFormFile file = dto.audio;
+                    using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+
+
+
+
+                    string dbPath = dto.savingPort + "uploads/" + newFileName;
+
+                    speakModel.mediaFile = dbPath;
+                    speakModel.question = dto.question;
+                    speakModel.lessonId = dto.lessonId;
+                    speakModel.answer = dto.answer;
+
+
+
+                    _repoSpeakActivity.Add(speakModel);
+
+
+
+
+                }
+          
+                
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+        }
 
         public void AddMcqs(List< mcqsDto> dto)
         {
@@ -617,138 +1071,138 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
             List<string> lstaudios = new List<string>();
             List<string> lstimages = new List<string>();
 
-            if (input != null && input.videos != null)
-            {
-                String filePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
-                String GenericfilePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
-                foreach (IFormFile requestvideo in input.videos)
-                {
-                    if (requestvideo != null)
-                    {
+            //if (input != null && input.videos != null)
+            //{
+            //    String filePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
+            //    String GenericfilePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
+            //    foreach (IFormFile requestvideo in input.videos)
+            //    {
+            //        if (requestvideo != null)
+            //        {
 
 
-                        // create new guid and set file name with newly created guid.
-                        var newFileName = string.Format(@"{0}", Guid.NewGuid()) + "." + "mp4";
+            //            // create new guid and set file name with newly created guid.
+            //            var newFileName = string.Format(@"{0}", Guid.NewGuid()) + "." + "mp4";
 
 
-                        filePath = Path.Combine(GenericfilePath, newFileName);
+            //            filePath = Path.Combine(GenericfilePath, newFileName);
 
 
-                        IFormFile file = requestvideo;
-                        using (Stream fileStream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await file.CopyToAsync(fileStream);
-                        }
+            //            IFormFile file = requestvideo;
+            //            using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+            //            {
+            //                await file.CopyToAsync(fileStream);
+            //            }
 
 
-                        #region save file name in lstDocument
-                        string dbPath = input.savingPort + "uploads/" + newFileName;
-                        lstVideos.Add(dbPath);
+            //            #region save file name in lstDocument
+            //            string dbPath = input.savingPort + "uploads/" + newFileName;
+            //            lstVideos.Add(dbPath);
 
-                        #endregion
-                    }
-                }
+            //            #endregion
+            //        }
+            //    }
 
-                #region update files in product table in database
+            //    #region update files in product table in database
 
-                if (lstVideos != null && lstVideos.Count > 0)
-                {
+            //    if (lstVideos != null && lstVideos.Count > 0)
+            //    {
 
-                    lesson.videos = lstVideos.ToArray();
+            //        lesson.videos = lstVideos.ToArray();
 
-                }
-                #endregion
-            }
+            //    }
+            //    #endregion
+            //}
             #endregion
-            if (input != null && input.Audios != null)
-            {
-                String filePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
-                String GenericfilePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
-                foreach (IFormFile requestaudio in input.Audios)
-                {
-                    if (requestaudio != null)
-                    {
+            //if (input != null && input.Audios != null)
+            //{
+            //    String filePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
+            //    String GenericfilePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
+            //    foreach (IFormFile requestaudio in input.Audios)
+            //    {
+            //        if (requestaudio != null)
+            //        {
 
 
-                        // create new guid and set file name with newly created guid.
-                        var newFileName = string.Format(@"{0}", Guid.NewGuid()) + "." + "mp3";
+            //            // create new guid and set file name with newly created guid.
+            //            var newFileName = string.Format(@"{0}", Guid.NewGuid()) + "." + "mp3";
 
 
-                        filePath = Path.Combine(GenericfilePath, newFileName);
+            //            filePath = Path.Combine(GenericfilePath, newFileName);
 
 
-                        IFormFile file = requestaudio;
-                        using (Stream fileStream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await file.CopyToAsync(fileStream);
-                        }
+            //            IFormFile file = requestaudio;
+            //            using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+            //            {
+            //                await file.CopyToAsync(fileStream);
+            //            }
 
-                        #region save file name in lstDocument
+            //            #region save file name in lstDocument
 
-                        string dbPath = input.savingPort + "uploads/" + newFileName;
-                        lstaudios.Add(dbPath);
+            //            string dbPath = input.savingPort + "uploads/" + newFileName;
+            //            lstaudios.Add(dbPath);
 
-                        #endregion
-                    }
-                }
+            //            #endregion
+            //        }
+            //    }
 
-                #region update files in product table in database
+            //    #region update files in product table in database
 
-                if (lstaudios != null && lstaudios.Count > 0)
-                {
+            //    if (lstaudios != null && lstaudios.Count > 0)
+            //    {
 
-                    lesson.Audios = lstaudios.ToArray();
+            //        lesson.Audios = lstaudios.ToArray();
 
-                }
-                #endregion
-            }
-
-
-            if (input != null && input.image != null)
-            {
-                String filePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
-                String GenericfilePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
-
-                int i = 0;
-                foreach (IFormFile requestimage in input.image)
-                {
-                    if (requestimage != null)
-                    {
-                        var imgtype = input.image[i].ContentType;
-                        i++;
-                        imgtype = imgtype.Substring(imgtype.LastIndexOf('/') + 1);
-                        // create new guid and set file name with newly created guid.
-                        var newFileName = string.Format(@"{0}", Guid.NewGuid()) + "." + imgtype;
+            //    }
+            //    #endregion
+            //}
 
 
-                        filePath = Path.Combine(GenericfilePath, newFileName);
+            //if (input != null && input.image != null)
+            //{
+            //    String filePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
+            //    String GenericfilePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
+
+            //    int i = 0;
+            //    foreach (IFormFile requestimage in input.image)
+            //    {
+            //        if (requestimage != null)
+            //        {
+            //            var imgtype = input.image[i].ContentType;
+            //            i++;
+            //            imgtype = imgtype.Substring(imgtype.LastIndexOf('/') + 1);
+            //            // create new guid and set file name with newly created guid.
+            //            var newFileName = string.Format(@"{0}", Guid.NewGuid()) + "." + imgtype;
 
 
-                        IFormFile file = requestimage;
-                        using (Stream fileStream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await file.CopyToAsync(fileStream);
-                        }
+            //            filePath = Path.Combine(GenericfilePath, newFileName);
 
-                        #region save file name in lstDocument
 
-                        string dbPath = input.savingPort + "uploads/" + newFileName;
-                        lstimages.Add(dbPath);
+            //            IFormFile file = requestimage;
+            //            using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+            //            {
+            //                await file.CopyToAsync(fileStream);
+            //            }
 
-                        #endregion
-                    }
-                }
+            //            #region save file name in lstDocument
 
-                #region update files in product table in database
+            //            string dbPath = input.savingPort + "uploads/" + newFileName;
+            //            lstimages.Add(dbPath);
 
-                if (lstimages != null && lstimages.Count > 0)
-                {
+            //            #endregion
+            //        }
+            //    }
 
-                    lesson.image = lstimages.ToArray();
+            //    #region update files in product table in database
 
-                }
-                #endregion
-            }
+            //    if (lstimages != null && lstimages.Count > 0)
+            //    {
+
+            //     //   lesson.image = lstimages.ToArray();
+
+            //    }
+            //    #endregion
+            //}
 
             if(lesson.dayNumber==-1)
             {

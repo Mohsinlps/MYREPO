@@ -21,12 +21,16 @@ namespace BeajLearner.Domain.Entities
         public string activity { get; set; }
         public string activityAlias { get; set; }
         public int? weekNumber { get; set; }
-        public string[] videos { get; set; }
-        public string[] Audios { get; set; }
-        public string[] image { get; set; }
+     
         public string text { get; set; }
         public ICollection< mcqQuestions> mcqquestion {get;set;}
+        public ICollection<SpeakActivityQuestions> speakactivity {get;set;}
+        public ICollection<DocumentFiles> documentfiles {get;set;}
         public int courseId { get; set; }
         public Course Course { get; set; }
+
+        //public string[] videos { get; set; }
+        //public string[] Audios { get; set; }
+        //public string[] image { get; set; }
     }
 }

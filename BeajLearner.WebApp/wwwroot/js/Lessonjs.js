@@ -8,6 +8,7 @@
 
 //-------------------Add Lesson------------------------
 var mcqsArray = [];
+var speakActivityQuestionsArray = [];
 $(document).ready
     (
        
@@ -104,6 +105,7 @@ $('#CoursedrpLesson').change(function () {
         loadVideoLesson();
         loadAudioLesson();
         loadTextLesson();
+        loadListenAndSpeak();
         loadMcqsLesson();
     }
 }
@@ -149,9 +151,9 @@ function loadVideoLesson()
                                 
 
                                 var videoArray = "";
-                                var length = data.videos.length;
+                                var length = data.documentFiles.length;
                                 for (var i = 0; i < length; i++) {
-                                    videoArray = videoArray + '<video width="120" height="120" controls><source src="' + data.videos[i] + '"></video><span> </span>';
+                                    videoArray = videoArray + '<video width="120" height="120" controls><source src="' + data.documentFiles[i].video + '"></video><span> </span>';
                                    /* videoArray = videoArray + ' ';*/
                                 }
 
@@ -185,8 +187,6 @@ function loadVideoLesson()
         }
     )
 };
-
-
 
 function loadAudioLesson() {
     var categoryId = $('#CourseCategorydrpLesson').find(":selected").val();
@@ -224,16 +224,17 @@ function loadAudioLesson() {
 
 
                                 var audioArray = "";
-                                var length = data.audios.length;
+                                var length = data.documentFiles.length;
                                 for (var i = 0; i < length; i++) {
 
                                   
 
                                    
+                                    if (data.documentFiles[i].mediaType == 'audio') {
 
-
-                                    audioArray = audioArray + `  <audio controls> <source src= ` + data.audios[i] + ` type="audio/ogg"> </audio>`;
-                                    audioArray = audioArray + ' ';
+                                        audioArray = audioArray + `  <audio controls> <source src= ` + data.documentFiles[i].audio + ` type="audio/ogg"> </audio>`;
+                                        audioArray = audioArray + ' ';
+                                    }
                                 }
 
                                 return audioArray;
@@ -244,7 +245,17 @@ function loadAudioLesson() {
                         {
                             "data": null, "render": function(data)
                             {
-                                return `<img id="imgAudio" src="` + data.image + `"  width="50" height="50">`;
+                                var imgArray = "";
+                                var length = data.documentFiles.length;
+                                for (var i = 0; i < length; i++) {
+                                    if (data.documentFiles[i].mediaType == 'image') {
+
+
+                                        imgArray = imgArray + `<img id="imgAudio" src="` + data.documentFiles[i].image + `"  width="50" height="50">`;
+                                        imgArray = imgArray + ' ';
+                                    }
+                                }
+                                return imgArray;
                             }
                         },
                         {
@@ -284,9 +295,6 @@ $(document).on('click', '#imgAudio', function () {
 });
 
 
-
-
-
 function loadTextLesson() {
     var categoryId = $('#CourseCategorydrpLesson').find(":selected").val();
     var CourseId = $('#CoursedrpLesson').find(":selected").val();
@@ -324,12 +332,17 @@ function loadTextLesson() {
 
 
                                 var audioArray = "";
-                                var length = data.audios.length;
+                                var length = data.documentFiles.length;
                                 for (var i = 0; i < length; i++) {
 
 
-                                    audioArray = audioArray + `  <audio controls> <source src= ` + data.audios[i] + ` type="audio/ogg"> </audio>`;
-                                    audioArray = audioArray + ' ';
+
+
+                                    if (data.documentFiles[i].mediaType == 'audio') {
+
+                                        audioArray = audioArray + `  <audio controls> <source src= ` + data.documentFiles[i].audio + ` type="audio/ogg"> </audio>`;
+                                        audioArray = audioArray + ' ';
+                                    }
                                 }
 
                                 return audioArray;
@@ -338,7 +351,17 @@ function loadTextLesson() {
                         },
                         {
                             "data": null, "render": function (data) {
-                                return `<img id="imgText" src="` + data.image + `"  width="50" height="50">`;
+                                var imgArray = "";
+                                var length = data.documentFiles.length;
+                                for (var i = 0; i < length; i++) {
+                                    if (data.documentFiles[i].mediaType == 'image') {
+
+
+                                        imgArray = imgArray + `<img id="imgAudio" src="` + data.documentFiles[i].image + `"  width="50" height="50">`;
+                                        imgArray = imgArray + ' ';
+                                    }
+                                }
+                                return imgArray;
                             }
                         },
                         {
@@ -373,8 +396,6 @@ function loadTextLesson() {
 };
 
 
-
-
 $(document).on('click', '.btnShowLessonText', function () {
 
     var text = $(this).attr('text');
@@ -399,9 +420,243 @@ $(document).on('click', '#imgText', function () {
     $('.textImgModal').modal('toggle');
 });
 
-//aaaaaaaaaaaaaaaaaaaaaa
 
-//-------------------  load mcqs ----------------------------------
+//--------------------- load listen and speak --------------------
+
+
+//function loadListenAndSpeak() {
+//    var categoryId = $('#CourseCategorydrpLesson').find(":selected").val();
+//    var CourseId = $('#CoursedrpLesson').find(":selected").val();
+
+//    var jsondata = JSON.stringify({ activity: "listenAndSpeak", courseId: CourseId });
+//    $.ajax(
+//        {
+//            type: 'POST',
+//            url: globalUrlForAPIs + 'GetLessons/getLessonByCourseIdAndActivity',
+//            dataType: 'JSON',
+//            contentType: "application/json; charset=utf-8",
+//            data: jsondata,
+//            success: (res) => {
+//                var table = $('#listenAndSpeakDataTable').DataTable();
+
+//                //clear datatable
+//                table.clear().draw();
+
+//                //destroy datatable
+//                table.destroy();
+
+//                $('#listenAndSpeakDataTable').dataTable({
+//                    data: res,
+//                    columns: [
+
+//                        { "data": "lessonType" },
+//                        { "data": "weekNumber" },
+//                        { "data": "dayNumber" },
+//                        {
+//                            "data": null, "render": function (data) {
+
+
+//                                var audioArray = "";
+//                                var length = data.documentFiles.length;
+//                                for (var i = 0; i < length; i++) {
+
+
+
+
+//                                    if (data.documentFiles[i].mediaType == 'audio') {
+
+//                                        audioArray = audioArray + `  <audio controls> <source src= ` + data.documentFiles[i].audio + ` type="audio/ogg"> </audio>`;
+//                                        audioArray = audioArray + ' ';
+//                                    }
+//                                }
+
+//                                return audioArray;
+
+//                            }
+//                        },
+//                        {
+
+//                            "data": null, "render": function (data) {
+
+//                                var length = data.speakactivity.length;
+
+//                                for (var i = 0; i < length; i++) {
+
+//                                    speakActivityQuestionsArray[i] = data.speakactivity[i];
+
+//                                }
+
+//                                return '<button type="button"  lessonId="' + data.lessonId + '"  class="btn btn-success btnShowSpeakQuestions ">Show Questions</button>'
+
+//                            }
+
+
+//                        },
+//                        {
+//                            "data": null, "render": function (data) {
+//                                return `<button class="btn btn-primary btnEditLesson" lessonId=` + data.lessonId + `>Edit</button>`
+//                            }
+//                        },
+//                        {
+//                            "data": null, "render": function (data) {
+//                                return `<button class="btn btn-danger btnDeleteLesson" lessonId=` + data.lessonId + `>Delete</button>`
+//                            }
+//                        },
+
+//                    ]
+
+//                });
+
+
+
+//            }
+//        }
+//    )
+//};
+
+
+
+//----------------  show speak  ------------------------------------
+
+
+$(document).on('click', '.btnShowSpeakQuestions ', function () {
+   
+    var questionsArray = [];
+    var speakModalBody = '';
+    var lessonId = $(this).attr('lessonid');
+    $.ajax({
+
+        url: globalUrlForAPIs + 'GetLessons/getLessonById?id=' + lessonId,
+        type: 'GET',
+        dataType: 'JSON',
+        success: (response) =>
+        {
+            questionsArray = response[0].speakactivity;
+            $('.showSpeakModalBody').html('');
+            for (var i = 0; i < questionsArray.length; i++)
+            {
+                speakModalBody = speakModalBody + `  <div style="border: 1px solid black; border-radius:5px" class="">
+<br>
+                                      <audio class="form-control"  controls><source src="`+ questionsArray[i].mediaFile + `" ></audio>
+<br>
+<input class="form-control listenAndSpeakAnswer" value="` + questionsArray[i].question + `"  /><br>
+
+`;
+
+                for (var j = 0; j < questionsArray[i].answer.length; j++)
+                {
+                    var array = questionsArray[i].answer[j].split(',');
+                    for (var k = 0; k < array.length; k++)
+                    {
+                        speakModalBody = speakModalBody + `<input class="form-control " value="` + array[0] + `"  /><br>`;
+                    }
+               
+
+
+                }
+                speakModalBody = speakModalBody + `</div> <br>`;
+            }
+           
+         
+            $('.showSpeakModalBody').append(speakModalBody);
+            $('.speakModal').modal('toggle');
+        }
+
+    })
+
+   
+
+   
+//    for (var j = 0; j < speakActivityQuestionsArray.length; j++)
+//    {
+        
+//        //$('.speakModalBody').append();
+//        for (var i = 0; i < speakActivityQuestionsArray[j].answer.length; i++)
+//        {
+//            speakModalBody = speakModalBody +  `
+//<input class="form-control listenAndSpeakAnswer" value="` + speakActivityQuestionsArray[j].answer[i] + `" placeholder="Provide answer" />`
+//            //$('.speakModalBody').append();
+//        }
+
+});
+
+
+//<input class="form-control listenAndSpeakAnswer" placeholder="Provide answer" />
+
+
+//-------------------  load listen and speak ----------------------------------
+
+function loadListenAndSpeak() {
+    var categoryId = $('#CourseCategorydrpLesson').find(":selected").val();
+    var CourseId = $('#CoursedrpLesson').find(":selected").val();
+
+    var jsondata = JSON.stringify({ activity: "listenAndSpeak", courseId: CourseId });
+    $.ajax(
+        {
+            type: 'POST',
+            url: globalUrlForAPIs + 'GetLessons/getLessonByCourseIdAndActivity',
+            dataType: 'JSON',
+            contentType: "application/json; charset=utf-8",
+            data: jsondata,
+            success: (res) => {
+
+                var table = $('#listenAndSpeakDataTable').DataTable();
+
+                //clear datatable
+                table.clear().draw();
+
+                //destroy datatable
+                table.destroy();
+
+
+                $('#listenAndSpeakDataTable').dataTable({
+                    data: res,
+                    columns: [
+
+                        { "data": "lessonType" },
+                        { "data": "weekNumber" },
+                        { "data": "dayNumber" },
+
+                        {
+
+                            "data": null, "render": function (data) {
+
+                                var length = data.mcqquestion.length;
+
+                                for (var i = 0; i < length; i++) {
+
+                                    mcqsArray[i] = data.mcqquestion[i];
+
+                                }
+
+                                return '<button type="button"  lessonId="' + data.lessonId + '"  class="btn btn-success btnShowSpeakQuestions ">Show Speak Lesson</button>'
+
+                            }
+
+
+                        },
+                        {
+                            "data": null, "render": function (data) {
+                                return `<button class="btn btn-primary btnEditLesson" lessonId=` + data.lessonId + `>Edit</button>`
+                            }
+                        },
+                        {
+                            "data": null, "render": function (data) {
+                                return `<button class="btn btn-danger btnDeleteLesson" lessonId=` + data.lessonId + `>Delete</button>`
+                            }
+                        },
+
+                    ]
+
+                });
+
+
+
+            }
+        }
+    )
+};
+
 
 function loadMcqsLesson() {
     var categoryId = $('#CourseCategorydrpLesson').find(":selected").val();
@@ -490,11 +745,11 @@ $(document).on('click', '.btnShowMcq', function () {
         $('.mcqsModalBody').append(`
        <div class="question">
               <h2>Question : `+ mcqsArray[i].question + `</h2>
-              <p>Option 1 :`+ mcqsArray[i].option1 + `</p>
-              <p>Option 2 :`+ mcqsArray[i].option2 +`</p>
-              <p>Option 3 :`+ mcqsArray[i].option3+`</p>
-              <p>Option 4 :`+ mcqsArray[i].option4+`</p>
-              <h3>Correct Answer :`+ mcqsArray[i].correctAnswer+`</h3>
+              <p><b>Option  :&nbsp;&nbsp;</b>`+ mcqsArray[i].option1 + `</p>
+              <p><b>Option  :&nbsp;&nbsp;</b>`+ mcqsArray[i].option2 +`</p>
+              <p><b>Option  :&nbsp;&nbsp;</b>`+ mcqsArray[i].option3+`</p>
+              <p><b>Option  :&nbsp;&nbsp;</b>`+ mcqsArray[i].option4+`</p>
+              <h5>Correct Answer :`+ mcqsArray[i].correctAnswer+`</h3>
              
           </div>
 <br>
@@ -592,7 +847,53 @@ $(document).on('click', '.btnEditLesson', function () {
             });
 
 
-            // ------------  Lesson type ------------------------
+
+
+            //                                Make dropDowns as selected
+
+
+      
+            $("#drpAlias option[value='" + resLesson[0].activityAlias + "']").attr("selected", "selected");
+            $("#dayDrp option[value='" + resLesson[0].day + "']").attr("selected", "selected");
+          
+
+            // ------------  Lesson type ------------------changed------
+
+            $(document).on('change', '#drpLessonType', function ()
+            {
+
+                var lessonType = $('#drpLessonType').find(':selected').val();
+                if (lessonType == 'day') {
+                    $('.weekHide').prop('hidden', true);
+                }
+                else
+                {
+                    $('.weekHide').prop('hidden', false);
+             var courseId=       $('#CoursedrpEdit').find(':selected').val();
+                    $.ajax({
+                        type: 'POST',
+                        url: globalUrlForAPIs + 'Course/GetCourseById?id=' + courseId,
+                        success: (courseGetForWeek) => {
+                            $('#weekNumberDrp').empty();
+                            $('#weekNumberDrp').append(`<option  value="${-1}">
+                                      Select week Number
+                                  </option>`)
+                            for (var i = 1; i <= courseGetForWeek.courseWeeks; i++) {
+
+                                $('#weekNumberDrp').append(`<option ${i == resLesson[0].weekNumber?'selected':''}  value="${i}">
+                                       ${i}
+                                  </option>`)
+                            }
+                        }
+                    });
+
+
+                  
+                }
+            });
+
+
+
 
            
             if (resLesson[0].lessonType != 'week') {
@@ -641,57 +942,194 @@ $(document).on('click', '.btnEditLesson', function () {
                         }
                     }
                 });
-                //  load week
-                $.ajax({
-                    type: 'GET',
-                    url: globalUrlForAPIs + 'Lesson/GetWeekByCourseIdAndWeekNumber?id=' + resLesson[0].courseId + '&weekNumber=' + resLesson[0].weekNumber + '',
-                    success: (resWeek) =>
-                    {
-                        console.log('--resweek--' + resWeek);
-                        $('#imgDiv').html(`  <img id='imgWeekModal'  alt="Image" style=" width:50px ; height:50px" src=' ` + resWeek.image + `' />`);
-                        $('#weekDescription').val(resWeek.description);
 
-                    }
-                });
+                // ---------- load week------------------------------
+                if (resLesson[0].weekNumber != -1) {
+                    $.ajax({
+                        type: 'GET',
+                        url: globalUrlForAPIs + 'Lesson/GetWeekByCourseIdAndWeekNumber?id=' + resLesson[0].courseId + '&weekNumber=' + resLesson[0].weekNumber + '',
 
+
+                        success: (resWeek) => {
+
+
+                            $('#imgDiv').html(`  <img id='imgWeekModal'  alt="Image" style=" width:50px ; height:50px" src=' ` + resWeek.image + `' />`);
+
+                            $('#weekDescription').val(resWeek.description);
+
+                        }
+                    });
+                }
 
 
                 //load Day
 
                 $("#dayDrp option[value='" + resLesson[0].dayNumber + "']").attr("selected", "selected");
-                $("#drpFormat option[value='" + resLesson[0].activity + "']").attr("selected", "selected");
-                $("#drpAlias option[value='" + resLesson[0].activityAlias + "']").attr("selected", "selected");
+          
+
               //  $('#imgLessonEditDiv').html(`<img id='imgLessonEdit'  alt="Image" style=" width:50px ; height:50px" src=' ` + resLesson.image + `' />`)
               
             }
 
+          
+            //---------------------------    Load Alias  -----------------------
+            $(document).ready(function () {
+                $.ajax(
+                    {
+                        type: 'GET',
+                        url: globalUrlForAPIs + 'Lesson/getActivityAlias',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: (res) => {
+                            console.log(res);
+                            $('#drpAlias').empty();
+                            $('#drpAlias').append(`<option value="-1">Select Alias </option>`);
+                            for (var i = 0; i < res.length; i++) {
+
+                                $('#drpAlias').append(`<option ${res[i].alias == resLesson[0].activityAlias?'selected':''} value="${res[i].alias}">
+                                       ${res[i].alias}
+                                  </option>`)
+                            }
+                        }
+                    }
+                )
+
+            });
 
 
-            $('#imgLessonEditDiv').html(
-                `<img id="imgText" src="` + resLesson[0].image[0] + `"  width="75" height="auto">`
+            $('#txtActivity').val(resLesson[0].activity);
+            //---------------------------  activity Changed --------------------------
+
+            //$(document).on('change', '#drpFormat', function () {
+
+            //    alert('activity changed');
+            //    var selectedActivity = $('#drpFormat').find(':selected').val();
+            //    if (selectedActivity == 'audio')
+            //    {
+            //        $('#imgHideDiv').prop('hidden', false);
+            //        $('#audioHideDiv').prop('hidden', false);
+            //        $('#divMcsqs').prop('hidden', true);
+            //        $('#videoHideDiv').prop('hidden', true);
+            //        $('.listenAndSpeak').prop('hidden', true);
+            //        $('#audioHideDiv2').prop('hidden', true);
+            //    }
+            //    if (selectedActivity == 'video')
+            //    {
+            //        $('#videoHideDiv').prop('hidden', false);
+            //        $('#imgHideDiv').prop('hidden', true);
+            //        $('#audioHideDiv').prop('hidden', true);
+            //        $('#divMcsqs').prop('hidden', true);
+            //        $('.listenAndSpeak').prop('hidden', true);
+            //        $('#audioHideDiv2').prop('hidden', true);
+            //    }
+            //    if (selectedActivity == 'read')
+            //    {
+            //        $('#imgHideDiv').prop('hidden', false);
+            //        $('#audioHideDiv').prop('hidden', false);
+            //        $('#divMcsqs').prop('hidden', true);
+            //        $('#videoHideDiv').prop('hidden', true);
+            //        $('.listenAndSpeak').prop('hidden', true);
+            //        $('#audioHideDiv2').prop('hidden', false);
+            //    }
+            //    if (selectedActivity == 'listenAndSpeak')
+            //    {
+            //        $('#imgHideDiv').prop('hidden', true);
+            //        $('#audioHideDiv').prop('hidden', false);
+            //        $('#divMcsqs').prop('hidden', true);
+            //        $('#videoHideDiv').prop('hidden', true);
+            //        $('.listenAndSpeak').prop('hidden', false);
+            //        $('#audioHideDiv2').prop('hidden', true);
+
+                      
+            //    }
+
+
+
+
+            //    if (selectedActivity == 'mcqs')
+            //    {
+            //        $('#imgHideDiv').prop('hidden', true);
+            //        $('#audioHideDiv').prop('hidden', true);
+            //        $('#divMcsqs').prop('hidden', false);
+            //        $('#videoHideDiv').prop('hidden', true);
+            //        $('.listenAndSpeak').prop('hidden', true);
+
+                    
+
+            //    }
+            //    if (selectedActivity == 'watchAndSpeak') { }
+                
+                
+            //});
+
+
+            //------------------------   Format change ended -----------------------------
+
+
+            var imgArray = "";
+            var length = resLesson[0].documentFiles.length;
+            for (var i = 0; i < length; i++) {
+                if (resLesson[0].documentFiles[i].mediaType == 'image') {
+
+
+                    imgArray = imgArray + `<img id="imgAudio" src="` + resLesson[0].documentFiles[i].image + `"  width="50" height="50">`;
+                    imgArray = imgArray + ' ';
+                }
+            }
+
+                $('#imgLessonEditDiv').html(
+                    imgArray
+                );
+
+            var videoArray = "";
+            $('#videoLessonEditDiv').html(``);
+            for (var i = 0;i< length; i++) {
+                if (resLesson[0].documentFiles[i].mediaType == 'video')
+                {
+
+                    videoArray = videoArray + `<video width="150" height="130" controls><source src="` + resLesson[0].documentFiles[i].video + `"></video> <span> </span>`;
+                }
+                   
+            }
+            $('#videoLessonEditDiv').append(
+
+                videoArray
             );
 
-            $('#videoLessonEditDiv').html(``);
-            for (var i = 0; i < resLesson[0].videos.length; i++) {
-              
-                $('#videoLessonEditDiv').append(
-                    `<video width="150" height="130" controls><source src="` + resLesson[0].videos[i] + `"></video> <span> </span>`
-                    
-                );
+
+            //----------------- Audios Edit -----------------
+         
+
+            var audioArray = "";
+            $('#audioLessonEditDiv').html('' );
+            for (var i = 0; i < length; i++) {
+                if (resLesson[0].documentFiles[i].mediaType == 'audio' && resLesson[0].documentFiles[i].language == 'English') {
+
+                    audioArray = audioArray + `<audio width="150" height="130" controls><source src="` + resLesson[0].documentFiles[i].audio + `"></video> <span> </span>`;
+                }
 
             }
+            $('#audioLessonEditDiv').append(
+                audioArray
+
+             );
 
 
-            $('#audioLessonEditDiv').html(``);
-            for (var i = 0; i < resLesson[0].audios.length; i++) {
- 
-                $('#audioLessonEditDiv').append(
-                    `<audio controls> <source src= ` + resLesson[0].audios[i] + ` type="audio/ogg"> </audio>`
 
-                );
+            var audioArray = "";
+            $('#audioLessonEditDiv2').html('');
+            for (var i = 0; i < length; i++) {
+                if (resLesson[0].documentFiles[i].mediaType == 'audio' && resLesson[0].documentFiles[i].language == 'Urdu') {
+
+                    audioArray = audioArray + `<audio width="150" height="130" controls><source src="` + resLesson[0].documentFiles[i].audio + `"></audio> <span> </span>`;
+                }
 
             }
+            $('#audioLessonEditDiv2').append(
+                audioArray
 
+            );
+            
 
             if (resLesson[0].activity == 'video')
             {
@@ -699,6 +1137,10 @@ $(document).on('click', '.btnEditLesson', function () {
                 $('#imgHideDiv').prop('hidden', true);
                 $('#audioHideDiv').prop('hidden', true);
                 $('#divMcsqs').prop('hidden', true);
+                $('.listenAndSpeak').prop('hidden', true);
+                $('#audioHideDiv2').prop('hidden', true);
+                
+                
                 
             }
 
@@ -707,6 +1149,8 @@ $(document).on('click', '.btnEditLesson', function () {
                 $('#audioHideDiv').prop('hidden', false);
                 $('#divMcsqs').prop('hidden', true);
                 $('#videoHideDiv').prop('hidden', true);
+                $('.listenAndSpeak').prop('hidden', true);
+                $('#audioHideDiv2').prop('hidden', true);
             }
 
             if (resLesson[0].activity == 'read') {
@@ -714,6 +1158,69 @@ $(document).on('click', '.btnEditLesson', function () {
                 $('#audioHideDiv').prop('hidden', false);
                 $('#divMcsqs').prop('hidden', true);
                 $('#videoHideDiv').prop('hidden', true);
+                $('.listenAndSpeak').prop('hidden', true);
+                $('#audioHideDiv2').prop('hidden', false);
+            }
+
+            if (resLesson[0].activity == 'listenAndSpeak') {
+                $('#imgHideDiv').prop('hidden', true);
+                $('#audioHideDiv').prop('hidden', false);
+                $('#divMcsqs').prop('hidden', true);
+                $('#videoHideDiv').prop('hidden', true);
+                $('.listenAndSpeak').prop('hidden', false);
+                $('#audioHideDiv2').prop('hidden', true);
+                $('#audioHideDiv').prop('hidden', true);
+
+                var speakLength = resLesson[0].speakactivity.length;
+                var speakModalBody = "";
+                var questionsArray = resLesson[0].speakactivity;
+                
+                $('.listenAndSpeak').html(`<div class="listenSpeakAppendQuestions"> </div>`);
+
+                for (var i = 0; i < speakLength; i++)
+                {
+                  
+                  
+                    speakModalBody = speakModalBody + `  <div style="border: 1px solid black; border-radius:5px" class="listenAndSpeakQuestionDiv">
+<button id="btnAddAnswerSpeak" type="button" class="form-control btn btn-primary ">+</button>
+ <br>
+                        <label class="control-label  "> Audio Question</label>
+                                      <audio controls><source src="`+ questionsArray[i].mediaFile + `" ></audio>
+                <input class="form-control listenAndSpeakQuestion" value="` + questionsArray[i].question + `"  /><br>
+
+`;
+
+                    for (var j = 0; j < questionsArray[i].answer.length; j++) {
+                        var array = questionsArray[i].answer[0].split(',');
+                      
+                        for (var k = 0; k < array.length; k++) {
+                                speakModalBody = speakModalBody + `<input class="form-control listenAndSpeakAnswer" value="` + array[k] + `"  /><br>`;
+                            }
+
+                        }
+                        speakModalBody = speakModalBody + `</div> <br>`;
+                    
+
+
+                   
+                }
+
+
+                $('.listenSpeakAppendQuestions').html(speakModalBody);
+                   
+
+                        //<input type="file" id="questionAudio" name="files" class="form-control fileUpload speakAudio " multiple="">
+
+                        //    <input class="form-control listenAndSpeakQuestion" placeholder="Write Question">
+                        //        <input class="form-control listenAndSpeakAnswer" placeholder="Provide answer">
+                        //        </div>
+
+
+
+
+
+
+
             }
 
             if (resLesson[0].activity == 'mcqs') {
@@ -721,6 +1228,7 @@ $(document).on('click', '.btnEditLesson', function () {
                 $('#audioHideDiv').prop('hidden', true);
                 $('#divMcsqs').prop('hidden', false);
                 $('#videoHideDiv').prop('hidden', true);
+                $('.listenAndSpeak').prop('hidden', true);
 
                 let mcqQuestionCount = 1;
                 let idCount = 1;
@@ -781,20 +1289,81 @@ $(document).on('click', '.btnEditLesson', function () {
 
 
 
-
-
-
-
-
-          
-
-
-
         }
         
     });
 
 });
+
+
+
+//-------------  End Edit Modal event--------------------------------------------------
+
+// load week image and description on course change in edit
+$(document).on('change', '#CoursedrpEdit', function () {
+    $.ajax({
+        type: 'GET',
+        url: globalUrlForAPIs + 'Lesson/GetWeekByCourseIdAndWeekNumber?id=' + $('#CoursedrpEdit').find(':selected').val() + '&weekNumber=' + $('#weekNumberDrp').find(':selected').val() + '',
+
+
+        success: (resWeek) => {
+
+
+            $('#imgDiv').html(`  <img id='imgWeekModal'  alt="Image" style=" width:50px ; height:50px" src=' ` + resWeek.image + `' />`);
+
+            $('#weekDescription').val(resWeek.description);
+
+        }
+    });
+});
+
+$(document).on('change', '#weekNumberDrp', function () {
+    $.ajax({
+        type: 'GET',
+        url: globalUrlForAPIs + 'Lesson/GetWeekByCourseIdAndWeekNumber?id=' + $('#CoursedrpEdit').find(':selected').val() + '&weekNumber=' + $('#weekNumberDrp').find(':selected').val() + '',
+
+
+        success: (resWeek) => {
+
+
+            $('#imgDiv').html(`  <img id='imgWeekModal'  alt="Image" style=" width:50px ; height:50px" src=' ` + resWeek.image + `' />`);
+
+            $('#weekDescription').val(resWeek.description);
+
+        }
+    });
+});
+
+
+
+// ------------  empty modal on click down -----------------
+
+$('.lessonEditModal').on('hidden.bs.modal', function () {
+    $('#videoUpload').val('');
+    $('#imageUpload').val('');
+    $('#audioUpload').val('');
+    $('#audioUpload2').val('');
+});
+
+
+//   Adding new questions in listen And Speak activity edit
+
+$(document).on('click', '#btnAddQuestion', function () {
+
+    $('#listenSpeakAppendQuestions').append(`  <div style="border: 1px solid black; border-radius:5px" class="listenAndSpeakQuestionDiv">
+                                        <button id="btnAddAnswerSpeak" type="button" class="form-control btn btn-primary ">+</button>
+                                          <input class="form-control listenAndSpeakQuestion" placeholder="Write Question" />
+                                         <input class="form-control listenAndSpeakAnswer" placeholder="Provide answer" />
+                                      
+                  </div>
+                                     `);
+
+
+
+    //$('.listenspeakModal').modal('toggle');
+});
+
+
 
 //  ---------------   mcqs calculations --------------------
 function removeQuestionFunc(value) {
@@ -854,17 +1423,36 @@ document.getElementById("videoUpload").addEventListener("change", function () {
 //---------------------------/   load audio in audio div---------------------
 
 document.getElementById("audioUpload").addEventListener("change", function () {
-    $('#audioLessonEditDiv').html(``);
-    var id = "video";
+    
+    var id = "video_1";
     for (i = 0; i < this.files.length; i++) {
-        id = i;
-        $('#audioLessonEditDiv').append(`<audio id=` + id + ` width="100" height="100" controls style="display: none;"></audio>`);
+      //  id = i;
+        $('#audioLessonEditDiv').html(``);
+        $('#audioLessonEditDiv').append(`<div><audio id=` + id + ` width="100" height="100" controls style="display: none;"></audio></div>`);
         var media = URL.createObjectURL(this.files[i]);
         var video = document.getElementById(id);
         video.src = media;
         video.style.display = "block";
 
     }
+});
+
+document.getElementById("audioUpload2").addEventListener("change", function () {
+   
+    var id = "video_2";
+    var media = "";
+    for (i = 0; i < this.files.length; i++) {
+        id = i;
+      
+        var media = URL.createObjectURL(this.files[i]);
+      //  video = document.getElementById(id);
+        //video.src = media;
+        //srcAudio2 = media;
+        //video.style.display = "block";
+
+    }
+
+    $('#audioLessonEditDiv2').html(`<div><audio  width="150" height="130" controls><source src="` + media + `"></audio> <span> </span></div>`);
 });
 
 
@@ -937,6 +1525,9 @@ $(document).on('change', '#CourseCategorydrpEdit', function () {
 
 
 
+// **************************   UPDATING ****************************
+//*******************************************************************
+
 $(document).on('click', '#btnUpdateLesson', function () {
 
 
@@ -956,29 +1547,32 @@ $(document).on('click', '#btnUpdateLesson', function () {
     
     var activity = $('#drpFormat').find(":selected").val();
     var weekNumber = $('#weekNumberDrp').find(":selected").val();
+    var alias = $('#drpAlias').find(":selected").val();
 
     formData.append("LessonId", lessonid);
     formData.append("courseId", courseiddrp);
     formData.append("lessonType", lessonType);
-    formData.append("dayNumber", day);
+
+
+    if (lessonType == 'week') {
+        formData.append("weekNumber", weekNumber);
+        formData.append("dayNumber", day);
+    }
+    else
+    {
+        formData.append("weekNumber", 0);
+        formData.append("dayNumber", 0);
+    }
+
+
+   
     formData.append("activity", activity);
+    formData.append("activityAlias", alias);
 
-    $($("#videoUpload")[0].files).each((i, element) => {
+    
 
-        formData.append("videos", $("#videoUpload")[0].files[i]);
-    });
-
-    $($("#audioUpload")[0].files).each((i, element) => {
-
-        formData.append("Audios", $("#audioUpload")[0].files[i]);
-    });
-
-    $($("#imageUpload")[0].files).each((i, element) => {
-
-        formData.append("image", $("#imageUpload")[0].files[i]);
-    });
     formData.append("text", textVal);
-    formData.append("weekNumber", weekNumber);
+   
 
     
 
@@ -997,57 +1591,175 @@ $(document).on('click', '#btnUpdateLesson', function () {
                 type: 'POST',
                 success: (res) => {
 
-                    console.log('update response');
-                    console.log(res);
-
                     loadVideoLesson();
                     loadAudioLesson();
                     loadTextLesson();
                     loadMcqsLesson();
+
+                 
                    
+
+                    // -----------------update video --------------------
+                    //-----------------  video -----------------------------
+
+                    if (activity == 'video') {
+                        var videoObject = {};
+                        var documentFilesArray = [];
+                        var formDataVideo = new FormData();
+
+                        $($("#videoUpload")[0].files).each((i, element) => {
+
+
+                            videoObject.video = $("#videoUpload")[0].files[i];
+                        });
+
+                        if (videoObject.video != null)
+                        {
+                          
+                            videoObject.language = "-";
+                            videoObject.lessonId = lessonid;
+                            videoObject.mediaType = "video";
+
+                            formDataVideo.append("video", videoObject.video);
+                            formDataVideo.append("language", videoObject.language);
+                            formDataVideo.append("lessonId", videoObject.lessonId);
+                            formDataVideo.append("mediaType", videoObject.mediaType);
+
+
+
+                            $.ajax(
+                                {
+                                    url: globalUrlForAPIs + 'Lesson/UpdateDocumentFilesForLesson',
+                                    data: formDataVideo,
+                                    //dataType: 'JSON',
+                                    processData: false,
+                                    contentType: false,
+                                    enctype: "multipart/form-data",
+                                    type: 'POST',
+                                    success: (res) => {
+
+
+                                        loadVideoLesson();
+                                        loadAudioLesson();
+                                        loadTextLesson();
+                                        loadMcqsLesson();
+
+                                    }
+                                });
+                        }
+                       
+
+
+
+
+
+                    }
+                    if (activity == 'audio') {
+
+
+                        //--------------  updating image -------------------
+                        var imageObject = {};
+                        var documentFilesArray = [];
+                        var formDataImage = new FormData();
+
+                        $($("#imageUpload")[0].files).each((i, element) => {
+
+
+                            imageObject.image = $("#imageUpload")[0].files[i];
+                        });
+                        if (imageObject.image != null) {
+
+                            imageObject.language = "-";
+                            imageObject.lessonId = lessonid;
+                            imageObject.mediaType = "image";
+
+                            formDataImage.append("image", imageObject.image);
+                            formDataImage.append("language", imageObject.language);
+                            formDataImage.append("lessonId", imageObject.lessonId);
+                            formDataImage.append("mediaType", imageObject.mediaType);
+
+
+
+                            $.ajax(
+                                {
+                                    url: globalUrlForAPIs + 'Lesson/UpdateDocumentFilesForLesson',
+                                    data: formDataImage,
+                                    //dataType: 'JSON',
+                                    processData: false,
+                                    contentType: false,
+                                    enctype: "multipart/form-data",
+                                    type: 'POST',
+                                    success: (res) => {
+
+
+                                        loadVideoLesson();
+                                        loadAudioLesson();
+                                        loadTextLesson();
+                                        loadMcqsLesson();
+
+                                    }
+                                });
+                        }
+
+
+
+                        //---------------  updating audio ------------------
+                        var audioObject = {};
+                        var formDataAudio = new FormData();
+
+                        $($("#audioUpload")[0].files).each((i, element) => {
+
+
+                            audioObject.audio = $("#audioUpload")[0].files[i];
+                        });
+
+                        if (audioObject.audio != null) {
+
+                            audioObject.language = "-";
+                            audioObject.lessonId = lessonid;
+                            audioObject.mediaType = "audio";
+
+                            formDataAudio.append("audio", audioObject.audio);
+                            formDataAudio.append("language", audioObject.language);
+                            formDataAudio.append("lessonId", audioObject.lessonId);
+                            formDataAudio.append("mediaType", audioObject.mediaType);
+
+
+
+                            $.ajax(
+                                {
+                                    url: globalUrlForAPIs + 'Lesson/UpdateDocumentFilesForLesson',
+                                    data: formDataAudio,
+                                    //dataType: 'JSON',
+                                    processData: false,
+                                    contentType: false,
+                                    enctype: "multipart/form-data",
+                                    type: 'POST',
+                                    success: (res) => {
+
+
+                                        loadVideoLesson();
+                                        loadAudioLesson();
+                                        loadTextLesson();
+                                        loadMcqsLesson();
+
+                                    }
+                                });
+                        }
+
+
+
+
+
+
+                    }
+
 
 
 
                     ////---------------update mcq------------------
                     if (activity == 'mcqs') {
-                    //    var idgenerator = 1;
-                    //    var formdataMcqs = new FormData();
-                    //    var txtMcqQuestion = "";
-                    //    var txtoption1 = 0;
-                    //    var txtoption2 = 0;
-                    //    var txtoption3 = 0;
-                    //    var txtoption4 = 0;
-                    //    var txtCorrect = "";
-
-                    //    var mcqsArr = [
-
-                    //    ];
-
-
-                    //    $('.txtMcqQuestion').each((i, element) => {
-                    //        txtMcqQuestion = $('#txtMcqQuestion' + idgenerator + '').val();
-                    //        txtoption1 = $('#txtMcqOption1' + idgenerator + '').val();
-                    //        txtoption2 = $('#txtMcqOption2' + idgenerator + '').val();
-                    //        txtoption3 = $('#txtMcqOption3' + idgenerator + '').val();
-                    //        txtoption4 = $('#txtMcqOption4' + idgenerator + '').val();
-                    //        txtCorrect = $('#txtCorrectAnswer' + idgenerator + '').val();
-                    //        mcqsArr.push({
-                    //            question: txtMcqQuestion,
-                    //            option1: txtoption1,
-                    //            option2: txtoption2,
-                    //            option3: txtoption3,
-                    //            option4: txtoption4,
-                    //            correctAnswer: txtCorrect,
-                    //            lessonId: globalLessonIdForEdit,
-                    //        });
-
-                    //        idgenerator++;
-                    //    });
-
-                        //console.log(mcqsArr);
-                        //arrdata = JSON.stringify(mcqsArr);
-
-                        //console.log(arrdata);
+          
                    
 
                     var mcqsArr = [
@@ -1127,8 +1839,8 @@ $(document).on('click', '#btnUpdateLesson', function () {
         /* $('.tbldynamic').html(` `);*/
     
 
-
-
+  
+  
 
 });
 //--------------------------  MCqs Designing ------------------------------------------

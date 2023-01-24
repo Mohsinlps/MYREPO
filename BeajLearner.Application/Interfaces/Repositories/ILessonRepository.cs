@@ -35,6 +35,9 @@ namespace BeajLearner.Application.Interfaces.Repositories
         public void addActivityAlias(string alias);
         public IEnumerable<ActivityAlias> getActivityAlias();
         public void deleteActivityAlias(int id);
+        public void AddSpeakActivityQuestions(speakActivityQuestionDto dto);
+        public void AddDocumentFiles(documentFilesDto input);
+        public void UpdateDocumentFiles(documentFilesDto input);
 
     }
 }

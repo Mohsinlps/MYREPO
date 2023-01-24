@@ -12,7 +12,7 @@ function isNullOrUndefined(value) {
         return true;
 }
 
-   //    Global variables  ---------
+//    Global variables  ---------
 let lessonOperation = '';
 let insertedLessonId = 0;
 let updateLessonId = 0;
@@ -20,7 +20,7 @@ let updateLessonId = 0;
 //--------------  setting Edit operation ---------------------
 $(document).ready(function () {
     /*   sessionStorage.setItem('savingOperation', 'insert');*/
-    lessonOperation='insert'
+    lessonOperation = 'insert'
 });
 
 $(document).on('click', '.btnEdit', function () {
@@ -76,7 +76,7 @@ $(document).ready(function () {
     $(document).on('click', '#btnNextCategory', function () {
 
         var i = $('#CourseCategorydrp').find(":selected").val();
-       
+
         if (i != "-1") {
 
 
@@ -104,8 +104,7 @@ $(document).ready(function () {
             });
             setProgressBar(++current);
         }
-        else
-        {
+        else {
             alert('select category');
         }
     });
@@ -171,12 +170,10 @@ $(document).ready(function () {
         var format = $('#drpFormat').find(":selected").val();
         var day = $('#dayDrp').find(":selected").val();
         var weekNumber = $('#weekNumberDrp').find(":selected").val();
-        
 
-        if (type == 'week' && day != '-1' && format!='-1')
-        {
-            if (weekNumber == '-1')
-            {
+
+        if (type == 'week' && day != '-1' && format != '-1') {
+            if (weekNumber == '-1') {
             }
             else {
 
@@ -206,8 +203,7 @@ $(document).ready(function () {
             }
 
         }
-        if (type == 'day' && format!='-1')
-        {
+        if (type == 'day' && format != '-1') {
 
             current_fs = $(this).parent();
             next_fs = $(this).parent().next();
@@ -233,10 +229,10 @@ $(document).ready(function () {
             });
             setProgressBar(++current);
         }
-       
-       
-        
-      
+
+
+
+
     });
 
 
@@ -258,13 +254,13 @@ $(document).ready(function () {
             var courseiddrp = $('#Coursedrp').find(":selected").val();
             var courseCatdrp = $('#CourseCategorydrp').find(":selected").val();
 
-           
+
             if (courseiddrp != -1 && courseCatdrp != -1) {
 
 
                 //-----------------next page--------------------
 
-              /*  loadCategoryDropdown();*/
+                /*  loadCategoryDropdown();*/
 
 
                 current_fs = $(this).parent();
@@ -298,7 +294,7 @@ $(document).ready(function () {
                 var lessonType = $('#drpLessonType').find(":selected").val();
                 var day = $('#dayDrp').find(":selected").val();
                 var weekNumber = $('#weekNumberDrp').find(":selected").val();
-               
+
                 console.log(weekNumber);
                 var textval = CKEDITOR.instances['text'].getData();
                 var activity = $('#drpFormat').find(":selected").val();
@@ -309,25 +305,14 @@ $(document).ready(function () {
                 formData.append("dayNumber", day);
                 formData.append("activity", activity);
                 formData.append("activityAlias", activityAlias);
-                                
+
                 formData.append("weekNumber", weekNumber);
-               
-                $($("#videoUpload")[0].files).each((i, element) => {
 
-                    formData.append("videos", $("#videoUpload")[0].files[i]);
-                });
 
-                $($("#audioUpload")[0].files).each((i, element) => {
 
-                    formData.append("Audios", $("#audioUpload")[0].files[i]);
-                });
 
-                $($("#imageUpload")[0].files).each((i, element) => {
-
-                    formData.append("image", $("#imageUpload")[0].files[i]);
-                });
                 formData.append("text", CKEDITOR.instances['text'].getData());
-                
+
 
 
 
@@ -345,9 +330,295 @@ $(document).ready(function () {
                             console.log(res);
 
                             saveWeekInfo();
-                            // alert("saved successfully");
-                           
+
+
+
+                            //saving generated lessonId in global variable
+
                             insertedLessonId = res.data.lessonId;
+
+
+
+                            //-----------------  video -----------------------------
+
+                            if (activity == 'video') {
+                                var videoObject = {};
+                                var documentFilesArray = [];
+                                var formDataVideo = new FormData();
+
+                                $($("#videoUpload")[0].files).each((i, element) => {
+
+
+                                    videoObject.video = $("#videoUpload")[0].files[i];
+                                });
+                                videoObject.language = "English";
+                                videoObject.lessonId = insertedLessonId;
+                                videoObject.mediaType = "video";
+
+                                formDataVideo.append("video", videoObject.video);
+                                formDataVideo.append("language", videoObject.language);
+                                formDataVideo.append("lessonId", videoObject.lessonId);
+                                formDataVideo.append("mediaType", videoObject.mediaType);
+
+
+
+                                $.ajax(
+                                    {
+                                        url: globalUrlForAPIs + 'Lesson/AddDocumentFilesForLesson',
+                                        data: formDataVideo,
+                                        //dataType: 'JSON',
+                                        processData: false,
+                                        contentType: false,
+                                        enctype: "multipart/form-data",
+                                        type: 'POST',
+                                        success: (res) => {
+
+
+
+
+                                        }
+                                    });
+
+
+
+
+
+                            }
+
+                            //---------------------------------- Audio saving-------- -------
+
+                            if (activity == 'audio') {
+
+                                //---------------------saving image -----------------------
+                                var audioObject = {};
+                                var documentFilesArray = [];
+                                var formDataAudio = new FormData();
+
+
+                                audioObject.language = "image";
+                                audioObject.lessonId = insertedLessonId;
+                                audioObject.mediaType = "image";
+
+                                $($("#imageUpload")[0].files).each((i, element) => {
+
+                                    formDataAudio.append("image", $("#imageUpload")[0].files[i]);
+                                });
+                                formDataAudio.append("language", audioObject.language);
+                                formDataAudio.append("lessonId", audioObject.lessonId);
+                                formDataAudio.append("mediaType", audioObject.mediaType);
+
+
+
+                                $.ajax(
+                                    {
+                                        url: globalUrlForAPIs + 'Lesson/AddDocumentFilesForLesson',
+                                        data: formDataAudio,
+                                        //dataType: 'JSON',
+                                        processData: false,
+                                        contentType: false,
+                                        enctype: "multipart/form-data",
+                                        type: 'POST',
+                                        success: (res) => { }
+                                    });
+
+                                // -------------------------save audio 1  ---------------------
+                                var audioObject = {};
+                                var documentFilesArray = [];
+                                var formDataAudio = new FormData();
+
+
+                                audioObject.language = "English";
+                                audioObject.lessonId = insertedLessonId;
+                                audioObject.mediaType = "audio";
+
+
+                                $($("#audioUpload")[0].files).each((i, element) => {
+
+                                    formDataAudio.append("audio", $("#audioUpload")[0].files[i]);
+                                });
+
+                                formDataAudio.append("language", audioObject.language);
+                                formDataAudio.append("lessonId", audioObject.lessonId);
+                                formDataAudio.append("mediaType", audioObject.mediaType);
+
+
+
+                                $.ajax(
+                                    {
+                                        url: globalUrlForAPIs + 'Lesson/AddDocumentFilesForLesson',
+                                        data: formDataAudio,
+                                        //dataType: 'JSON',
+                                        processData: false,
+                                        contentType: false,
+                                        enctype: "multipart/form-data",
+                                        type: 'POST',
+                                        success: (res) => {
+
+
+
+                                        }
+                                    });
+
+                            }
+
+                            if (activity == 'read') {
+                                //---------------------saving image -----------------------
+
+
+                                var formDataImg = new FormData();
+                                $($("#imageUpload")[0].files).each((i, element) => {
+
+                                    formDataImg.append("image", $("#imageUpload")[0].files[i]);
+                                });
+                                formDataImg.append("language", "image");
+                                formDataImg.append("lessonId", insertedLessonId);
+                                formDataImg.append("mediaType", "image");
+
+
+
+                                $.ajax(
+                                    {
+                                        url: globalUrlForAPIs + 'Lesson/AddDocumentFilesForLesson',
+                                        data: formDataImg,
+                                        //dataType: 'JSON',
+                                        processData: false,
+                                        contentType: false,
+                                        enctype: "multipart/form-data",
+                                        type: 'POST',
+                                        success: (res) => {
+
+                                            // -------------------------save audio 1  ---------------------
+
+
+                                            var formDataAudioOne = new FormData();
+
+
+
+
+                                            $($("#audioUpload")[0].files).each((i, element) => {
+
+                                                formDataAudioOne.append("audio", $("#audioUpload")[0].files[i]);
+                                            });
+
+                                            formDataAudioOne.append("language", "English");
+                                            formDataAudioOne.append("lessonId", insertedLessonId);
+                                            formDataAudioOne.append("mediaType", "audio");
+
+
+
+                                            $.ajax(
+                                                {
+                                                    url: globalUrlForAPIs + 'Lesson/AddDocumentFilesForLesson',
+                                                    data: formDataAudioOne,
+                                                    //dataType: 'JSON',
+                                                    processData: false,
+                                                    contentType: false,
+                                                    enctype: "multipart/form-data",
+                                                    type: 'POST',
+                                                    success: (res) => {
+
+
+                                                        //-------------------  saving second audio---------------------
+
+                                                        var formDataAudiotwo = new FormData();
+
+                                                        $($("#audioUpload2")[0].files).each((i, element) => {
+
+                                                            formDataAudiotwo.append("audio", $("#audioUpload2")[0].files[i]);
+                                                        });
+
+                                                        formDataAudiotwo.append("language", "Urdu");
+                                                        formDataAudiotwo.append("lessonId", insertedLessonId);
+                                                        formDataAudiotwo.append("mediaType", "audio");
+
+
+                                                        $.ajax(
+                                                            {
+                                                                url: globalUrlForAPIs + 'Lesson/AddDocumentFilesForLesson',
+                                                                data: formDataAudiotwo,
+                                                                //dataType: 'JSON',
+                                                                processData: false,
+                                                                contentType: false,
+                                                                enctype: "multipart/form-data",
+                                                                type: 'POST',
+                                                                success: (res) => { }
+                                                            })
+                                                    }
+                                                });
+
+
+
+
+
+                                        }
+                                    });
+
+
+
+                            }
+
+                            // ------------- Save Listen and speak -------------
+
+                            if (activity == 'listenAndSpeak' || activity == 'watchAndSpeak') {
+
+                                alert('here');
+
+                                var questionsArray = [];
+
+
+                                //------------------------
+
+                                $('.listenAndSpeakQuestionDiv').each((i, element) => {
+
+                                    //      var questionsObject = new Object;
+                                    var objectListen =
+                                    {
+                                        audio: "",
+                                        question: "",
+                                        answer: []
+                                    }
+
+
+
+                                    objectListen.question = $(element).find('.listenAndSpeakQuestion').val();
+
+                                    objectListen.lessonId = res.data.lessonId;
+                                    $(element).find('.listenAndSpeakAnswer').each((j, text) => {
+                                        objectListen.answer.push($(text).val());
+                                    });
+
+                                    objectListen.audio = $(element).find('.speakAudio')[0].files[0];
+
+                                    questionsArray.push(objectListen);
+
+                                });
+
+                                for (var i = 0; i < questionsArray.length; i++) {
+
+                                    var formData = new FormData();
+                                    formData.append('question', questionsArray[i].question);
+                                    formData.append('answer', questionsArray[i].answer);
+                                    formData.append('audio', questionsArray[i].audio);
+                                    formData.append('lessonId', res.data.lessonId);
+
+                                    $.ajax(
+                                        {
+                                            url: globalUrlForAPIs + 'Lesson/AddSpeakActivityQuestions',
+                                            data: formData,
+                                            async: false,
+                                            processData: false,
+                                            contentType: false,
+                                            enctype: "multipart/form-data",
+                                            type: 'POST',
+                                            success: (res) => { }
+                                        });
+                                }
+
+
+
+                            }
+
+
 
                             ////---------------save mcq------------------
                             if (activity == 'mcqs') {
@@ -364,11 +635,11 @@ $(document).ready(function () {
 
                                 ];
                                 var iterate = 0;
-                                
+
                                 var questionsArray = [];
                                 //------------------------
                                 $('.iterateElements').each((i, element) => {
-                              //      var questionsObject = new Object;
+                                    //      var questionsObject = new Object;
                                     var questionsObject = {
                                         question: "",
                                         option1: "",
@@ -378,7 +649,7 @@ $(document).ready(function () {
                                         correctAnswer: "",
                                     }
                                     questionsObject.question = $(element).find('.question').val();
-                                    
+
                                     $(element).find('.option').each((j, text) => {
                                         Object.defineProperty(questionsObject, `option${j + 1}`, { value: $(text).val() })
                                     });
@@ -387,11 +658,11 @@ $(document).ready(function () {
                                     questionsArray.push(questionsObject)
                                 });
 
-                                
-                                
-                           
-                              
-                             var   arrdata = JSON.stringify(questionsArray);
+
+
+
+
+                                var arrdata = JSON.stringify(questionsArray);
 
                                 console.log(arrdata);
 
@@ -406,7 +677,7 @@ $(document).ready(function () {
                                         success: (res) => {
                                             console.log(res);
                                             //alert("saved successfully");
-                                          
+
 
                                         }
                                     });
@@ -427,8 +698,7 @@ $(document).ready(function () {
         }
 
         //---------------------------         Else ------------------------------------
-        else
-        {
+        else {
             var formData = new FormData();
             //alert('inserted lesson id---' + insertedLessonId);
 
@@ -441,7 +711,7 @@ $(document).ready(function () {
 
                 //-----------------next page--------------------
 
-             /*   loadCategoryDropdown();*/
+                /*   loadCategoryDropdown();*/
 
 
                 current_fs = $(this).parent();
@@ -583,12 +853,11 @@ $(document).ready(function () {
                                         }
                                     });
                             }
-                            else
-                            {
+                            else {
                                 $.ajax(
                                     {
                                         url: globalUrlForAPIs + 'Lesson/deleteMcqs?id=' + updateLessonId,
-                                      /*  data: updateLessonId,*/
+                                        /*  data: updateLessonId,*/
                                         //  dataType: 'JSON',
                                         contentType: 'application/json',
 
@@ -615,10 +884,10 @@ $(document).ready(function () {
             }
 
         }
-       
+
 
     });
-//------------------------------------------------------------------------
+    //------------------------------------------------------------------------
 
 
     //--------------------------------------------------------------------------------------------------------------
@@ -672,7 +941,7 @@ $(document).ready
 
         loadCategoryDropdown()
 
-       
+
     );
 //------------------------------------------Load Category Drowpdown in Course Sections--------------------
 function loadCategoryDropdown() {
@@ -708,7 +977,7 @@ function loadCategoryDropdown() {
 $(document).on('click', '#btnAddCategoryModal', function () {
 
     $('.CategoryAddModal').modal('toggle');
-    $('#txtCourseCategory').prop('hidden',false);
+    $('#txtCourseCategory').prop('hidden', false);
     $('#txtCourseCategory').val('');
     //$('#lblCourseCategoryName').show();
     $('#lblCategoryAddSuccess').attr('hidden', true);
@@ -716,15 +985,15 @@ $(document).on('click', '#btnAddCategoryModal', function () {
     $('#imageUploadCat').val('');
     $('#btnAddCategory').prop('hidden', false);
     //$('#lblCategoryAddSuccess').attr('hidden', true);
-    
-   
+
+
 });
 
 $(document).on('click', '#btnAddCourseModal', function () {
-   
-      $('#lblCourseAddedMessage').prop('hidden', true);
-      $('#txtCourse').show();
-      $('#btnCourseAddclick').show();
+
+    $('#lblCourseAddedMessage').prop('hidden', true);
+    $('#txtCourse').show();
+    $('#btnCourseAddclick').show();
     $('.courseAddModal').modal('toggle');
     $('#coursecategoryid').prop('hidden', false);
     $('#courseStatusDrp').prop('hidden', false);
@@ -746,7 +1015,7 @@ $(document).on('click', '#btnAddCourseModal', function () {
 //----------------------         Save Category  ---------------------------
 
 
-$(document).on('click','#btnAddCategory', function () {
+$(document).on('click', '#btnAddCategory', function () {
 
     var formdata = new FormData();
     formdata.append('CourseCategoryName', $('#txtCourseCategory').val());
@@ -755,14 +1024,14 @@ $(document).on('click','#btnAddCategory', function () {
         formdata.append("image", $("#imageUploadCat")[0].files[i]);
     });
     JSON.stringify(formdata);
-  
+
     var check = isNullOrUndefined($('#txtCourseCategory').val());
     if (check != false) {
-      
+
         $.ajax({
             url: globalUrlForAPIs + 'CourseCategory/AddCourseCategory',
             data: formdata,
-           
+
             dataType: 'JSON',
             processData: false,
             contentType: false,
@@ -772,13 +1041,13 @@ $(document).on('click','#btnAddCategory', function () {
             success: (res) => {
 
                 //$('#txtmodalCourseCategory').hide();
-                $('#lblCategoryAddSuccess').prop('hidden',false);
+                $('#lblCategoryAddSuccess').prop('hidden', false);
                 //$('#lblMessage').removeAttr('hidden');
                 $('#txtCourseCategory').prop('hidden', true);
                 $('#btnAddCategory').prop('hidden', true);
                 $('#categoryImg').prop('hidden', true);
-               
-                
+
+
                 loadCategoryDropdown();
             },
             error: () => {
@@ -786,11 +1055,11 @@ $(document).on('click','#btnAddCategory', function () {
             }
 
         });
-       
+
     }
-   
+
     loadCategoryDropdown();
-  
+
 });
 
 
@@ -800,34 +1069,33 @@ $(document).on('click','#btnAddCategory', function () {
 $(document).on('click', '#btnCourseAddclick', function () {
 
     var check = isNullOrUndefined($('#txtCourse').val());
-   
-    if (check != false)
-    {
-       
-                $.ajax(
-                    {
-                        
-                        url: globalUrlForAPIs + 'Course/AddCourse',
-                        data: { "CourseCategoryId": $('#CourseCategorydrp').find(":selected").val(), "CourseName": $('#txtCourse').val(), "CoursePrice": $('#txtCoursePrice').val(), "CourseWeeks": $('#txtCourseWeeks').val(), "status": $('#courseStatusDrp').find(':selected').val() },
 
-                        dataType: 'JSON',
-                  
-                        type: 'POST',
-                        success: (res) => {
+    if (check != false) {
 
-                            
-                            $('#lblCourseAddedMessage').prop('hidden', false);
-                            $('#txtCourse').hide();
-                            $('#btnCourseAddclick').hide();
-                            $('#txtCoursePrice').hide();
-                            $('#txtCourseWeeks').hide();
-                            $('#coursecategoryid').prop('hidden', true);
-                            $('#courseStatusDrp').prop('hidden', true);
-                            loadCoursesDrp();
-                        },
-                        error: (res) => { alert('something went wrong') }
-                    });
-            
+        $.ajax(
+            {
+
+                url: globalUrlForAPIs + 'Course/AddCourse',
+                data: { "CourseCategoryId": $('#CourseCategorydrp').find(":selected").val(), "CourseName": $('#txtCourse').val(), "CoursePrice": $('#txtCoursePrice').val(), "CourseWeeks": $('#txtCourseWeeks').val(), "status": $('#courseStatusDrp').find(':selected').val() },
+
+                dataType: 'JSON',
+
+                type: 'POST',
+                success: (res) => {
+
+
+                    $('#lblCourseAddedMessage').prop('hidden', false);
+                    $('#txtCourse').hide();
+                    $('#btnCourseAddclick').hide();
+                    $('#txtCoursePrice').hide();
+                    $('#txtCourseWeeks').hide();
+                    $('#coursecategoryid').prop('hidden', true);
+                    $('#courseStatusDrp').prop('hidden', true);
+                    loadCoursesDrp();
+                },
+                error: (res) => { alert('something went wrong') }
+            });
+
         loadCoursesDrp();
 
     }
@@ -843,8 +1111,7 @@ $(document).on('change', '#courseStatusDrp', function () {
         $('#txtCoursePrice').val('0');
         $('#txtCoursePrice').attr('disabled', true);
     }
-    else
-    {
+    else {
         $('#txtCoursePrice').val('');
         $('#txtCoursePrice').attr('disabled', false);
     }
@@ -867,11 +1134,11 @@ $(document).on('click', '#btnPreStepperTeacher', function () {
 //----------------------------------- lesson 1 click-------------
 
 $(document).on('click', '#btnNextLesson1', function () {
-  
+
     var type = $('#drpLessonType').find(":selected").val();
     var format = $('#drpFormat').find(":selected").val();
 
-  
+
 });
 
 
@@ -906,7 +1173,7 @@ $(document).ready
         }
 
 
-)
+    )
 
 
 //--------------Get all courses on category change -----------on category change--------------------
@@ -914,7 +1181,7 @@ $('#CourseCategorydrp').change(function () {
     loadCoursesDrp();
 }
 );
-function loadCoursesDrp () {
+function loadCoursesDrp() {
     var id = $('#CourseCategorydrp').find(":selected").val();
     var text = $("#CourseCategorydrp option:selected").text();
     text = $.trim(text);
@@ -948,44 +1215,42 @@ $('#Coursedrp').change(function () {
     $('.dayDiv').prop('hidden', true);
     $("#weekNumberDrp").val($("#weekNumberDrp option:first").val());
     $('.weekNumberDiv').prop('hidden', true);
-  
-   
+
+
 });
 
 
 
 // ---------------------------   Load weeks of selected course ----------------------
-    function loadWeeks() {
-        var id = $('#Coursedrp').find(":selected").val();
-        var text = $("#CourseCategorydrp option:selected").text();
-        text = $.trim(text);
-        $('#txtCategory').val(text);
-        $.ajax(
-            {
-                type: 'POST',
-                url: globalUrlForAPIs + 'Course/GetCourseById?id='+ id,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: (res) => {
-                    console.log(res);
-                    $('#weekNumberDrp').empty();
-                    $('#weekNumberDrp').append(`<option value="-1">Select Course Week </option>`);
-                    for (var i = 1; i <= res.courseWeeks; i++)
-                    {
+function loadWeeks() {
+    var id = $('#Coursedrp').find(":selected").val();
+    var text = $("#CourseCategorydrp option:selected").text();
+    text = $.trim(text);
+    $('#txtCategory').val(text);
+    $.ajax(
+        {
+            type: 'POST',
+            url: globalUrlForAPIs + 'Course/GetCourseById?id=' + id,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: (res) => {
+                console.log(res);
+                $('#weekNumberDrp').empty();
+                $('#weekNumberDrp').append(`<option value="-1">Select Course Week </option>`);
+                for (var i = 1; i <= res.courseWeeks; i++) {
 
-                        $('#weekNumberDrp').append(`<option value="${i}">
+                    $('#weekNumberDrp').append(`<option value="${i}">
                                        ${i}
                                   </option>`)
-                    }
                 }
             }
-        )
+        }
+    )
 }
 
 
 //---------------------------    Load Alias  -----------------------
-$(document).ready(function ()
-{
+$(document).ready(function () {
     $.ajax(
         {
             type: 'GET',
@@ -996,9 +1261,9 @@ $(document).ready(function ()
                 console.log(res);
                 $('#drpAlias').empty();
                 $('#drpAlias').append(`<option value="-1">Select Alias </option>`);
-                for (var i = 0; i <= res.length; i++) {
+                for (var i = 0; i < res.length; i++) {
 
-                    $('#drpAlias').append(`<option value="${i}">
+                    $('#drpAlias').append(`<option value="${res[i].alias}">
                                        ${res[i].alias}
                                   </option>`)
                 }
@@ -1007,8 +1272,8 @@ $(document).ready(function ()
     )
 
 });
-   
-  
+
+
 
 
 
@@ -1024,12 +1289,12 @@ $('#Coursedrp').change(function () {
     var text = $("#Coursedrp option:selected").text();
     text = $.trim(text);
     $('#txtCoursetbl').val(text);
-  
+
 }
 );
 //--------------------------   on lesson type -----------------------
 $('#drpLessonType').change(function () {
-   
+
     var type = $('#drpLessonType').find(":selected").val();
     var format = $('#drpFormat').find(":selected").val();
     var day = $('#dayDrp').find(":selected").val();
@@ -1041,11 +1306,10 @@ $('#drpLessonType').change(function () {
     $('#txtType').val(text);
 
 
-    if (type != '-1' && format != '-1' )
-    {
+    if (type != '-1' && format != '-1') {
         $('#btnNextLesson1').prop('disabled', false);
     }
-    if (type == '-1' && format == '-1' ) {
+    if (type == '-1' && format == '-1') {
         $('#btnNextLesson1').prop('disabled', true);
     }
 
@@ -1060,7 +1324,7 @@ $('#drpLessonType').change(function () {
 
 
     if (type == "-1") {
-       
+
         $("#dayDrp").val($("#dayDrp option:first").val());
         $('.dayDiv').prop('hidden', true);
 
@@ -1074,15 +1338,14 @@ $('#drpLessonType').change(function () {
         $('.weekNumberDiv').prop('hidden', false);
         $("#weekNumberDrp").val($("#weekNumberDrp option:first").val());
     }
-     if (type == 'day')
-     {
-         $('.weekNumberDiv').prop('hidden', true);
-         $("#dayDrp").val($("#dayDrp option:first").val());
-         $('.dayDiv').prop('hidden', true);
-         $('#txtDay').val('-');
+    if (type == 'day') {
+        $('.weekNumberDiv').prop('hidden', true);
+        $("#dayDrp").val($("#dayDrp option:first").val());
+        $('.dayDiv').prop('hidden', true);
+        $('#txtDay').val('-');
     }
 
-  
+
 
 });
 
@@ -1106,7 +1369,7 @@ $('#dayDrp').change(function () {
 $('#weekNumberDrp').change(function () {
 
     var courseId = $('#Coursedrp option:selected').val();
-   
+
     var weekNum = $("#weekNumberDrp option:selected").text();
     weekNum = $.trim(weekNum);
     //assigning value to table below stepper
@@ -1118,14 +1381,12 @@ $('#weekNumberDrp').change(function () {
 
         type: 'GET',
         url: globalUrlForAPIs + 'Lesson/GetWeekByCourseIdAndWeekNumber?id=' + courseId + '&weekNumber=' + weekNum + '',
-        success: (res) =>
-        {
+        success: (res) => {
             if (res != null) {
                 $('#imgDiv').html(`  <img id='imgWeekModal' alt="Image" style=" width:50px ; height:50px" src=' ` + res.image + `' />`);
                 $('#weekDescription').val(res.description);
             }
-            else
-            {
+            else {
                 $('#imgDiv').html(``);
             }
         }
@@ -1137,8 +1398,7 @@ $('#weekNumberDrp').change(function () {
 
 // -------------------------------------  Save Week Information ----------------------------
 
-function saveWeekInfo()
-{
+function saveWeekInfo() {
     var formData = new FormData();
     var courseId = $('#Coursedrp option:selected').val();
     var weekNum = $("#weekNumberDrp option:selected").val();
@@ -1152,9 +1412,9 @@ function saveWeekInfo()
 
         formData.append("image", $("#weekImgUpload")[0].files[i]);
     });
-    
-    
-   
+
+
+
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
@@ -1163,8 +1423,7 @@ function saveWeekInfo()
         processData: false,
         contentType: false,
         enctype: "multipart/form-data",
-        success: (res) =>
-        {
+        success: (res) => {
 
         }
     });
@@ -1199,7 +1458,7 @@ $("#weekImgUpload").on("change", function (e) {
 
 
 
-                 //-----------------  Activity Format change----------------------
+//-----------------  Activity Format change----------------------
 $('#drpFormat').change(function () {
     //$("#CourseCategorydrp").val($("#CourseCategorydrp option:first").val());
     //$("#Coursedrp").val($("#CourseCategorydrp option:first").val());
@@ -1212,8 +1471,27 @@ $('#drpFormat').change(function () {
     text = $.trim(text);
     $('#txtActivity').val(text);
 
- 
 
+    //  empty speak activity div
+    $('#listenSpeakAppendQuestions').html(``);
+    $('#listenSpeakAppendQuestions').html(` <div style="border: 1px solid black; border-radius:5px" class="listenAndSpeakQuestionDiv">
+       
+
+
+ <button id="btnAddAnswerSpeak" type="button" style="background-color:#0080ff;color:white" class="form-control btn  ">Add answer</button>
+
+
+
+
+<br/>
+        <label class="control-label  ">Upload Audio Question</label>
+
+        <input type="file"  id="questionAudio"  name="files" class="form-control fileUpload speakAudio "  multiple />
+
+        <input class="form-control listenAndSpeakQuestion" placeholder="Write Question" />
+        <input class="form-control listenAndSpeakAnswer" placeholder="Provide answer" />
+    </div>
+`);
 
 
 
@@ -1222,7 +1500,7 @@ $('#drpFormat').change(function () {
     var day = $('#dayDrp').find(":selected").val();
 
 
-    if (type != '-1' && format != '-1' ) {
+    if (type != '-1' && format != '-1') {
         $('#btnNextLesson1').prop('disabled', false);
     }
     if (type == '-1' && format == '-1') {
@@ -1234,18 +1512,19 @@ $('#drpFormat').change(function () {
     }
 
 
-   
-    
 
-    if (format == 'video')
-    {
+
+
+    if (format == 'video') {
         $('.videoHide').prop('hidden', false);
         $('.audioHide').prop('hidden', true);
         $('.textDiv').prop('hidden', false);
         $('.imageHide').prop('hidden', true);
         $('#btnTextSave').prop('hidden', true);
         $('#divMcsqs').prop('hidden', true);
-        
+        $('.listenAndSpeak').prop('hidden', true);
+        $('.audioHideForRead').prop('hidden', true);
+
 
         $('.tbldynamic').html(` <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
@@ -1277,18 +1556,19 @@ $('#drpFormat').change(function () {
                   </tbody>
             </table>`);
         //<video id="video" width="100" height="100" controls style="display: none;"></video>
-       
+
     }
-     if (format == 'audio') {
-         $('.audioHide').prop('hidden', false);
-         $('.imageHide').prop('hidden', false);
+    if (format == 'audio') {
+        $('.audioHide').prop('hidden', false);
+        $('.imageHide').prop('hidden', false);
         $('.videoHide').prop('hidden', true);
-         $('.textDiv').prop('hidden', false);
-         $('#btnTextSave').prop('hidden', true);
-         $('#divMcsqs').prop('hidden', true);
+        $('.textDiv').prop('hidden', false);
+        $('#btnTextSave').prop('hidden', true);
+        $('#divMcsqs').prop('hidden', true);
+        $('.listenAndSpeak').prop('hidden', true);
+        $('.audioHideForRead').prop('hidden', true);
 
-
-         $('.tbldynamic').html(` <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+        $('.tbldynamic').html(` <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
                         <th>CourseCategory Name</th>
@@ -1326,10 +1606,11 @@ $('#drpFormat').change(function () {
         $('#btnTextSave').prop('hidden', false);
         $('.imageHide').prop('hidden', false);
         $('.textDiv').prop('hidden', false);
-         $('.audioHide').prop('hidden', false);
+        $('.audioHide').prop('hidden', false);
         $('.videoHide').prop('hidden', true);
         $('#divMcsqs').prop('hidden', true);
-
+        $('.listenAndSpeak').prop('hidden', true);
+        $('.audioHideForRead').prop('hidden', false);
 
         $('.tbldynamic').html(`  <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
@@ -1374,15 +1655,29 @@ $('#drpFormat').change(function () {
             </table> `);
     }
 
-    if (format == 'listenAndSpeak')
-    {
-       
-        $('.audioHide').prop('hidden', false);
+    if (format == 'listenAndSpeak') {
+
+        $('.listenAndSpeak').prop('hidden', false);
+        $('.audioHide').prop('hidden', true);
         $('.videoHide').prop('hidden', true);
         $('#divMcsqs').prop('hidden', true);
         $('#btnTextSave').prop('hidden', true);
         $('.imageHide').prop('hidden', true);
-        $('.textDiv').prop('hidden', true);
+        $('.textHide').prop('hidden', true);
+        $('.audioHideForRead').prop('hidden', true);
+
+    }
+
+    if (format == 'watchAndSpeak') {
+
+        $('.listenAndSpeak').prop('hidden', false);
+        $('.audioHide').prop('hidden', true);
+        $('.videoHide').prop('hidden', true);
+        $('#divMcsqs').prop('hidden', true);
+        $('#btnTextSave').prop('hidden', true);
+        $('.imageHide').prop('hidden', true);
+        $('.textHide').prop('hidden', true);
+        $('.audioHideForRead').prop('hidden', true);
 
     }
 
@@ -1394,8 +1689,8 @@ $('#drpFormat').change(function () {
         $('.textDiv').prop('hidden', false);
         $('.audioHide').prop('hidden', true);
         $('.videoHide').prop('hidden', true);
-       
-
+        $('.listenAndSpeak').prop('hidden', true);
+        $('.audioHideForRead').prop('hidden', true);
 
         $('.tbldynamic').html(`  <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
@@ -1420,12 +1715,9 @@ $('#drpFormat').change(function () {
  <td id="tdWeekNum"><input readonly type="text" id="txtWeekNum" /></td>
                               <td id="tdActivity"><input readonly type="text" id="txtActivity" /></td>
                             
-                              <td id="tdText"><input readonly hidden type="text" id="txtMcqs" /><button class="btn-primary btn-primary" id="btnShowText">Show Text</button></td>
+      <td id="tdText"><input readonly hidden type="text" id="txtMcqs" /><button class="btn-primary btn-primary" id="btnShowText">Show Text</button></td>
                            
-                             
-                              
-
-                          </tr>
+                           </tr>
                       
                   </tbody>
             </table> `);
@@ -1440,14 +1732,14 @@ $('#drpFormat').change(function () {
     //changing bottom table values on dropdown change  -------------- type  +   activity
     $('#txtCategory').val(category.trim());
     $('#txtCoursetbl').val(course.trim());
-   
-     text = $("#drpFormat option:selected").text();
+
+    text = $("#drpFormat option:selected").text();
     text = $.trim(text);
     $('#txtActivity').val(text);
 
     var typeText = $("#drpLessonType option:selected").text();
     if (typeText == 'Weekly') {
-        $('#txtDay').val( $('#dayDrp').find(":selected").val());
+        $('#txtDay').val($('#dayDrp').find(":selected").val());
     }
 
     var weekNum = $("#weekNumberDrp option:selected").text();
@@ -1459,7 +1751,7 @@ $('#drpFormat').change(function () {
     $('#imageUpload').val('');
     $('#videoUpload').val('');
     $('#audioUpload').val('');
-    
+
 });
 
 
@@ -1484,7 +1776,7 @@ var fileModalpic = "";
 
 $(".js-file-upload").on("change", function (e) {
     const [file] = e.target.files;
-   
+
     $('#tdImage').html('<div class="imageContainer"> <img id="blah" src="#" alt="your image" style="width:30px;height:30px"  /></div>');
 
     if (file) {
@@ -1498,22 +1790,21 @@ $(".js-file-upload").on("change", function (e) {
 //----------------------------  video load in table---------------------
 
 document.getElementById("videoUpload").addEventListener("change", function () {
-   
+
     $('#tdVideo').html(``);
     var id = "video";
-    for (i = 0; i < this.files.length;i++)
-    {
-        id=i;
-        $('#tdVideo').append(`<video id=`+id+` width="100" height="100" controls style="display: none;"></video>`);
+    for (i = 0; i < this.files.length; i++) {
+        id = i;
+        $('#tdVideo').append(`<video id=` + id + ` width="100" height="100" controls style="display: none;"></video>`);
         var media = URL.createObjectURL(this.files[i]);
         var video = document.getElementById(id);
         video.src = media;
         video.style.display = "block";
 
     }
-   
-   
-   // video.play();
+
+
+    // video.play();
 });
 
 //---------------------------  Audio load in table ---------------------
@@ -1523,7 +1814,7 @@ document.getElementById("audioUpload").addEventListener("change", function () {
     var id = "video";
     for (i = 0; i < this.files.length; i++) {
         id = i;
-        $('#tdAudio').append(`<audio id=` + id +` width="100" height="100" controls style="display: none;"></audio>`);
+        $('#tdAudio').append(`<audio id=` + id + ` width="100" height="100" controls style="display: none;"></audio>`);
         var media = URL.createObjectURL(this.files[i]);
         var video = document.getElementById(id);
         video.src = media;
@@ -1546,7 +1837,7 @@ $(document).on('click', '#btnTextSave', function () {
 $(document).on('click', '#btnShowText', function () {
     $('.textModal').modal('toggle');
     var text = $('#txtText').val();
-   
+
     $('.modal-body').html(text);
 
 
@@ -1567,10 +1858,10 @@ $(document).on('click', '#blah', function () {
     $('.picModal').modal('toggle');
     $('.modal-body').html('<div class="imageModal"></div>');
 
-    $('.modal-body').append('<div class="imageModal"> <img id="modalImg" src="' + fileModalpic +'" alt="your image" style="width:465px;height:auto"  /></div>');
+    $('.modal-body').append('<div class="imageModal"> <img id="modalImg" src="' + fileModalpic + '" alt="your image" style="width:465px;height:auto"  /></div>');
 
-   
-      
+
+
 });
 
 
@@ -1579,21 +1870,21 @@ let mcqQuestionCount = 2;
 let idCount = 1;
 
 $(document).on('click', '.btnAddMcq', function () {
-   
-   
-   
 
-                                    $('#questionDiv').append(`<div id="removeQuestion` + idCount +`" class="iterateElements">
 
-                                    <h3 class="regenerateCount"><p>Question No : `+ mcqQuestionCount +`</p></h3>
+
+
+    $('#questionDiv').append(`<div id="removeQuestion` + idCount + `" class="iterateElements">
+
+                                    <h3 class="regenerateCount"><p>Question No : `+ mcqQuestionCount + `</p></h3>
                                     <button type="button" class="btn btn-danger " id="`+ idCount + `" onclick="removeQuestionFunc(this.id)">Remove</button>
-                                     <input type="text" id="txtMcqQuestion`+ idCount +`" class="form-control txtMcqQuestion iterateInputElements question" style="border-radius:5px" placeholder="Write question" />
-                                     <input type="text" id="txtMcqOption1`+ idCount +`"  class=" iterateInputElements option"  placeholder="provide option" />
-                                     <input type="text" id="txtMcqOption2`+ idCount +`"  class=" iterateInputElements option" placeholder="provide option" />
-                                     <input type="text" id="txtMcqOption3`+ idCount +`"  class=" iterateInputElements option" placeholder="provide option" />
-                                     <input type="text" id="txtMcqOption4`+ idCount +`"  class=" iterateInputElements option" placeholder="provide option" />
+                                     <input type="text" id="txtMcqQuestion`+ idCount + `" class="form-control txtMcqQuestion iterateInputElements question" style="border-radius:5px" placeholder="Write question" />
+                                     <input type="text" id="txtMcqOption1`+ idCount + `"  class=" iterateInputElements option"  placeholder="provide option" />
+                                     <input type="text" id="txtMcqOption2`+ idCount + `"  class=" iterateInputElements option" placeholder="provide option" />
+                                     <input type="text" id="txtMcqOption3`+ idCount + `"  class=" iterateInputElements option" placeholder="provide option" />
+                                     <input type="text" id="txtMcqOption4`+ idCount + `"  class=" iterateInputElements option" placeholder="provide option" />
                                     <hr style="color:red" />
-                                   <input type="text" id="txtCorrectAnswer`+ idCount +`" class=" iterateInputElements" placeholder="provide Correct answer" />
+                                   <input type="text" id="txtCorrectAnswer`+ idCount + `" class=" iterateInputElements" placeholder="provide Correct answer" />
                                    
                                     </div>
                                      `);
@@ -1604,24 +1895,22 @@ $(document).on('click', '.btnAddMcq', function () {
 
 });
 
-function removeQuestionFunc(value)
-{
-   
+function removeQuestionFunc(value) {
+
     $('#removeQuestion' + value + '').remove();
     regenerateQuestionAfterAdd();
     //var j = 1;
- 
+
     //$('.regenerateCount').each((i, element) => {
-        
+
     //    $(element).children("p").text('Question No : '+j);
-        
+
     //    j++;
-       
+
     //});
 }
 
-function regenerateQuestionAfterAdd()
-{
+function regenerateQuestionAfterAdd() {
     var j = 1;
     $('.regenerateCount').each((i, element) => {
 
@@ -1632,4 +1921,59 @@ function regenerateQuestionAfterAdd()
         //j++
     });
 }
+
+
+
+
+
+//-------------------------        Listen and Speak  ---------------------------------
+
+$(document).on('click', '#btnAddQuestion', function () {
+
+    $('#listenSpeakAppendQuestions').append(` <br/> <div style="border: 1px solid black; border-radius:5px" class="listenAndSpeakQuestionDiv">
+ <button id="btnAddAnswerSpeak" type="button" style="width:50%;background-color:#0080ff;color:white" class="form-control btn btn ">Add Answer</button>
+<button id="btnRemoveQuestion" type="button" style="width:50%;background-color: 	#d92626;color:white; float:right" class="form-control btn ">Remove Question</button>
+
+<br/>
+        <label class="control-label  ">Upload Audio Question</label>
+        <input type="file"  id="questionAudio"  name="files" class="form-control fileUpload speakAudio "  multiple />
+                                          <input class="form-control listenAndSpeakQuestion" placeholder="Write Question" />
+                                         <input class="form-control listenAndSpeakAnswer" placeholder="Provide answer" />
+                                      
+                  </div>
+                                     `);
+
+
+
+    //$('.listenspeakModal').modal('toggle');
+});
+
+$(document).on('click', '#btnAddAnswerSpeak', function () {
+
+    /* $('.listenAndSpeakQuestionDiv').append(`<input class="form-control listenAndSpeakAnswer" placeholder="Provide answer" />`);*/
+    $(this).parent().append(`<input class="form-control listenAndSpeakAnswer" style="width:100% ;border-radius:5px" placeholder="Provide answer" />
+<button id="btnRemoveAnswer" type="button" style="background-color:#d92626;color:white; float:right;margin-top: -64px;" class=" btn ">X</button>
+
+
+`);
+
+});
+
+$(document).on('click', '#btnRemoveQuestion', function () {
+
+    /* $('.listenAndSpeakQuestionDiv').append(`<input class="form-control listenAndSpeakAnswer" placeholder="Provide answer" />`);*/
+    $(this).parent().remove();
+
+});
+
+$(document).on('click', '#btnRemoveAnswer', function () {
+
+    /* $('.listenAndSpeakQuestionDiv').append(`<input class="form-control listenAndSpeakAnswer" placeholder="Provide answer" />`);*/
+    $(this).prev().remove();
+    $(this).remove();
+
+});
+
+
+
 

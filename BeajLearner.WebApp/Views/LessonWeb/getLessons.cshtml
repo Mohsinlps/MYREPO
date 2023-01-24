@@ -22,12 +22,29 @@
   </div>
 </div>
 
+@*-------------------------------------  Speak Questions show Modal --------------------------------------------*@
+
+   <div class="modal   speakModal" tabindex="-1">
+  <div class="modal-dialog  modal-dialog-scrollable" style="max-width: 60%;">
+    <div class="modal-content">
+     <div class="modal-header">
+        <h5 class="modal-title">Questions</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body showSpeakModalBody" style="">
+        
+ 
+      </div>
+  
+    </div>
+  </div>
+</div>
 
 
 @*------------------------------------- Show mcqs Modal --------------------------------------------*@
 
    <div class="modal   mcqsModal" tabindex="-1">
-  <div class="modal-dialog">
+  <div class="modal-dialog  modal-dialog-scrollable" style="max-width: 60%;">
     <div class="modal-content">
      <div class="modal-header">
         <h5 class="modal-title">Mcqs</h5>
@@ -119,7 +136,7 @@
                            <select  id="drpLessonType"  class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
                              
                             </select>
-                           <div class="weekNumberDiv">
+                           <div class="weekNumberDiv weekHide">
                                <label class="fieldlabels">Week number</label>
                                  <select  id="weekNumberDrp"   class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" >
                                <option value="-1">Select Week Number</option>
@@ -142,13 +159,13 @@
 
                                  <div class="col-6">
                                      <label class="fieldlabels">Week Description</label>
-                                  <input class="form-control" id="weekDescription"  placeholder="Add Week Description" />
+                                  <input class="form-control" readonly id="weekDescription"  placeholder="Add Week Description" />
                               </div>
                                  
                               </div>
                            </div>
                            <br />
-                               <div class="dayDiv">
+                               <div class="dayDiv weekHide" >
                                    <label class="fieldlabels"> Week Day</label>
                                     <select  id="dayDrp"  class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" >
                                <option value="-1">Select Day</option>
@@ -161,31 +178,21 @@
                               </select>
                                </div>
                             
-                             <label class="fieldlabels">Select Lesson Activity:</label>
-                           <select  id="drpFormat"  class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                             <label class="fieldlabels">Lesson Activity:</label>
+                          @* <select  id="drpFormat"  class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
                              <option value="-1">Select Lesson Activity</option>
                                <option value="audio">Listen</option>
                              <option value="video">Watch</option>
                              <option value="read">Read</option>
-                              <option value="speak">Speak</option>
+                              <option value="listenAndSpeak">Listen and Speak</option>
+                               <option value="watchAndSpeak">Watch and Speak</option>
                              <option value="mcqs">MCQs</option>
-                            </select>
-                            
+                            </select>*@
+                            <input class="form-control" readonly id="txtActivity"  />
+                            <br />
                             <label class="fieldlabels">Select activity alias</label>
                               <select  id="drpAlias"  class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-                             <option value="-1">Select Alias</option>
-                               <option value="Listen">Listen</option>
-                             <option value="Watch">Watch</option>
-                             <option value="Speak">Speak</option>
-                              <option value="Grammar">Grammar</option>
-                             <option value="Practice">Practice</option>
-                              <option value="Speak">Speak</option>
-                               <option value="Vocabulary">Vocabulary</option>
-                                <option value="Conversation">Conversation</option>
-                                 <option value="Read">Read</option>
-                                  <option value="Review Phrases">Review Phrases</option>
-                                  <option value="Review words">Review words</option>
-
+                           
                             </select>
                           
           </div>
@@ -218,7 +225,8 @@
                                    </div>
                                </div>
                                 
-
+                               <br />
+                             
                                 <div id="audioHideDiv" class="row"> 
                                    <div class="col-6">
                                     
@@ -226,12 +234,38 @@
                                  <input type="file"  id="audioUpload"  name="files" class="fileUpload audioHide form-control" multiple />
                             
                                    </div>
-                                   <div id="audioLessonEditDiv" class="col-6"></div>
+                                   <div id="audioLessonEditDiv" class=""></div>
                                </div>
-                                
 
+                               <br />
+                                   <div id="audioHideDiv2" class="row"> 
+                                   <div class="col-6">
+                                    
+                                 <label class="control-label  audioHide2">Upload Urdu Audio</label>
+                                 <input type="file"  id="audioUpload2"  name="files" class="fileUpload audioHide2 form-control" multiple />
+                            
+                                   </div>
+                                   <div id="audioLessonEditDiv2" class="audio2Class"></div>
+                               </div>
+                             
 
                                  <br />
+
+                                  @*------------------- Listen and Speak -----------------*@
+
+                                 @*used for both listen and watch*@
+
+                                 <div class="listenAndSpeak">
+                                   @* <div id="listenSpeakAppendQuestions">
+
+                                       
+                                    </div>*@
+
+                                  <button class="btn btn-success" type="button" id="btnAddQuestion">Add Question</button>
+                                 </div>
+
+
+
                                  @*-----------------mcq generation--------------*@
                                  <div id="divMcsqs" style=" border:2px solid black;border-radius:5px;">
                                  <div class="card">
@@ -290,6 +324,11 @@
         </div>
 </div>
 
+
+
+             @*---------------------   Tabs and Panes  -------------------------------------*@
+
+
 <ul class="nav nav-tabs" id="myTab" role="tablist">
   <li class="nav-item" role="presentation">
     <button class="nav-link active  paneVideo" id="home-tab"  data-bs-toggle="tab" data-bs-target="#video" type="button" role="tab" aria-controls="home" aria-selected="true">Video</button>
@@ -300,6 +339,11 @@
   <li class="nav-item" role="presentation">
     <button class="nav-link paneText" id="contact-tab" data-bs-toggle="tab" data-bs-target="#textpane" type="button" role="tab" aria-controls="contact" aria-selected="false">Read</button>
   </li>
+
+   <li class="nav-item" role="presentation">
+    <button class="nav-link paneListenAndSpeak" id="contact-tab" data-bs-toggle="tab" data-bs-target="#listenAndSpeak" type="button" role="tab" aria-controls="contact" aria-selected="false">Listen And Speak</button>
+  </li>
+
     <li class="nav-item" role="presentation">
     <button class="nav-link paneText" id="contact-tab" data-bs-toggle="tab" data-bs-target="#mcqs" type="button" role="tab" aria-controls="contact" aria-selected="false">MCQs</button>
   </li>
@@ -378,18 +422,19 @@
             </table>
   </div>
   </div>
-@*  <div class="tab-pane fade" id="text" role="tabpanel" aria-labelledby="contact-tab">
+    @*------------------------------- Listen and Speak --------------------------------------------*@
+
+        <div class="tab-pane fade" id="listenAndSpeak" role="tabpanel" aria-labelledby="contact-tab">
 
     <div class="table-responsive">
-            <table class="table table-bordered" id="textDataTable" width="100%" cellspacing="0">
+            <table class="table table-bordered" id="listenAndSpeakDataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
                          <th>lessonType</th>
                           <th>weekNumber</th>
                         <th>dayNumber</th>
-                        <th>Audios</th>
-                        <th>Image</th>
-                        <th>Text</th>
+                        <th>Show Questions</th>
+                      
                         <th></th>
                       <th></th>
                     </tr>
@@ -400,7 +445,8 @@
             </table>
   </div>
 
-  </div>*@
+  </div>
+
     @*-----------------------------   mcqs ------------------------------------------------*@
 
     <div class="tab-pane fade" id="mcqs" role="tabpanel" aria-labelledby="contact-tab">

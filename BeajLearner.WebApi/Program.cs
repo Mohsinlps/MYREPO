@@ -106,6 +106,10 @@ builder.Services.AddScoped<IAsyncRepository<TeachersAssignedCourse>, EfRepositor
 builder.Services.AddScoped<IAsyncRepository<purchasedCourse>, EfRepository<purchasedCourse>>();
 builder.Services.AddScoped<IAsyncRepository<CourseWeek>, EfRepository<CourseWeek>>();
 builder.Services.AddScoped<IAsyncRepository<ActivityAlias>, EfRepository<ActivityAlias>>();
+builder.Services.AddScoped<IAsyncRepository<SpeakActivityQuestions>, EfRepository<SpeakActivityQuestions>>();
+builder.Services.AddScoped<IAsyncRepository<DocumentFiles>, EfRepository<DocumentFiles>>();
+builder.Services.AddScoped<IAsyncRepository<SpeakActivityQuestions>, EfRepository<SpeakActivityQuestions>>();
+
 //builder.Services.AddScoped<IAsyncRepository<UserSignup>, EfRepository<UserSignup>>();
 builder.Services.AddCors(options =>
 {

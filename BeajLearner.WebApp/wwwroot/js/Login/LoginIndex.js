@@ -80,14 +80,14 @@ function loginclick() {
 
                    
                    
-                    if (res.data.role == 'Teachers') {
-                        redurl = 'Dashboard/teacherDash';
-                        window.location.href = redurl;
-                    }
-                    else {
+                    //if (res.data.role == 'Teachers') {
+                    //    redurl = 'Dashboard/teacherDash';
+                    //    window.location.href = redurl;
+                    //}
+                    //else {
                         redurl = 'Dashboard/Index';
                         window.location.href = redurl;
-                    }
+                   // }
                    
                     //if (res != 0 && res.role == "SuperAdmin") {
                     //    redurl = 'CourseCategoryWeb/AddCourseCategory';

@@ -93,6 +93,7 @@ namespace BeajLearner.Infrastructure.Identity.Repositories
         public IEnumerable<Lesson> GetLessonByCourseIdwithMcqs(int id) { return null; }
 
         public IEnumerable<Lesson> GetLessonByIdwithMcqs(int id) { return null; }
+        public IEnumerable<Lesson> GetLessonByCourseIdAndActivity(int id, string activity) { return null; }
 
        // ********************************************************
         public virtual async Task<T> GetByIdAsync(Guid id)

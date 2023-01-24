@@ -21,8 +21,11 @@ namespace BeajLearner.Infrastructure.Persistance.Contexts
         public DbSet<purchasedCourse> purchasedCourses { get; set; }
         public DbSet<CourseWeek> courseWeek { get; set; }
         public DbSet<ActivityAlias> activityAlias { get; set; }
-        public DbSet<SpeakAnswer> speakAnswer { get; set; }
-        public DbSet<SpeakQuestion> speakQuestion { get; set; }
+        //public DbSet<SpeakAnswer> speakAnswer { get; set; }
+        //public DbSet<SpeakQuestion> speakQuestion { get; set; }
+        public DbSet<SpeakActivityQuestions> speakActivityQuestions { get; set; }
+        public DocumentFiles documentFiles { get; set; }
+        
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {

@@ -81,9 +81,6 @@ namespace BeajLearner.WebApi.Controllers.v1
             return dto;
         }
 
-
-
-
         //----------------------------------------------
 
 
@@ -128,15 +125,6 @@ namespace BeajLearner.WebApi.Controllers.v1
 
 
         //---------------------------------------------
-
-
-
-
-
-
-
-
-
 
 
         [HttpPost("getLessonByCourseId")]
