@@ -302,11 +302,20 @@ $(document).ready(function () {
 
                 formData.append("courseId", $('#Coursedrp').find(":selected").val());
                 formData.append("lessonType", lessonType);
-                formData.append("dayNumber", day);
+
+                if (lessonType == 'week') {
+                    formData.append("weekNumber", weekNumber);
+                    formData.append("dayNumber", day);
+                }
+                else {
+                    formData.append("weekNumber", 0);
+                    formData.append("dayNumber", 0);
+                }
+               
                 formData.append("activity", activity);
                 formData.append("activityAlias", activityAlias);
 
-                formData.append("weekNumber", weekNumber);
+               
 
 
 
@@ -561,8 +570,7 @@ $(document).ready(function () {
 
                             if (activity == 'listenAndSpeak' || activity == 'watchAndSpeak') {
 
-                                alert('here');
-
+                               
                                 var questionsArray = [];
 
 
@@ -573,9 +581,10 @@ $(document).ready(function () {
                                     //      var questionsObject = new Object;
                                     var objectListen =
                                     {
-                                        audio: "",
+                                        mediaFile: "",
                                         question: "",
-                                        answer: []
+                                        answer: [],
+                                        type:""
                                     }
 
 
@@ -587,8 +596,8 @@ $(document).ready(function () {
                                         objectListen.answer.push($(text).val());
                                     });
 
-                                    objectListen.audio = $(element).find('.speakAudio')[0].files[0];
-
+                                    objectListen.mediaFile = $(element).find('.speakAudio')[0].files[0];
+                                    objectListen.type = activity;
                                     questionsArray.push(objectListen);
 
                                 });
@@ -598,8 +607,9 @@ $(document).ready(function () {
                                     var formData = new FormData();
                                     formData.append('question', questionsArray[i].question);
                                     formData.append('answer', questionsArray[i].answer);
-                                    formData.append('audio', questionsArray[i].audio);
+                                    formData.append('mediaFile', questionsArray[i].mediaFile);
                                     formData.append('lessonId', res.data.lessonId);
+                                    formData.append('type', questionsArray[i].type);
 
                                     $.ajax(
                                         {
@@ -1472,27 +1482,23 @@ $('#drpFormat').change(function () {
     $('#txtActivity').val(text);
 
 
-    //  empty speak activity div
-    $('#listenSpeakAppendQuestions').html(``);
-    $('#listenSpeakAppendQuestions').html(` <div style="border: 1px solid black; border-radius:5px" class="listenAndSpeakQuestionDiv">
+//    //  empty speak activity div
+//    $('#listenSpeakAppendQuestions').html(``);
+//    $('#listenSpeakAppendQuestions').html(` <div style="border: 1px solid black; border-radius:5px" class="listenAndSpeakQuestionDiv">
        
+// <button id="btnAddAnswerSpeak" type="button" style="background-color:#0080ff;color:white" class="form-control btn  ">Add answer</button>
 
 
- <button id="btnAddAnswerSpeak" type="button" style="background-color:#0080ff;color:white" class="form-control btn  ">Add answer</button>
+//<br/>
+//        <label class="control-label  ">Upload Audio Question</label>
 
+//        <input type="file"  id="questionAudio"  name="files" class="form-control fileUpload speakAudio "  multiple />
 
-
-
-<br/>
-        <label class="control-label  ">Upload Audio Question</label>
-
-        <input type="file"  id="questionAudio"  name="files" class="form-control fileUpload speakAudio "  multiple />
-
-        <input class="form-control listenAndSpeakQuestion" placeholder="Write Question" />
-        <input class="form-control listenAndSpeakAnswer" placeholder="Provide answer" />
-    </div>
-`);
-
+//        <input class="form-control listenAndSpeakQuestion" placeholder="Write Question" />
+//        <input class="form-control listenAndSpeakAnswer" placeholder="Provide answer" />
+//    </div>
+//`);
+    
 
 
     var type = $('#drpLessonType').find(":selected").val();
@@ -1666,6 +1672,24 @@ $('#drpFormat').change(function () {
         $('.textHide').prop('hidden', true);
         $('.audioHideForRead').prop('hidden', true);
 
+
+        //  empty speak activity div
+        $('#listenSpeakAppendQuestions').html(``);
+        $('#listenSpeakAppendQuestions').html(` <div style="border: 1px solid black; border-radius:5px" class="listenAndSpeakQuestionDiv">
+       
+ <button id="btnAddAnswerSpeak" type="button" style="background-color:#0080ff;color:white" class="form-control btn  ">Add answer</button>
+
+
+<br/>
+        <label style="margin-top:5px;margin-left:5px" class="control-label  ">Upload Question</label>
+
+        <input type="file"  id="questionAudio"  name="files" class="form-control fileUpload speakAudio "  multiple />
+
+        <input class="form-control listenAndSpeakQuestion" placeholder="Write Question" />
+        <input class="form-control listenAndSpeakAnswer" placeholder="Provide answer" />
+    </div>
+`);
+
     }
 
     if (format == 'watchAndSpeak') {
@@ -1678,6 +1702,26 @@ $('#drpFormat').change(function () {
         $('.imageHide').prop('hidden', true);
         $('.textHide').prop('hidden', true);
         $('.audioHideForRead').prop('hidden', true);
+
+
+
+        //  empty speak activity div
+        $('#listenSpeakAppendQuestions').html(``);
+        $('#listenSpeakAppendQuestions').html(` <div style="border: 1px solid black; border-radius:5px" class="listenAndSpeakQuestionDiv">
+       
+ <button id="btnAddAnswerSpeak" type="button" style="background-color:#0080ff;color:white" class="form-control btn  ">Add answer</button>
+
+
+<br/>
+        <label style="margin-top:5px;margin-left:5px" class="control-label  ">Upload Question</label>
+
+        <input type="file"  id="questionAudio"  name="files" class="form-control fileUpload speakAudio "  multiple />
+
+        <input class="form-control listenAndSpeakQuestion" placeholder="Write Question" />
+        <input class="form-control listenAndSpeakAnswer" placeholder="Provide answer" />
+    </div>
+`);
+
 
     }
 
@@ -1935,7 +1979,7 @@ $(document).on('click', '#btnAddQuestion', function () {
 <button id="btnRemoveQuestion" type="button" style="width:50%;background-color: 	#d92626;color:white; float:right" class="form-control btn ">Remove Question</button>
 
 <br/>
-        <label class="control-label  ">Upload Audio Question</label>
+        <label style="margin-top:5px;margin-left:5px" class="control-label  ">Upload Question</label>
         <input type="file"  id="questionAudio"  name="files" class="form-control fileUpload speakAudio "  multiple />
                                           <input class="form-control listenAndSpeakQuestion" placeholder="Write Question" />
                                          <input class="form-control listenAndSpeakAnswer" placeholder="Provide answer" />

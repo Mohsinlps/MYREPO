@@ -13,7 +13,8 @@ namespace BeajLearner.Application.DTOs
         public int lessonId { get; set; }
         public string question { get; set; }
         public string[] answer { get; set; }
-        public IFormFile  audio { get; set; }
+        public IFormFile  mediaFile { get; set; }
         public string savingPort { get; set; }
+        public string type { get; set; }
     }
 }

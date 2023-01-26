@@ -119,6 +119,39 @@ namespace BeajLearner.WebApi.Controllers.v1
         }
 
 
+        [HttpPost]
+        [Route("UpdateSpeakActivityQuestions")]
+        public  IActionResult updateSpeakActivityQuestions([FromForm] updateSpeakActivityQuestionDto dto)
+        {
+            string host = HttpContext.Request.Host.Value;
+            host = "https://" + host + "//";
+
+            dto.savingPort = host;
+            _lessonRepository.updateSpeakActivityQuestions(dto);
+            return Ok(new Response<SpeakActivityQuestions>("Created Sucessfully"));
+        }
+        [HttpPost]
+        [Route("UpdateSpeakActivityQuestionsWithoutAudio")]
+        public void updateWithoutAudio([FromForm] updateSpeakActivityQuestionWithoutAudioDto dto)
+        {
+           
+            _lessonRepository.updateSpeakActivityQuestionsWithoutAudio(dto);
+          
+        }
+
+
+
+
+        [HttpPost]
+        [Route("deleteSpeakActivityQuestions")]
+        public void deleteSpeakActivityQquestions([FromBody] string[] toBeRemovedQuestions)
+        {
+            
+                _lessonRepository.deleteSpeakActivityQuestions(toBeRemovedQuestions);
+            
+           
+
+        }
 
 
 

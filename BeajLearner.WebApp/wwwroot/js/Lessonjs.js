@@ -73,31 +73,6 @@ $('#CourseCategorydrpLesson').change(function () {
 );
 
 
-
-//function loadCoursesDrp() {
-//    var id = $('#CourseCategorydrp').find(":selected").val();
-//    var text = $("#CourseCategorydrp option:selected").text();
-//    text = $.trim(text);
-//    $('#txtCategory').val(text);
-//    $.ajax(
-//        {
-//            type: 'POST',
-//            url: globalUrlForAPIs + 'Course/GetAllCourseByCategoryId?categoryId=' + id,
-//            contentType: "application/json; charset=utf-8",
-//            dataType: "json",
-//            success: (res) => {
-//                $('#Coursedrp').empty();
-//                $('#Coursedrp').append(`<option value="-1">Select Course </option>`);
-//                $.each(res, function (i, item) {
-//                    $('#Coursedrp').append(`<option value="${item.courseId}">
-//                                       ${item.courseName}
-//                                  </option>`)
-//                });
-//            }
-//        }
-//    )
-//}
-
 $('#CoursedrpLesson').change(function () {
 
     if ($('#CousedrpLesson').find(":selected").val()!=-1)
@@ -106,12 +81,11 @@ $('#CoursedrpLesson').change(function () {
         loadAudioLesson();
         loadTextLesson();
         loadListenAndSpeak();
+        loadWatchAndSpeak();
         loadMcqsLesson();
     }
 }
 );
-
-
 
 
 function loadVideoLesson()
@@ -404,8 +378,6 @@ $(document).on('click', '.btnShowLessonText', function () {
     $('.textModalBody').html(text);
 });
 
-
-
 $(document).on('click', '#imgText', function () {
 
     var src = $(this).attr('src');
@@ -421,103 +393,8 @@ $(document).on('click', '#imgText', function () {
 });
 
 
-//--------------------- load listen and speak --------------------
-
-
-//function loadListenAndSpeak() {
-//    var categoryId = $('#CourseCategorydrpLesson').find(":selected").val();
-//    var CourseId = $('#CoursedrpLesson').find(":selected").val();
-
-//    var jsondata = JSON.stringify({ activity: "listenAndSpeak", courseId: CourseId });
-//    $.ajax(
-//        {
-//            type: 'POST',
-//            url: globalUrlForAPIs + 'GetLessons/getLessonByCourseIdAndActivity',
-//            dataType: 'JSON',
-//            contentType: "application/json; charset=utf-8",
-//            data: jsondata,
-//            success: (res) => {
-//                var table = $('#listenAndSpeakDataTable').DataTable();
-
-//                //clear datatable
-//                table.clear().draw();
-
-//                //destroy datatable
-//                table.destroy();
-
-//                $('#listenAndSpeakDataTable').dataTable({
-//                    data: res,
-//                    columns: [
-
-//                        { "data": "lessonType" },
-//                        { "data": "weekNumber" },
-//                        { "data": "dayNumber" },
-//                        {
-//                            "data": null, "render": function (data) {
-
-
-//                                var audioArray = "";
-//                                var length = data.documentFiles.length;
-//                                for (var i = 0; i < length; i++) {
-
-
-
-
-//                                    if (data.documentFiles[i].mediaType == 'audio') {
-
-//                                        audioArray = audioArray + `  <audio controls> <source src= ` + data.documentFiles[i].audio + ` type="audio/ogg"> </audio>`;
-//                                        audioArray = audioArray + ' ';
-//                                    }
-//                                }
-
-//                                return audioArray;
-
-//                            }
-//                        },
-//                        {
-
-//                            "data": null, "render": function (data) {
-
-//                                var length = data.speakactivity.length;
-
-//                                for (var i = 0; i < length; i++) {
-
-//                                    speakActivityQuestionsArray[i] = data.speakactivity[i];
-
-//                                }
-
-//                                return '<button type="button"  lessonId="' + data.lessonId + '"  class="btn btn-success btnShowSpeakQuestions ">Show Questions</button>'
-
-//                            }
-
-
-//                        },
-//                        {
-//                            "data": null, "render": function (data) {
-//                                return `<button class="btn btn-primary btnEditLesson" lessonId=` + data.lessonId + `>Edit</button>`
-//                            }
-//                        },
-//                        {
-//                            "data": null, "render": function (data) {
-//                                return `<button class="btn btn-danger btnDeleteLesson" lessonId=` + data.lessonId + `>Delete</button>`
-//                            }
-//                        },
-
-//                    ]
-
-//                });
-
-
-
-//            }
-//        }
-//    )
-//};
-
-
 
 //----------------  show speak  ------------------------------------
-
 
 $(document).on('click', '.btnShowSpeakQuestions ', function () {
    
@@ -532,10 +409,12 @@ $(document).on('click', '.btnShowSpeakQuestions ', function () {
         success: (response) =>
         {
             questionsArray = response[0].speakactivity;
-            $('.showSpeakModalBody').html('');
-            for (var i = 0; i < questionsArray.length; i++)
+
+            if (response.activity == 'listenAndSpeak')
             {
-                speakModalBody = speakModalBody + `  <div style="border: 1px solid black; border-radius:5px" class="">
+                $('.showSpeakModalBody').html('');
+                for (var i = 0; i < questionsArray.length; i++) {
+                    speakModalBody = speakModalBody + `  <div style="border: 1px solid black; border-radius:5px" class="">
 <br>
                                       <audio class="form-control"  controls><source src="`+ questionsArray[i].mediaFile + `" ></audio>
 <br>
@@ -543,23 +422,57 @@ $(document).on('click', '.btnShowSpeakQuestions ', function () {
 
 `;
 
-                for (var j = 0; j < questionsArray[i].answer.length; j++)
-                {
-                    var array = questionsArray[i].answer[j].split(',');
-                    for (var k = 0; k < array.length; k++)
-                    {
-                        speakModalBody = speakModalBody + `<input class="form-control " value="` + array[0] + `"  /><br>`;
+                    for (var j = 0; j < questionsArray[i].answer.length; j++) {
+                        var array = questionsArray[i].answer[j].split(',');
+                        for (var k = 0; k < array.length; k++) {
+                            speakModalBody = speakModalBody + `<input class="form-control " value="` + array[k] + `"  /><br>`;
+                        }
+
+
+
                     }
-               
-
-
+                    speakModalBody = speakModalBody + `</div> <br>`;
                 }
-                speakModalBody = speakModalBody + `</div> <br>`;
+
+
+                $('.showSpeakModalBody').append(speakModalBody);
+                $('.speakModal').modal('toggle');
+
             }
-           
-         
-            $('.showSpeakModalBody').append(speakModalBody);
-            $('.speakModal').modal('toggle');
+
+            //-----------------   watch and speak ----------------------------
+
+            else
+            {
+                $('.showSpeakModalBody').html('');
+                for (var i = 0; i < questionsArray.length; i++) {
+                    speakModalBody = speakModalBody + `  <div style="border: 1px solid black; border-radius:5px" class="">
+<br>
+                                      <video style="margin-top:10px;height:250px;width:250px" class="form-control"  controls><source src="`+ questionsArray[i].mediaFile + `" ></video>
+<br>
+<input class="form-control listenAndSpeakAnswer" value="` + questionsArray[i].question + `"  /><br>
+
+`;
+
+                    for (var j = 0; j < questionsArray[i].answer.length; j++) {
+                        var array = questionsArray[i].answer[j].split(',');
+                        for (var k = 0; k < array.length; k++) {
+                            speakModalBody = speakModalBody + `<input class="form-control " value="` + array[k] + `"  /><br>`;
+                        }
+
+
+
+                    }
+                    speakModalBody = speakModalBody + `</div> <br>`;
+                }
+
+
+                $('.showSpeakModalBody').append(speakModalBody);
+                $('.speakModal').modal('toggle');
+
+            }
+
+          
         }
 
     })
@@ -567,22 +480,9 @@ $(document).on('click', '.btnShowSpeakQuestions ', function () {
    
 
    
-//    for (var j = 0; j < speakActivityQuestionsArray.length; j++)
-//    {
-        
-//        //$('.speakModalBody').append();
-//        for (var i = 0; i < speakActivityQuestionsArray[j].answer.length; i++)
-//        {
-//            speakModalBody = speakModalBody +  `
-//<input class="form-control listenAndSpeakAnswer" value="` + speakActivityQuestionsArray[j].answer[i] + `" placeholder="Provide answer" />`
-//            //$('.speakModalBody').append();
-//        }
+
 
 });
-
-
-//<input class="form-control listenAndSpeakAnswer" placeholder="Provide answer" />
-
 
 //-------------------  load listen and speak ----------------------------------
 
@@ -621,13 +521,85 @@ function loadListenAndSpeak() {
 
                             "data": null, "render": function (data) {
 
-                                var length = data.mcqquestion.length;
+                               // var length = data.mcqquestion.length;
 
-                                for (var i = 0; i < length; i++) {
+                                //for (var i = 0; i < length; i++) {
 
-                                    mcqsArray[i] = data.mcqquestion[i];
+                                //    mcqsArray[i] = data.mcqquestion[i];
 
-                                }
+                                //}
+
+                                return '<button type="button"  lessonId="' + data.lessonId + '"  class="btn btn-success btnShowSpeakQuestions ">Show Speak Lesson</button>'
+
+                            }
+
+
+                        },
+                        {
+                            "data": null, "render": function (data) {
+                                return `<button class="btn btn-primary btnEditLesson" lessonId=` + data.lessonId + `>Edit</button>`
+                            }
+                        },
+                        {
+                            "data": null, "render": function (data) {
+                                return `<button class="btn btn-danger btnDeleteLesson" lessonId=` + data.lessonId + `>Delete</button>`
+                            }
+                        },
+
+                    ]
+
+                });
+
+
+
+            }
+        }
+    )
+};
+
+//-------------------  load watch and speak ------------------------------------
+function loadWatchAndSpeak() {
+    var categoryId = $('#CourseCategorydrpLesson').find(":selected").val();
+    var CourseId = $('#CoursedrpLesson').find(":selected").val();
+
+    var jsondata = JSON.stringify({ activity: "watchAndSpeak", courseId: CourseId });
+    $.ajax(
+        {
+            type: 'POST',
+            url: globalUrlForAPIs + 'GetLessons/getLessonByCourseIdAndActivity',
+            dataType: 'JSON',
+            contentType: "application/json; charset=utf-8",
+            data: jsondata,
+            success: (res) => {
+
+                var table = $('#watchAndSpeakDataTable').DataTable();
+
+                //clear datatable
+                table.clear().draw();
+
+                //destroy datatable
+                table.destroy();
+
+
+                $('#watchAndSpeakDataTable').dataTable({
+                    data: res,
+                    columns: [
+
+                        { "data": "lessonType" },
+                        { "data": "weekNumber" },
+                        { "data": "dayNumber" },
+
+                        {
+
+                            "data": null, "render": function (data) {
+
+                                //var length = data.mcqquestion.length;
+
+                                //for (var i = 0; i < length; i++) {
+
+                                //    mcqsArray[i] = data.mcqquestion[i];
+
+                                //}
 
                                 return '<button type="button"  lessonId="' + data.lessonId + '"  class="btn btn-success btnShowSpeakQuestions ">Show Speak Lesson</button>'
 
@@ -658,6 +630,7 @@ function loadListenAndSpeak() {
 };
 
 
+//------------------   Load mcqs  ---------------------------------------------
 function loadMcqsLesson() {
     var categoryId = $('#CourseCategorydrpLesson').find(":selected").val();
     var CourseId = $('#CoursedrpLesson').find(":selected").val();
@@ -728,8 +701,6 @@ function loadMcqsLesson() {
         }
     )
 };
-
-
 $(document).on('click', '.btnShowMcq', function () {
     console.log("-----btn click-----------");
     console.log(mcqsArray);
@@ -765,9 +736,6 @@ $(document).on('click', '.btnShowMcq', function () {
    
     
 });
-
-
-
 $(document).on('click', '.btnDeleteLesson', function () {
 
     var lessonId = $(this).attr('lessonId');
@@ -782,14 +750,13 @@ $(document).on('click', '.btnDeleteLesson', function () {
             loadAudioLesson();
             loadTextLesson();
             loadMcqsLesson();
+            loadListenAndSpeak();
         }
     });
 });
 
 
-
-
-
+var toBeRemovedQuestions = [];
 var globalLessonIdForEdit = 0;
 var globalMcqLength = 0;
 
@@ -854,8 +821,34 @@ $(document).on('click', '.btnEditLesson', function () {
 
       
             $("#drpAlias option[value='" + resLesson[0].activityAlias + "']").attr("selected", "selected");
-            $("#dayDrp option[value='" + resLesson[0].day + "']").attr("selected", "selected");
+           // $("#dayDrp option[value='" + resLesson[0].dayNumber + "']").attr("selected", "selected");
+
+            $("#dayDrp").val(resLesson[0].dayNumber );
+
+            //                                load week Dropdown
           
+            if (resLesson[0].lessonType == 'week') {
+                $.ajax({
+                    type: 'POST',
+                    url: globalUrlForAPIs + 'Course/GetCourseById?id=' + $('#CoursedrpEdit').find(':selected').val(),
+                    success: (courseGetForWeek) => {
+                        if (courseGetForWeek != undefined)
+                        {
+                            $('#weekNumberDrp').empty();
+                            $('#weekNumberDrp').append(`<option  value="${-1}">
+                                      Select week Number
+                                  </option>`)
+                            for (var i = 1; i <= courseGetForWeek.courseWeeks; i++) {
+
+                                $('#weekNumberDrp').append(`<option ${i == resLesson[0].weekNumber ? 'selected' : ''}  value="${i}">
+                                       ${i}
+                                  </option>`)
+                            }
+                        }
+                       
+                    }
+                });
+            }
 
             // ------------  Lesson type ------------------changed------
 
@@ -880,9 +873,13 @@ $(document).on('click', '.btnEditLesson', function () {
                                   </option>`)
                             for (var i = 1; i <= courseGetForWeek.courseWeeks; i++) {
 
-                                $('#weekNumberDrp').append(`<option ${i == resLesson[0].weekNumber?'selected':''}  value="${i}">
+                                $('#weekNumberDrp').append(`<option ${i == resLesson[0].weekNumber ? 'selected' : ''}  value="${i}">
                                        ${i}
                                   </option>`)
+                            }
+
+                            if (resLesson[0].lessonType == 'day') {
+                                 $("#dayDrp option[value='" + -1 + "']").attr("selected", "selected");
                             }
                         }
                     });
@@ -964,11 +961,7 @@ $(document).on('click', '.btnEditLesson', function () {
 
                 //load Day
 
-                $("#dayDrp option[value='" + resLesson[0].dayNumber + "']").attr("selected", "selected");
-          
-
-              //  $('#imgLessonEditDiv').html(`<img id='imgLessonEdit'  alt="Image" style=" width:50px ; height:50px" src=' ` + resLesson.image + `' />`)
-              
+            
             }
 
           
@@ -996,8 +989,8 @@ $(document).on('click', '.btnEditLesson', function () {
 
             });
 
-
-            $('#txtActivity').val(resLesson[0].activity);
+            $("#drpFormat option[value='" + resLesson[0].activity + "']").attr("selected", "selected");
+            //$('#txtActivity').val(resLesson[0].activity);
             //---------------------------  activity Changed --------------------------
 
             //$(document).on('change', '#drpFormat', function () {
@@ -1175,53 +1168,99 @@ $(document).on('click', '.btnEditLesson', function () {
                 var speakModalBody = "";
                 var questionsArray = resLesson[0].speakactivity;
                 
-                $('.listenAndSpeak').html(`<div class="listenSpeakAppendQuestions"> </div>`);
+              
 
                 for (var i = 0; i < speakLength; i++)
                 {
                   
                   
-                    speakModalBody = speakModalBody + `  <div style="border: 1px solid black; border-radius:5px" class="listenAndSpeakQuestionDiv">
-<button id="btnAddAnswerSpeak" type="button" class="form-control btn btn-primary ">+</button>
+                    speakModalBody = speakModalBody + ` <br/> <div style="border: 1px solid black; border-radius:5px" class="listenAndSpeakQuestionDiv">
+ <button id="btnAddAnswerSpeak" type="button" style="width:50%;background-color:#0080ff;color:white" class="form-control btn btn ">Add Answer</button>
+<button id="btnRemoveQuestion" speakId=`+ resLesson[0].speakactivity[i].id +`  type="button" style="width:50%;background-color: 	#d92626;color:white; float:right" class="form-control btn ">Remove Question</button>
  <br>
+<span class="oldCheck" old="1" speakId=`+ resLesson[0].speakactivity[i].id +`></span>
                         <label class="control-label  "> Audio Question</label>
-                                      <audio controls><source src="`+ questionsArray[i].mediaFile + `" ></audio>
+<input type="file" class="form-control speakAudio" style="width:50%"  />
+                                      <audio class="form-control " controls><source class="savedAudio" src="`+ questionsArray[i].mediaFile + `" ></audio>
                 <input class="form-control listenAndSpeakQuestion" value="` + questionsArray[i].question + `"  /><br>
 
 `;
 
                     for (var j = 0; j < questionsArray[i].answer.length; j++) {
                         var array = questionsArray[i].answer[0].split(',');
-                      
-                        for (var k = 0; k < array.length; k++) {
-                                speakModalBody = speakModalBody + `<input class="form-control listenAndSpeakAnswer" value="` + array[k] + `"  /><br>`;
+
+                        speakModalBody = speakModalBody + `<input class="form-control listenAndSpeakAnswer" value="` + array[0] + `"  /><br>`;
+
+                        for (var k = 1; k < array.length; k++) {
+                            speakModalBody = speakModalBody + `<input class="form-control listenAndSpeakAnswer" value="` + array[k] + `"  /><br>
+<button id="btnRemoveAnswer" type="button" style="background-color:#d92626;color:white; float:right;margin-top: -57px;" class=" btn ">X</button>`;
                             }
 
                         }
-                        speakModalBody = speakModalBody + `</div> <br>`;
-                    
+                    speakModalBody = speakModalBody + ` 
 
-
-                   
+</div> <br>`;
+             
                 }
 
+                $('#listenSpeakAppendQuestions').html(speakModalBody);
+             
+            }
 
-                $('.listenSpeakAppendQuestions').html(speakModalBody);
-                   
+            //----------------  watch and speak edit  --------------------------
+            if (resLesson[0].activity == 'watchAndSpeak') {
+                $('#imgHideDiv').prop('hidden', true);
+                $('#audioHideDiv').prop('hidden', false);
+                $('#divMcsqs').prop('hidden', true);
+                $('#videoHideDiv').prop('hidden', true);
+                $('.listenAndSpeak').prop('hidden', false);
+                $('#audioHideDiv2').prop('hidden', true);
+                $('#audioHideDiv').prop('hidden', true);
 
-                        //<input type="file" id="questionAudio" name="files" class="form-control fileUpload speakAudio " multiple="">
-
-                        //    <input class="form-control listenAndSpeakQuestion" placeholder="Write Question">
-                        //        <input class="form-control listenAndSpeakAnswer" placeholder="Provide answer">
-                        //        </div>
+                var speakLength = resLesson[0].speakactivity.length;
+                var speakModalBody = "";
+                var questionsArray = resLesson[0].speakactivity;
 
 
 
+                for (var i = 0; i < speakLength; i++) {
 
 
+                    speakModalBody = speakModalBody + ` <br/> <div style="border: 1px solid black; border-radius:5px" class="listenAndSpeakQuestionDiv">
+ <button id="btnAddAnswerSpeak" type="button" style="width:50%;background-color:#0080ff;color:white" class="form-control btn btn ">Add Answer</button>
+<button id="btnRemoveQuestion" speakId=`+ resLesson[0].speakactivity[i].id + `  type="button" style="width:50%;background-color: #d92626;color:white; float:right" class="form-control btn ">Remove Question</button>
+ <br>
+<span class="oldCheck" old="1" speakId=`+ resLesson[0].speakactivity[i].id + `></span>
+                        <label class="control-label  "> Audio Question</label>
+<input type="file" class="form-control speakAudio" style="width:50%"  />
+                                      <video style="width:80px;height:80px"  controls><source class="savedAudio" src="`+ questionsArray[i].mediaFile + `" ></video>
+                <input class="form-control listenAndSpeakQuestion" value="` + questionsArray[i].question + `"  /><br>
 
+`;
+
+                    for (var j = 0; j < questionsArray[i].answer.length; j++) {
+                        var array = questionsArray[i].answer[0].split(',');
+
+                        speakModalBody = speakModalBody + `<input class="form-control listenAndSpeakAnswer" value="` + array[0] + `"  /><br>`;
+
+                        for (var k = 1; k < array.length; k++) {
+                            speakModalBody = speakModalBody + `<input class="form-control listenAndSpeakAnswer" value="` + array[k] + `"  /><br>
+<button id="btnRemoveAnswer" type="button" style="background-color:#d92626;color:white; float:right;margin-top: -57px;" class=" btn ">X</button>`;
+                        }
+
+                    }
+                    speakModalBody = speakModalBody + ` 
+
+</div> <br>`;
+
+                }
+
+                $('#listenSpeakAppendQuestions').html(speakModalBody);
 
             }
+
+
+
 
             if (resLesson[0].activity == 'mcqs') {
                 $('#imgHideDiv').prop('hidden', true);
@@ -1276,8 +1315,6 @@ $(document).on('click', '.btnEditLesson', function () {
             }
 
 
-
-      
             CKEDITOR.instances['ckContent'].setData(resLesson[0].text);
 
             $('.lessonEditModal').modal('toggle');
@@ -1292,6 +1329,64 @@ $(document).on('click', '.btnEditLesson', function () {
         }
         
     });
+
+});
+
+
+//                      add listen and speak question
+$(document).on('click', '#btnAddQuestion', function () {
+
+    $('#listenSpeakAppendQuestions').append(` <br/> <div style="border: 1px solid black; border-radius:5px" class="listenAndSpeakQuestionDiv">
+ <button id="btnAddAnswerSpeak" type="button" style="width:50%;background-color:#0080ff;color:white" class="form-control btn btn ">Add Answer</button>
+<button id="btnRemoveQuestion" type="button" style="width:50%;background-color: 	#d92626;color:white; float:right" class="form-control btn ">Remove Question</button>
+
+<br/>
+        <label class="control-label  ">Upload Question</label>
+        <input type="file"  id="questionAudio"  name="files" class="form-control fileUpload speakAudio "  multiple />
+<br>
+                                          <input class="form-control listenAndSpeakQuestion" placeholder="Write Question" />
+<br>
+                                         <input class="form-control listenAndSpeakAnswer" placeholder="Provide answer" />
+                                      
+                  </div>
+                                     `);
+
+});
+$(document).on('click', '#btnAddAnswerSpeak', function () {
+
+    /* $('.listenAndSpeakQuestionDiv').append(`<input class="form-control listenAndSpeakAnswer" placeholder="Provide answer" />`);*/
+    $(this).parent().append(`<input class="form-control listenAndSpeakAnswer" style="width:100% ;border-radius:5px" placeholder="Provide answer" />
+<br>
+<button id="btnRemoveAnswer" type="button" style="background-color:#d92626;color:white; float:right;margin-top: -57px;" class=" btn ">X</button>
+
+
+`);
+
+});
+
+
+$(document).on('click', '#btnRemoveQuestion', function () {
+
+    var questionId = parseInt($(this).attr('speakid'));
+    if (isNaN(questionId))
+    {
+     
+    }
+    else
+    {
+        toBeRemovedQuestions.push(questionId);
+    }
+    
+    $(this).parent().remove();
+
+});
+
+$(document).on('click', '#btnRemoveAnswer', function () {
+
+    /* $('.listenAndSpeakQuestionDiv').append(`<input class="form-control listenAndSpeakAnswer" placeholder="Provide answer" />`);*/
+    $(this).prev().remove();
+    $(this).prev().remove();
+    $(this).remove();
 
 });
 
@@ -1348,20 +1443,7 @@ $('.lessonEditModal').on('hidden.bs.modal', function () {
 
 //   Adding new questions in listen And Speak activity edit
 
-$(document).on('click', '#btnAddQuestion', function () {
 
-    $('#listenSpeakAppendQuestions').append(`  <div style="border: 1px solid black; border-radius:5px" class="listenAndSpeakQuestionDiv">
-                                        <button id="btnAddAnswerSpeak" type="button" class="form-control btn btn-primary ">+</button>
-                                          <input class="form-control listenAndSpeakQuestion" placeholder="Write Question" />
-                                         <input class="form-control listenAndSpeakAnswer" placeholder="Provide answer" />
-                                      
-                  </div>
-                                     `);
-
-
-
-    //$('.listenspeakModal').modal('toggle');
-});
 
 
 
@@ -1370,15 +1452,7 @@ function removeQuestionFunc(value) {
 
     $('#removeQuestion' + value + '').remove();
     regenerateQuestionAfterAdd();
-    //var j = 1;
-
-    //$('.regenerateCount').each((i, element) => {
-
-    //    $(element).children("p").text('Question No : '+j);
-
-    //    j++;
-
-    //});
+   
 }
 
 function regenerateQuestionAfterAdd() {
@@ -1388,14 +1462,9 @@ function regenerateQuestionAfterAdd() {
         $(element).children("p").text('Question No : ' + j);
 
         j++;
-        //$('.regenerateCount').text(j);
-        //j++
+      
     });
 }
-
-
-
-
 
 
   //   load video in video div
@@ -1478,16 +1547,6 @@ $("#imageUpload").on("change", function (e) {
 });
 
 
-
-
-
-
-
-
-
-
-
-
 //   edit modal category change
 
 
@@ -1521,19 +1580,15 @@ $(document).on('change', '#CourseCategorydrpEdit', function () {
 
 });
 
-
-
-
-
 // **************************   UPDATING ****************************
 //*******************************************************************
+
 
 $(document).on('click', '#btnUpdateLesson', function () {
 
 
     var textVal = CKEDITOR.instances['ckContent'].getData();
    
-
     var formData = new FormData();
     //alert('inserted lesson id---' + insertedLessonId);
 
@@ -1544,8 +1599,8 @@ $(document).on('click', '#btnUpdateLesson', function () {
     var lessonType = $('#drpLessonType').find(":selected").val();
     var day = $('#dayDrp').find(":selected").val();
    // var textval = CKEDITOR.instances['ckContent'].getData();
-    
-    var activity = $('#drpFormat').find(":selected").val();
+
+    var activity =$('#drpFormat').find(":selected").val();;
     var weekNumber = $('#weekNumberDrp').find(":selected").val();
     var alias = $('#drpAlias').find(":selected").val();
 
@@ -1574,10 +1629,6 @@ $(document).on('click', '#btnUpdateLesson', function () {
     formData.append("text", textVal);
    
 
-    
-
-  
-   
     console.log();
 
         $.ajax(
@@ -1754,7 +1805,189 @@ $(document).on('click', '#btnUpdateLesson', function () {
 
                     }
 
+                    // ------------- update Listen and speak -------------
+                    if (activity == 'listenAndSpeak' || activity == 'watchAndSpeak')
+                    {
+                        // deleting questions
+                        if (toBeRemovedQuestions.length > 0) {
 
+                            $.ajax(
+                                {
+                                    type: 'POST',
+                                    url: globalUrlForAPIs + 'Lesson/deleteSpeakActivityQuestions',
+                                    data: JSON.stringify( toBeRemovedQuestions),
+
+                                    contentType: 'application/json; charset=utf-8',
+                                    datatype: 'json',
+                                    success: function (result) {
+                                        alert('Success ');
+                                        toBeRemovedQuestions = [];
+                                    },
+                                });
+                        }
+                    }
+
+                    if (activity == 'listenAndSpeak' || activity == 'watchAndSpeak') {
+
+                      
+                       
+
+                        var questionsArray = [];
+
+                        //------------------------
+
+                        $('.listenAndSpeakQuestionDiv').each((i, element) => {
+
+                            //      var questionsObject = new Object;
+                            var objectListen =
+                            {
+                                old: "",
+                                haveNewMediaFile: "",
+                                savedSpeakId:"",
+                                audio: "",
+                                question: "",
+                                answer: []
+                            }
+
+                            var oldCheck = $(element).find('.oldCheck').attr('old');
+
+                            if (oldCheck == 1) {
+
+                                var newAudioCheck = $(element).find('.speakAudio')[0].files[0];
+                                if (newAudioCheck != undefined) {
+                                    objectListen.audio = $(element).find('.speakAudio')[0].files[0];
+                                    objectListen.question = $(element).find('.listenAndSpeakQuestion').val();
+                                    objectListen.lessonId = lessonid;
+                                    objectListen.savedSpeakId = $(element).find('.oldCheck').attr('speakId');
+
+                                    $(element).find('.listenAndSpeakAnswer').each((j, text) => {
+                                        objectListen.answer.push($(text).val());
+                                    });
+                                    objectListen.old = 1;
+                                    objectListen.haveNewMediaFile = 1;
+
+                                    questionsArray.push(objectListen);
+                                }
+                                else
+                                {
+                                    objectListen.audio = $(element).find('.savedAudio').attr('src');;
+                                    objectListen.question = $(element).find('.listenAndSpeakQuestion').val();
+                                    objectListen.lessonId = lessonid;
+                                    objectListen.savedSpeakId = $(element).find('.oldCheck').attr('speakId');
+
+                                    $(element).find('.listenAndSpeakAnswer').each((j, text) => {
+                                        objectListen.answer.push($(text).val());
+                                    });
+                                    objectListen.old = 1;
+                                    objectListen.haveNewMediaFile = 0;
+
+                                    questionsArray.push(objectListen);
+                                }
+                               
+                            }
+                            else
+                            {
+                               
+                                    objectListen.audio = $(element).find('.speakAudio')[0].files[0];
+                                   objectListen.question = $(element).find('.listenAndSpeakQuestion').val();
+                                objectListen.lessonId = lessonid;
+                                objectListen.savedSpeakId = $(element).find('.oldCheck').attr('speakId');
+
+                                $(element).find('.listenAndSpeakAnswer').each((j, text) => {
+                                    objectListen.answer.push($(text).val());
+                                });
+                                objectListen.old = 0;
+                                questionsArray.push(objectListen);
+                            }
+                           
+                         
+
+                           
+
+                            
+
+                        });
+
+                        for (var i = 0; i < questionsArray.length; i++) {
+
+                            if (questionsArray[i].old == 0) {
+
+                                var formDataSave = new FormData();
+                                formDataSave.append('question', questionsArray[i].question);
+                                formDataSave.append('answer', questionsArray[i].answer);
+                                formDataSave.append('audio', questionsArray[i].audio);
+                                formDataSave.append('lessonId', lessonid);
+
+                                $.ajax(
+                                    {
+                                        url: globalUrlForAPIs + 'Lesson/AddSpeakActivityQuestions',
+                                        data: formDataSave,
+                                        async: false,
+                                        processData: false,
+                                        contentType: false,
+                                        enctype: "multipart/form-data",
+                                        type: 'POST',
+                                        success: (res) => { }
+                                    });
+
+                            }
+                            if (questionsArray[i].old == 1)
+                            {
+                               
+                                if (questionsArray[i].haveNewMediaFile == 0)
+                                {
+
+                                    var formDataUpdateWithoudAudio = new FormData();
+                                    formDataUpdateWithoudAudio.append('question', questionsArray[i].question);
+                                    formDataUpdateWithoudAudio.append('answer', questionsArray[i].answer);
+                                    formDataUpdateWithoudAudio.append('audio', questionsArray[i].audio);
+                                    formDataUpdateWithoudAudio.append('lessonId', lessonid);
+                                    formDataUpdateWithoudAudio.append('savedSpeakId', questionsArray[i].savedSpeakId);
+
+
+                                    $.ajax(
+                                        {
+                                            url: globalUrlForAPIs + 'Lesson/UpdateSpeakActivityQuestionsWithoutAudio',
+                                            data: formDataUpdateWithoudAudio,
+                                            async: false,
+                                            processData: false,
+                                            contentType: false,
+                                            enctype: "multipart/form-data",
+                                            type: 'POST',
+                                            success: (res) => { }
+                                        });
+                                }
+                                else
+                                {
+
+                                    var formDataUpdate = new FormData();
+                                    formDataUpdate.append('question', questionsArray[i].question);
+                                    formDataUpdate.append('answer', questionsArray[i].answer);
+                                    formDataUpdate.append('audio', questionsArray[i].audio);
+                                    formDataUpdate.append('lessonId', lessonid);
+                                    formDataUpdate.append('savedSpeakId', questionsArray[i].savedSpeakId);
+
+
+                                    $.ajax(
+                                        {
+                                            url: globalUrlForAPIs + 'Lesson/UpdateSpeakActivityQuestions',
+                                            data: formDataUpdate,
+                                            async: false,
+                                            processData: false,
+                                            contentType: false,
+                                            enctype: "multipart/form-data",
+                                            type: 'POST',
+                                            success: (res) => { }
+                                        });
+
+                                }
+                               
+                            }
+                        }
+
+                        alert('Updated');
+
+                    }
 
 
                     ////---------------update mcq------------------
@@ -1809,24 +2042,7 @@ $(document).on('click', '#btnUpdateLesson', function () {
 
 
                     }
-                    else {
-                        $.ajax(
-                            {
-                                url: globalUrlForAPIs + 'Lesson/deleteMcqs?id=' + globalLessonIdForEdit,
-                                /*  data: updateLessonId,*/
-                                //  dataType: 'JSON',
-                                contentType: 'application/json',
-
-                                type: 'POST',
-                                success: (res) => {
-                                    console.log(res);
-                                    //alert("deleted successfully");
-
-
-                                }
-                            });
-
-                    }
+                  
 
 
 

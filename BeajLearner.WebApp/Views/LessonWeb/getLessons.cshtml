@@ -179,7 +179,7 @@
                                </div>
                             
                              <label class="fieldlabels">Lesson Activity:</label>
-                          @* <select  id="drpFormat"  class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                           <select  id="drpFormat" disabled class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
                              <option value="-1">Select Lesson Activity</option>
                                <option value="audio">Listen</option>
                              <option value="video">Watch</option>
@@ -187,8 +187,8 @@
                               <option value="listenAndSpeak">Listen and Speak</option>
                                <option value="watchAndSpeak">Watch and Speak</option>
                              <option value="mcqs">MCQs</option>
-                            </select>*@
-                            <input class="form-control" readonly id="txtActivity"  />
+                            </select>
+                          @*<input class="form-control" readonly id="txtActivity"  />*@
                             <br />
                             <label class="fieldlabels">Select activity alias</label>
                               <select  id="drpAlias"  class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
@@ -255,14 +255,16 @@
 
                                  @*used for both listen and watch*@
 
-                                 <div class="listenAndSpeak">
-                                   @* <div id="listenSpeakAppendQuestions">
+                              
+                                  <div class="listenAndSpeak">
+                                    <div id="listenSpeakAppendQuestions">
 
                                        
-                                    </div>*@
-
-                                  <button class="btn btn-success" type="button" id="btnAddQuestion">Add Question</button>
+                                    </div>
+                                    <br />
+                                     <button class="form-control btn btn-success" type="button" id="btnAddQuestion">Add Question</button>
                                  </div>
+
 
 
 
@@ -343,6 +345,11 @@
    <li class="nav-item" role="presentation">
     <button class="nav-link paneListenAndSpeak" id="contact-tab" data-bs-toggle="tab" data-bs-target="#listenAndSpeak" type="button" role="tab" aria-controls="contact" aria-selected="false">Listen And Speak</button>
   </li>
+
+    <li class="nav-item" role="presentation">
+    <button class="nav-link paneListenAndSpeak" id="contact-tab" data-bs-toggle="tab" data-bs-target="#watchAndSpeak" type="button" role="tab" aria-controls="contact" aria-selected="false">Watch And Speak</button>
+  </li>
+  
 
     <li class="nav-item" role="presentation">
     <button class="nav-link paneText" id="contact-tab" data-bs-toggle="tab" data-bs-target="#mcqs" type="button" role="tab" aria-controls="contact" aria-selected="false">MCQs</button>
@@ -428,6 +435,31 @@
 
     <div class="table-responsive">
             <table class="table table-bordered" id="listenAndSpeakDataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                         <th>lessonType</th>
+                          <th>weekNumber</th>
+                        <th>dayNumber</th>
+                        <th>Show Questions</th>
+                      
+                        <th></th>
+                      <th></th>
+                    </tr>
+                </thead>
+                  <tbody >
+
+                  </tbody>
+            </table>
+  </div>
+
+  </div>
+
+     @*------------------------------- watch and Speak --------------------------------------------*@
+
+        <div class="tab-pane fade" id="watchAndSpeak" role="tabpanel" aria-labelledby="contact-tab">
+
+    <div class="table-responsive">
+            <table class="table table-bordered" id="watchAndSpeakDataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
                          <th>lessonType</th>

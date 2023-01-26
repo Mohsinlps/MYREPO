@@ -875,6 +875,118 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
          
             try
             {
+                if (dto.mediaFile != null)
+                {
+                    var fileDirectory = "wwwroot/uploads";
+                    var thumbnailDirectory = _configuration["FileSetting:Thumbnail:DirectoryPath"];
+                    var thumbnailWidth = Convert.ToInt32(_configuration["FileSetting:Thumbnail:Width"]);
+                    var thumbnailHeight = Convert.ToInt32(_configuration["FileSetting:Thumbnail:Height"]);
+                    //#region create folders
+                    if (!Directory.Exists(fileDirectory))
+                    {
+                        Directory.CreateDirectory(fileDirectory);
+                    }
+                    if (!Directory.Exists(thumbnailDirectory))
+                    {
+                        Directory.CreateDirectory(thumbnailDirectory);
+                    }
+                    //#endregion
+
+
+                    //#region save base64 to folder
+
+
+
+                    String filePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
+                    String GenericfilePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
+
+                    //-------------------  audio ----------------------------
+                    if (dto.type=="listenAndSpeak")
+                    {
+                        // var fileDirectory = _configuration["FileSetting:DirectoryPath"];
+
+
+
+                        // create new guid and set file name with newly created guid.
+                        var newFileName = string.Format(@"{0}", Guid.NewGuid()) + "." + "mp3";
+
+
+                        filePath = Path.Combine(GenericfilePath, newFileName);
+
+
+                        IFormFile file = dto.mediaFile;
+                        using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            file.CopyTo(fileStream);
+                        }
+
+
+
+
+
+                        string dbPath = dto.savingPort + "uploads/" + newFileName;
+
+                        speakModel.mediaFile = dbPath;
+                        speakModel.question = dto.question;
+                        speakModel.lessonId = dto.lessonId;
+                        speakModel.answer = dto.answer;
+
+
+
+                        _repoSpeakActivity.Add(speakModel);
+                    }
+
+                    // --------------  video ------------------------------
+                    else 
+                    {
+                       
+                        var newFileName = string.Format(@"{0}", Guid.NewGuid()) + "." + "mp4";
+
+
+                        filePath = Path.Combine(GenericfilePath, newFileName);
+
+
+                        IFormFile file = dto.mediaFile;
+                        using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            file.CopyTo(fileStream);
+                        }
+
+
+
+
+                        string dbPath = dto.savingPort + "uploads/" + newFileName;
+
+                        speakModel.mediaFile = dbPath;
+                        speakModel.question = dto.question;
+                        speakModel.lessonId = dto.lessonId;
+                        speakModel.answer = dto.answer;
+
+
+
+                        _repoSpeakActivity.Add(speakModel);
+                    }
+
+
+
+
+                }
+          
+                
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+        }
+        public void updateSpeakActivityQuestions(updateSpeakActivityQuestionDto dto)
+        {
+            SpeakActivityQuestions speakModel = new SpeakActivityQuestions();
+
+
+            try
+            {
                 if (dto.audio != null)
                 {
 
@@ -902,7 +1014,7 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
                     String filePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
                     String GenericfilePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
 
-                  
+
 
                     var newFileName = string.Format(@"{0}", Guid.NewGuid()) + "." + "mp3";
 
@@ -925,17 +1037,61 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
                     speakModel.question = dto.question;
                     speakModel.lessonId = dto.lessonId;
                     speakModel.answer = dto.answer;
+                    speakModel.id = dto.savedSpeakId;
 
 
-
-                    _repoSpeakActivity.Add(speakModel);
+                    _repoSpeakActivity.Update(speakModel);
 
 
 
 
                 }
-          
-                
+
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+        }
+        public void updateSpeakActivityQuestionsWithoutAudio(updateSpeakActivityQuestionWithoutAudioDto dto)
+        {
+            SpeakActivityQuestions speakModel = new SpeakActivityQuestions();
+
+
+            try
+            {
+                    speakModel.mediaFile = dto.audio;
+                    speakModel.question = dto.question;
+                    speakModel.lessonId = dto.lessonId;
+                    speakModel.answer = dto.answer;
+                    speakModel.id = dto.savedSpeakId;
+
+
+                    _repoSpeakActivity.Update(speakModel);
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+        }
+
+        public void deleteSpeakActivityQuestions(string[] ids)
+        {
+           
+
+            try
+            {
+               for(int i=0;i<ids.Length; i++) 
+                {
+                    int j =Convert.ToInt32( ids[i]);
+                    _repoSpeakActivity.Delete(j);
+                }
+             
+
             }
             catch (Exception ex)
             {
