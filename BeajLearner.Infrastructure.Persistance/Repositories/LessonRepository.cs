@@ -712,7 +712,24 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
                         file.CopyTo(fileStream);
                     }
 
-      DocumentFiles documentfiles=_repoDocumentFiles.GetAll().Where(x=>x.lessonId==input.lessonId).FirstOrDefault();
+                    //---------------- deleting already saved file --------------
+                    var deleteFilePath = _repoDocumentFiles.GetAll().Where(x => x.lessonId == input.lessonId).Select(y => y.video).FirstOrDefault();
+                    var searchString = "uploads/";
+                    var startIndex = deleteFilePath.IndexOf(searchString) + searchString.Length;
+                    var oldFileName = deleteFilePath.Substring(startIndex);
+                   
+                    deleteFilePath=GenericfilePath+oldFileName;
+                    if (File.Exists(filePath))
+                    {
+                        File.Delete(filePath);
+                    }
+
+
+
+
+
+
+                    DocumentFiles documentfiles =_repoDocumentFiles.GetAll().Where(x=>x.lessonId==input.lessonId).FirstOrDefault();
                   
                     string dbPath = input.savingPort + "uploads/" + newFileName;
                    
@@ -758,12 +775,29 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
                 String filePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
                 String GenericfilePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
 
+                //---------------- deleting already saved file --------------
+
+                var deleteFilePath = _repoDocumentFiles.GetAll().Where(x => x.lessonId == input.lessonId).Select(y => y.image).FirstOrDefault();
+                if (deleteFilePath != null)
+                {
+                    var searchString = "uploads/";
+                    var startIndex = deleteFilePath.IndexOf(searchString) + searchString.Length;
+                    var oldFileName = deleteFilePath.Substring(startIndex);
+
+               
+                     deleteFilePath = Path.Combine(GenericfilePath, oldFileName);
+                    if (File.Exists(deleteFilePath))
+                    {
+                        File.Delete(deleteFilePath);
+                    }
+                }
+
+
+
+
+
                 DocumentFiles model = new DocumentFiles();
-
-
-
                     var imgtype = input.image.ContentType;
-
                     imgtype = imgtype.Substring(imgtype.LastIndexOf('/') + 1);
                     // create new guid and set file name with newly created guid.
                     var newFileName = string.Format(@"{0}", Guid.NewGuid()) + "." + imgtype;
@@ -771,12 +805,15 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
 
                     filePath = Path.Combine(GenericfilePath, newFileName);
 
-
                     IFormFile file = input.image;
                     using (Stream fileStream = new FileStream(filePath, FileMode.Create))
                     {
                         file.CopyTo(fileStream);
                     }
+
+               
+
+
 
                 DocumentFiles documentfiles = new DocumentFiles();
 
@@ -829,7 +866,26 @@ namespace BeajLearner.Infrastructure.Persistance.Repositories
                 String filePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
                 String GenericfilePath = Path.Combine(Directory.GetCurrentDirectory(), fileDirectory);
 
-              
+                //---------------- deleting already saved file --------------
+
+                var deleteFilePath = _repoDocumentFiles.GetAll().Where(x => x.lessonId == input.lessonId && x.language==input.language).Select(y => y.audio).FirstOrDefault();
+                if (deleteFilePath != null)
+                {
+                    var searchString = "uploads/";
+                    var startIndex = deleteFilePath.IndexOf(searchString) + searchString.Length;
+                    var oldFileName = deleteFilePath.Substring(startIndex);
+
+
+                    deleteFilePath = Path.Combine(GenericfilePath, oldFileName);
+                    if (File.Exists(deleteFilePath))
+                    {
+                        File.Delete(deleteFilePath);
+                    }
+                }
+
+
+
+
 
                 var newFileName = string.Format(@"{0}", Guid.NewGuid()) + "." + "mp3";
 

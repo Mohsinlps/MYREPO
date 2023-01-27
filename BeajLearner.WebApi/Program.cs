@@ -96,6 +96,7 @@ builder.Services.AddScoped<IGetCourseRepository, GetCourseRepository>();
 builder.Services.AddScoped<ITeachersManageRepository, TeachersManageRepository>();
 builder.Services.AddScoped<IStudentsRepository, StudentsRepository>();
 builder.Services.AddScoped<ICustomerCourseManageRepository, CustomerCourseManageRepository>();
+builder.Services.AddScoped<IDeleteMediaFilesRepository, DeleteMediaFilesRepository>();
 
 builder.Services.AddScoped<IAsyncRepository<CourseCategory>, EfRepository<CourseCategory>>();
 builder.Services.AddScoped<IAsyncRepository<Course>, EfRepository<Course>>();

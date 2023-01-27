@@ -751,6 +751,7 @@ $(document).on('click', '.btnDeleteLesson', function () {
             loadTextLesson();
             loadMcqsLesson();
             loadListenAndSpeak();
+            loadWatchAndSpeak();
         }
     });
 });
@@ -1804,6 +1805,177 @@ $(document).on('click', '#btnUpdateLesson', function () {
 
 
                     }
+
+                    if (activity == 'read') {
+
+
+                        //--------------  updating image -------------------
+                        var imageObject = {};
+                        var documentFilesArray = [];
+                        var formDataImage = new FormData();
+
+                        $($("#imageUpload")[0].files).each((i, element) => {
+
+
+                            imageObject.image = $("#imageUpload")[0].files[i];
+                        });
+                        if (imageObject.image != null) {
+
+                            imageObject.language = "-";
+                            imageObject.lessonId = lessonid;
+                            imageObject.mediaType = "image";
+
+                            formDataImage.append("image", imageObject.image);
+                            formDataImage.append("language", imageObject.language);
+                            formDataImage.append("lessonId", imageObject.lessonId);
+                            formDataImage.append("mediaType", imageObject.mediaType);
+
+
+
+                            $.ajax(
+                                {
+                                    url: globalUrlForAPIs + 'Lesson/UpdateDocumentFilesForLesson',
+                                    data: formDataImage,
+                                    //dataType: 'JSON',
+                                    processData: false,
+                                    contentType: false,
+                                    enctype: "multipart/form-data",
+                                    type: 'POST',
+                                    success: (res) => {
+
+
+                                        loadVideoLesson();
+                                        loadAudioLesson();
+                                        loadTextLesson();
+                                        loadMcqsLesson();
+
+                                    }
+                                });
+                        }
+
+
+
+                        //---------------  updating audio ------------------
+                        var audioObject = {};
+                        var formDataAudio = new FormData();
+
+                        $($("#audioUpload")[0].files).each((i, element) => {
+
+
+                            audioObject.audio = $("#audioUpload")[0].files[i];
+                        });
+
+                        if (audioObject.audio != null) {
+
+                            audioObject.language = "-";
+                            audioObject.lessonId = lessonid;
+                            audioObject.mediaType = "audio";
+
+                            formDataAudio.append("audio", audioObject.audio);
+                            formDataAudio.append("language", audioObject.language);
+                            formDataAudio.append("lessonId", audioObject.lessonId);
+                            formDataAudio.append("mediaType", audioObject.mediaType);
+
+
+
+                            $.ajax(
+                                {
+                                    url: globalUrlForAPIs + 'Lesson/UpdateDocumentFilesForLesson',
+                                    data: formDataAudio,
+                                    //dataType: 'JSON',
+                                    processData: false,
+                                    contentType: false,
+                                    enctype: "multipart/form-data",
+                                    type: 'POST',
+                                    success: (res) => {
+
+                                        // -----------  Upload Urdu Audio --------------------------
+
+                                        var audioObjectUrdu = {};
+                                        var formDataAudioUrdu = new FormData();
+
+                                        $($("#audioUpload2")[0].files).each((i, element) => {
+
+
+                                            audioObjectUrdu.audio = $("#audioUpload2")[0].files[i];
+                                        });
+
+                                        if (audioObjectUrdu.audio != null) {
+
+                                            audioObjectUrdu.language = "-";
+                                            audioObjectUrdu.lessonId = lessonid;
+                                            audioObjectUrdu.mediaType = "audio";
+
+                                            formDataAudioUrdu.append("audio",  audioObjectUrdu.audio);
+                                            formDataAudioUrdu.append("language", audioObjectUrdu.language);
+                                            formDataAudioUrdu.append("lessonId", audioObjectUrdu.lessonId);
+                                            formDataAudioUrdu.append("mediaType", audioObjectUrdu.mediaType);
+
+
+
+                                            $.ajax(
+                                                {
+                                                    url: globalUrlForAPIs + 'Lesson/UpdateDocumentFilesForLesson',
+                                                    data: formDataAudioUrdu,
+                                                    //dataType: 'JSON',
+                                                    processData: false,
+                                                    contentType: false,
+                                                    enctype: "multipart/form-data",
+                                                    type: 'POST',
+                                                    success: (res) => {
+
+
+                                                        loadVideoLesson();
+                                                        loadAudioLesson();
+                                                        loadTextLesson();
+                                                        loadMcqsLesson();
+
+                                                    }
+                                                });
+                                        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        loadVideoLesson();
+                                        loadAudioLesson();
+                                        loadTextLesson();
+                                        loadMcqsLesson();
+
+                                    }
+                                });
+                        }
+
+
+
+
+
+
+                    }
+
+
 
                     // ------------- update Listen and speak -------------
                     if (activity == 'listenAndSpeak' || activity == 'watchAndSpeak')
